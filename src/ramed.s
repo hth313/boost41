@@ -1,4 +1,5 @@
 #include "mainframe.i"
+#include "OS4.h"
 
 ;;; **********************************************************************
 ;;;
@@ -173,8 +174,7 @@ RAMED:        nop                   ; non-programmable
               c=m                   ; select current address
               dadd=c
               ldi     24            ; number of keys
-              a=c     x
-              rxq     KEYFC
+              gosub   keyDispatch
               .con    0x11, 0xc0, 0x80, 0x70, 0x30, 0x10
               .con    0x84, 0x74, 0x34, 0x85, 0x75, 0x35
               .con    0x86, 0x76, 0x36, 0x37, 0x87, 0xc3
