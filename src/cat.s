@@ -90,20 +90,23 @@ myCAT:        nop                   ; non-programmable
 ;;; **********************************************************************
 
               .section BoostCode
+
 CAT7:         spopnd                ; drop return addresses
               spopnd
               s8=1                  ; set running flag
-              c=0     s             ; start with buffer 0
+              c=0                   ; start with buffer 0
 CAT7main:     m=c                   ; main loop
+              pt=     12
+              c=0     s
               c=0     x
-              rcr     -1
+              rcr     -2
               gosub   chkbuf
               goto    CAT7step      ; (P+1) not found, try step to next
 CAT7found:    c=data                ; (P+2) this one exists, read header
-              acex    x             ; C.X= buffer address
-              n=c                   ; N= buffer header and address
+              acex    x
+              m=c                   ; M= buffer header and address
               gosub   CLLCDE
-              c=n
+              c=m
               c=0     s
               rcr     12
               c=0     xs            ; C.X= buffer number
@@ -113,7 +116,7 @@ CAT7found:    c=data                ; (P+2) this one exists, read header
               gosub   GENNUM        ; output buffer number
               ldi     ' '
               slsabc
-              c=n                   ; register count
+              c=m                   ; register count
               rcr     10
               c=0     xs
               pt=     13
@@ -125,46 +128,80 @@ CAT7found:    c=data                ; (P+2) this one exists, read header
               slsabc
               c=0     x             ; @ address, also 3 decimal digits
               slsabc
-              c=n
+              c=m
               pt=     13
               lc      3
               a=c
               gosub   GENNUM
               readen
               st=c                  ; ST= annunciators
+              goto    CAT7wait
 
-CAT7delay:    c=0     x             ; delay counter
-CAT7loop:     chkkb
-              goc     CAT7key       ; some key went down
+CAT7main0:    goto    CAT7main      ; relay
+
+CAT7wait:     c=0
+              ldi     60            ; load outer counter (goes down)
+              rcr     -3
+CAT7delay:    ldi     1000          ; inner delay counter (goes up)
+CAT7loop:     rstkb
+              chkkb
+              goc     CAT7key       ; some key is down
               c=c+1   x
-              gonc    CAT7loop
+CAT7loop0:    gonc    CAT7loop      ; (also used as relay)
 
-              ?s8=1                 ; timed out
+              ?s8=1                 ; inner loop timed out
+              goc     CAT7step      ; running, so step to next
+CAT7stepOuter:
+              c=c-1   m
               gonc    CAT7delay     ; not running, loop again
                                     ; running, step to next entry
-CAT7step:     gosub   ENCP00
-              c=m                   ; step to next buffer
-              c=c+1   s
-              goc     CATend
-              goto    CAT7main
+CATend:       gosub   ENCP00
+              golong  NFRKB
 
 CAT7found0:   goto    CAT7found     ; relay
-CATend:       golong  CLDSP
+
+CAT7step:     gosub   ENCP00
+              c=m                   ; step to next buffer
+              pt=     12
+              c=c+1   pt
+              goc     CATend
+              goto    CAT7main0
+
+CAT7wait0:    goto    CAT7wait      ; relay
 
 CAT7SST:      ?s7=1                 ; shift?
-CAT7step0:    gonc    CAT7step      ; no, SST (also used as relay)
-              gosub   ENCP00        ; yes, BST
-10$:          c=m                   ; search backwards
-              c=c-1   s
-              goc     CAT7blink     ; no previous buffer
+CAT7step0:    gonc    CAT7step      ; no, SST (also used as a relay)
+              s9=1                  ; yes, ordinary BST
+CAT7BST:      gosub   ENLCD         ; (due to chkbuf and execution logic)
+              s7=0
+              readen
+              c=st
+              wrten
+              c=m                   ; search backwards
+              pt=     12
+              c=c-1   pt
+              goc     10$           ; no previous buffer
               m=c
+              c=0     s
               c=0     x
-              rcr     -1
+              pfad=c                ; deselect LCD
+              rcr     -2
               gosub   chkbuf
-              goto    10$           ; (P+1) no such buffer
-              goto    CAT7found0    ; (P+2) this one exists
+              goto    CAT7BST       ; (P+1) no such buffer
+              c=data
+              acex    x
+              m=c
+              goto    CAT7found0    ; (P+2) exists
+10$:          ?s9=1
+              goc     CAT7blink     ; real BST and no previous buffer
+              goto    CAT7step      ; after clear buffer, no previous
+                                    ;  step forward instead
 
-CAT7key:      n=c                   ; save delay counter
+CAT7stepOuter0: goto  CAT7stepOuter ; relay
+CAT7loop00:   goto    CAT7loop0     ; relay
+CAT7BST0:     goto    CAT7BST       ; relay
+
+CAT7key:      n=c                   ; save delay counters
               ldi     6
               gosub   keyDispatch
               .con    0x18,0x87,0xc3,0xc2,0x70,0x12,0
@@ -184,23 +221,28 @@ CAT7key:      n=c                   ; save delay counter
               goto    CAT7Shift     ; SHIFT
               ?s8=1                 ; undefined, running?
               goc     CAT7speedUp   ; yes, speedup
-CAT7blink:    gosub   BLINK         ; no, blink LCD
+CAT7blink:    gosub   BLINK         ; blink LCD
+CAT7rstkb1:   s7=0                  ; reset SHIFT
+CAT7rstkb2:   readen
+              c=st
+              wrten
 CAT7rstkb:    gosub   RSTKB
-              goto    CAT7delay
+              goto    CAT7wait0
 
-CAT7speedUp:  a=c     x             ; shave some delay off
-              ldi     400
-              c=a-c   x
-              goc     CAT7delay     ; start a new delay cycle
-              c=n                   ; use existing loop counter
-              goto    CAT7loop
+CAT7speedUp:  c=n                   ; reload counters
+              a=c     x             ; shave some delay off
+              ldi     200
+              c=a+c   x
+              goc     CAT7stepOuter0
+              goto    CAT7loop00
 
 CAT7Clear:    ?s8=1
               goc     CAT7speedUp   ; running
               ?s7=1                 ; shift?
               gonc    CAT7blink     ; no
               gosub   ENCP00        ; yes, clear buffer
-              c=n
+              c=m                   ; C.X= buffer address
+              regn=c  Q             ; preserve M register in Q
               dadd=c
               c=data
               c=0     s             ; mark buffer deleted
@@ -208,25 +250,31 @@ CAT7Clear:    ?s8=1
               c=0
               dadd=c
               gosub   PKIOAS        ; pack I/O area
+              c=0
+              dadd=c
+              c=regn  Q
+              m=c
               gosub   RSTKB
-              goto    CAT7step0     ; show previous buffer
+              s9=0                  ; BST after delete
+              goto    CAT7BST0      ; try to show previous buffer
 
 CAT7off:      golong  OFF
 
 CAT7RS:       ?s8=1
               goc     10$
               s8=1
-              goto    CAT7rstkb
+              goto    CAT7rstkb1
 10$:          s8=0
-              goto    CAT7rstkb
+              goto    CAT7rstkb1
 
 CAT7Shift:    ?s8=1
               goc     CAT7speedUp
               ?s7=1
               goc     10$
               s7=1
-5$:           cstex
+5$:           readen
+              c=st
               wrten
-              goto    CAT7rstkb
+              goto    CAT7rstkb2
 10$:          s7=0
               goto    5$
