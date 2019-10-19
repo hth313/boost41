@@ -8,7 +8,7 @@
               .extern `Y/N?`
               .extern N, I, PV, PMT, FV, TVM, TVMEXIT
               .extern myCAT
-XROMno:       .equ    14
+XROMno:       .equ    15
 
               .con    XROMno        ; XROM number
               .con    (FatEnd - FatStart) / 2 ; number of entry points
