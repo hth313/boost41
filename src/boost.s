@@ -139,6 +139,7 @@ sysKeyTable:  .con    11            ; CAT key
               .extern catHandler
               .align  4
 extensionHandlers:
+              .con    GenericExtension
               .con    ExtensionCAT
               .con    .low12 catHandler
-              .con    0             ; the end
+              .con    ExtensionListEnd
