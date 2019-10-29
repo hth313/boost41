@@ -58,6 +58,6 @@ powerOff:  ;   gosub   logoutXMem
               goto    powerOff      ; Powoff
               .con    0             ; I/O
               goto    deepWake      ; Deep wake-up
-              .con    0             ; Memory lost
+              goto    deepWake      ; Memory lost
               .text   "A1OB"        ; Identifier BO-1A
               .con    0             ; checksum position
