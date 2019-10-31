@@ -129,6 +129,36 @@ sysKeyTable:  .con    11            ; CAT key
 
 ;;; **********************************************************************
 ;;;
+;;; CAT 07 sparse keyboard definition.
+;;;
+;;; **********************************************************************
+
+              .section BoostTable, rodata
+              .align  4
+              .public keyTableCAT7
+keyTableCAT7: .con    40            ; SQRT
+              .con    KeyXKD
+              .con    66            ; SST
+              .con    KeyXKD
+              .con    74            ; BST
+              .con    KeyXKD
+              .con    67            ; <-
+              .con    KeyXKD
+              .con    55            ; R/S
+              .con    KeyXKD
+              .con    0x100         ; end of table
+
+              ;; The XKD pointers
+              .extern CAT7_Clear, CAT7_SST, CAT7_BST, CAT7_BACKARROW, CAT7_RUN
+              .con    .low12 CAT7_Clear
+              .con    .low12 CAT7_SST
+              .con    .low12 CAT7_BST
+              .con    .low12 CAT7_BACKARROW
+              .con    .low12 CAT7_RUN
+
+
+;;; **********************************************************************
+;;;
 ;;; Extension notifications we are listening to.
 ;;;
 ;;; **********************************************************************
