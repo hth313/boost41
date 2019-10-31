@@ -97,17 +97,16 @@ KEYFC:        acex    x             ; get table length
 
 
 
-              .section BoostTable, rodata
-              .align  4
 ;;; **********************************************************************
 ;;;
-;;; Sparse keyboard definitions, the key here is the index it would be
-;;; in a key table.
+;;; TVM sparse keyboard definition.
 ;;;
 ;;; **********************************************************************
 
-              .public keyTable
-keyTable:     .con    0             ; SIGMA+
+              .section BoostTable, rodata
+              .align  4
+              .public keyTableTVM
+keyTableTVM:  .con    0             ; SIGMA+
               KeyEntry N
               .con    16            ; 1/X
               KeyEntry I

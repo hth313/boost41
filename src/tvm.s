@@ -212,22 +212,22 @@ PMT:          rtn
 FV:           rtn
 
 
-              .align  4
-              .section BoostCode
-keyHandler:   gosub   keyKeyboard   ; does not return
-              .con    .low12 keyboard ; argument to keyKeyboard
-
-
+;;; **********************************************************************
+;;;
 ;;; The keyboard description. We provide handlers for digit entry and ending
 ;;; digit entry and point to the keyboard table to use.
 ;;; Do not support auto assigned top keys, it slows things down too much and
 ;;; we rely on it for hexadecimal digit entry which should be fast.
-              .section BoostTable, rodata
+;;;
+;;; **********************************************************************
+
+              .section BoostCode
+              .extern keyTableTVM
               .align  4
-              .extern keyTable
-keyboard:     .con    (1 << KeyFlagSparseTable) ; flags
+keyHandler:   gosub   keyKeyboard   ; does not return
+              .con    (1 << KeyFlagSparseTable) ; flags
               .con    0             ; handle a digit
               .con    0             ; end digit entry
-              .con    .low12 keyTable
+              .con    .low12 keyTableTVM
                                     ; no transient termination entry needed
                                     ; we do not have keyboard secondaries

@@ -13,13 +13,9 @@ catShell:     .con    SysShell
 
               .section BoostCode
               .align  4
-keyHandler:   gosub   keyKeyboard   ; does not return
-              .con    .low12 sysKeyboard ; argument to keyKeyboard
-
-              .section BoostCode
               .extern sysKeyTable
-              .align  4
-sysKeyboard:  .con    (1 << KeyFlagSparseTable) ; flags
+keyHandler:   gosub   keyKeyboard   ; does not return
+              .con    (1 << KeyFlagSparseTable) ; flags
               .con    0             ; handle a digit
               .con    0             ; end digit entry
               .con    .low12 sysKeyTable
