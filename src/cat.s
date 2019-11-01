@@ -191,7 +191,7 @@ back:         c=m                   ; search backwards
 
 CAT7blink:    gosub   BLINK         ; blink LCD
 CATreturn:    gosub   STMSGF        ; set message flag
-CATend:       golong  NFRKB         ; give control back to OS
+              golong  NFRKB         ; give control back to OS
 
 CAT7loop0:    goto    CAT7loop      ; relay
 
@@ -211,6 +211,9 @@ CAT7key:      n=c                   ; save delay counters
 
 back0:        goto    back          ; relay
 step0:        goto    step          ; relay
+
+CATend:       gosub   ENCP00
+              golong  QUTCAT
 
 CAT7off:      golong  OFF
 
