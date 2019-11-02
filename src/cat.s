@@ -90,7 +90,7 @@ myCAT:        nop                   ; non-programmable
 CAT7:         spopnd                ; drop return addresses
               spopnd
               c=0                   ; start with buffer 0
-CAT7main:     m=c                   ; main loop
+CAT7main:     n=c                   ; main loop
               pt=     12
               c=0     s
               c=0     x
@@ -99,9 +99,9 @@ CAT7main:     m=c                   ; main loop
               goto    step00        ; (P+1) not found, try step to next
 CAT7found:    c=data                ; (P+2) this one exists, read header
               acex    x
-              m=c                   ; M= buffer header and address
+              n=c                   ; N= buffer header and address
               gosub   CLLCDE
-              c=m
+              c=n
               c=0     s
               rcr     12
               c=0     xs            ; C.X= buffer number
@@ -111,7 +111,7 @@ CAT7found:    c=data                ; (P+2) this one exists, read header
               gosub   GENNUM        ; output buffer number
               ldi     ' '
               slsabc
-              c=m                   ; register count
+              c=n                   ; register count
               rcr     10
               c=0     xs
               pt=     13
@@ -123,7 +123,7 @@ CAT7found:    c=data                ; (P+2) this one exists, read header
               slsabc
               c=0     x             ; @ address, also 3 decimal digits
               slsabc
-              c=m
+              c=n
               pt=     13
               lc      3
               a=c
@@ -157,8 +157,8 @@ CAT7found0:   goto    CAT7found     ; relay
 CAT7_SST:
               gosub   scratchArea   ; bring state back
               c=data
-              m=c
-step:         c=m                   ; step to next buffer
+              n=c
+step:         c=n                   ; step to next buffer
               pt=     12
               c=c+1   pt
               goc     CATend
@@ -166,23 +166,21 @@ step:         c=m                   ; step to next buffer
 
               .align  4
               .public CAT7_BST
-CAT7_BST:     s9=1                  ; ordinary BST
+CAT7_BST:     gosub   OFSHFT
+              s9=1                  ; ordinary BST
               gosub   scratchArea   ; bring state back
               c=data
-              m=c
-back:         c=m                   ; search backwards
+              n=c
+back:         c=n                   ; search backwards
               pt=     12
               c=c-1   pt
               goc     10$           ; no previous buffer
-              m=c
+              n=c
               c=0     s
               c=0     x
               rcr     -2
               gosub   chkbuf
               goto    back          ; (P+1) no such buffer
-              c=data
-              acex    x
-              m=c
               goto    CAT7found0    ; (P+2) exists
 10$:          ?s9=1
               goc     CAT7blink     ; real BST and no previous buffer
@@ -190,38 +188,40 @@ back:         c=m                   ; search backwards
                                     ;  step forward instead
 
 CAT7blink:    gosub   BLINK         ; blink LCD
-CATreturn:    gosub   STMSGF        ; set message flag
+CATreturn:    gosub   scratchArea   ; save state and return to OS
+              c=n
+              data=c
+              gosub   STMSGF        ; set message flag
               golong  NFRKB         ; give control back to OS
 
-CAT7loop0:    goto    CAT7loop      ; relay
+CAT7loopOuter0: goto  CAT7loopOuter
+CAT7loop0:    goto    CAT7loop     ; relay
 
 ;;; Handle key while running
-CAT7key:      n=c                   ; save delay counters
+CAT7key:      m=c                   ; save delay counters
               ldi     2
               gosub   keyDispatch
               .con    0x18,0x87,0
               goto    CAT7off       ; ON
               goto    CAT7stop      ; R/S
-              c=n                   ; undefined key, speed up
+              c=m                   ; undefined key, speed up
               a=c     x             ; shave some delay off
               ldi     200
               c=a+c   x
-              goc     CAT7loopOuter
+              goc     CAT7loopOuter0
               goto    CAT7loop0
 
 back0:        goto    back          ; relay
 step0:        goto    step          ; relay
 
-CATend:       gosub   ENCP00
-              golong  QUTCAT
-
-CAT7off:      golong  OFF
-
               .align  4
               .public CAT7_BACKARROW
 CAT7_BACKARROW:
-              gosub   exitTransientApp
-              goto    CATend
+CATend:       gosub   exitTransientApp
+              gosub   ENCP00
+              golong  QUTCAT
+
+CAT7off:      golong  OFF
 
 CAT7stop:     ldi     .low12 cat7Shell
               gosub   activateShell
@@ -229,10 +229,6 @@ CAT7stop:     ldi     .low12 cat7Shell
               ldi     1             ; (P+2) need one scratch register
               gosub   allocScratch
               goto    10$           ; (P+1) no room for scratch
-              bcex    x
-              dadd=c                ; select scratch register
-              c=m                   ; C= state
-              data=c                ; save it CAT 7 state in scratch
               goto    CATreturn     ; give control back
 10$:          golong  noRoom        ; NO ROOM error
 
@@ -241,19 +237,16 @@ CAT7stop:     ldi     .low12 cat7Shell
 CAT7_Clear:   gosub   scratchArea   ; bring state back
               c=data
               dadd=c
-              a=c                   ; A= state
               c=data                ; read buffer header
               c=0     s             ; mark it as deleted
               data=c
               c=0     x             ; select chip 0
               dadd=c
-              acex
-              regn=c  Q             ; preserve M register in Q
+              gosub   OFSHFT
               gosub   PKIOAS        ; pack I/O area
-              c=0     x
-              dadd=c
-              c=regn  Q
-              m=c
+              gosub   scratchArea
+              c=data
+              n=c
               gosub   RSTKB
               s9=0                  ; BST after delete
               goto    back0         ; try to show previous buffer
@@ -262,7 +255,7 @@ CAT7_Clear:   gosub   scratchArea   ; bring state back
               .public CAT7_RUN
 CAT7_RUN:     gosub   scratchArea   ; bring state back
               c=data
-              m=c
+              n=c
               gosub   exitTransientApp
               gosub   RSTKB
               goto    step0         ; continue with next entry
