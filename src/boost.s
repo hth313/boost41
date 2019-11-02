@@ -146,6 +146,14 @@ keyTableCAT7: .con    40            ; SQRT
               .con    KeyXKD
               .con    55            ; R/S
               .con    KeyXKD
+              .con    2             ; Shift
+              .con    0x30e
+              .con    10            ; Shifted shift
+              .con    0x30e
+              .con    70            ; User
+              .con    0x30c
+              .con    78            ; Shifted user
+              .con    0x30c
               .con    0x100         ; end of table
 
               ;; The XKD pointers
