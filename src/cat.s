@@ -166,8 +166,7 @@ step:         c=n                   ; step to next buffer
 
               .align  4
               .public CAT7_BST
-CAT7_BST:     gosub   OFSHFT
-              s9=1                  ; ordinary BST
+CAT7_BST:     s9=1                  ; ordinary BST
               gosub   scratchArea   ; bring state back
               c=data
               n=c
