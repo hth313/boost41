@@ -134,23 +134,16 @@ CAT7found:    c=data                ; (P+2) this one exists, read header
               goto    CATreturn     ; (P+2) yes
 
 CAT7main0:    goto    CAT7main      ; relay
+CAT7found0:   goto    CAT7found     ; relay
+step00:       goto    step          ; relay
 
-CAT7wait:     c=0
-              ldi     60            ; load outer counter (goes down)
-              rcr     -3
-CAT7delay:    ldi     1000          ; inner delay counter (goes up)
+CAT7wait:     ldi     1000          ; inner delay counter (goes up)
 CAT7loop:     rstkb
               chkkb
               goc     CAT7key       ; some key is down
-              c=c+1   x
+              c=c-1   x
               gonc    CAT7loop
-step00:       goto    step          ; step to next
-CAT7loopOuter:
-              c=c-1   m
-              gonc    CAT7delay     ; not running, loop again
-                                    ; running, step to next entry
-
-CAT7found0:   goto    CAT7found     ; relay
+              goto    step          ; step to next
 
               .align  4
               .public CAT7_SST
@@ -193,7 +186,6 @@ CATreturn:    gosub   scratchArea   ; save state and return to OS
               gosub   STMSGF        ; set message flag
               golong  NFRKB         ; give control back to OS
 
-CAT7loopOuter0: goto  CAT7loopOuter
 CAT7loop0:    goto    CAT7loop     ; relay
 
 ;;; Handle key while running
@@ -205,9 +197,9 @@ CAT7key:      m=c                   ; save delay counters
               goto    CAT7stop      ; R/S
               c=m                   ; undefined key, speed up
               a=c     x             ; shave some delay off
-              ldi     200
-              c=a+c   x
-              goc     CAT7loopOuter0
+              ldi     10
+              c=a-c   x
+              goc     step
               goto    CAT7loop0
 
 back0:        goto    back          ; relay
