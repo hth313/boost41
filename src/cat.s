@@ -1,6 +1,8 @@
 #include "mainframe.i"
 #include "OS4.h"
 
+PRT12:        .equlab 0X6FD7
+
               .section BoostTable, rodata
               .align  4
               .public catShell
@@ -124,6 +126,15 @@ CAT7found:    c=data                ; (P+2) this one exists, read header
               a=c
               gosub   GENNUM
               gosub   ENCP00
+              c=regn  8
+              c=0     s             ; just say it is not CAT 1
+              regn=c  8
+              c=n
+              m=c                   ; M= state
+              gosub   PRT12         ; send LCD to printer
+              c=m
+              n=c                   ; N= state
+
               gosub   hasActiveTransientApp
               goto    CAT7wait      ; (P+1) no
               goto    CATreturn     ; (P+2) yes
