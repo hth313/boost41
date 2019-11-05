@@ -57,13 +57,8 @@ catHandler:   c=n
 myCAT:        nop                   ; non-programmable
               acex    x
               st=c
-              ?s7=1                 ; indirect?
-              gonc    10$           ; no
-              gosub   ADRFCH        ; get reg
-              gosub   BCDBIN        ; convert to binary
-              st=c
-10$:          c=0
-              c=st
+              s8=0
+              gosub   TONSTF
               n=c                   ; N.X= catalog number
               ldi     ExtensionCAT
               gosub   extensionHandler
