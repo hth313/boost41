@@ -1,7 +1,7 @@
 OS4 = ../../OS4/src
 LIB4 = ../../lib41/include
 RPN_SRCS =
-SRCS = boost.s ramed.s compile.s mainframe.s poll.s tvm.s cat.s
+SRCS = boost.s ramed.s compile.s mainframe.s poll.s tvm.s cat.s xmemory.s
 
 OBJS = $(SRCS:%.s=%.o) $(RPN_SRCS:%.rpn=%.o)
 MOD = boost.mod

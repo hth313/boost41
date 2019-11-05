@@ -6,6 +6,7 @@
               .extern RAMED, COMPILE, APX, ASHFX, MKXYZ, `RTN?`
               .extern ARCLINT, SEED, RNDM, `2D6`, KILLBUF, `F/E`
               .extern `Y/N?`
+              .extern XRCL, XSTO, XXVIEW, XXARCL
               .extern N, I, PV, PMT, FV, TVM, TVMEXIT
               .extern myCAT
 XROMno:       .equ    15
@@ -29,6 +30,10 @@ FatStart:
               .fat    `Y/N?`
               .fat    `LUHN?`
               FAT     myCAT
+              .fat    XRCL
+              .fat    XSTO
+              .fat    XXVIEW
+              .fat    XXARCL
               .fat    TVM
               FAT     TVMEXIT
               FAT     N
