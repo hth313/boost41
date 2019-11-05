@@ -9,7 +9,7 @@
               .extern XRCL, XSTO, XXVIEW, XXARCL
               .extern N, I, PV, PMT, FV, TVM, TVMEXIT
               .extern myCAT
-XROMno:       .equ    15
+XROMno:       .equ    6
 
               .con    XROMno        ; XROM number
               .con    (FatEnd - FatStart) / 2 ; number of entry points
