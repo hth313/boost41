@@ -8,7 +8,7 @@
               .extern `Y/N?`
               .extern XRCL, XSTO, XXVIEW, XXARCL
               .extern N, I, PV, PMT, FV, TVM, TVMEXIT
-              .extern myCAT
+              .extern myCAT, myASN
 XROMno:       .equ    6
 
               .con    XROMno        ; XROM number
@@ -30,6 +30,7 @@ FatStart:
               .fat    `Y/N?`
               .fat    `LUHN?`
               FAT     myCAT
+              FAT     myASN
               .fat    XRCL
               .fat    XSTO
               .fat    XXVIEW
@@ -130,6 +131,8 @@ keyTableTVM:  .con    0             ; SIGMA+
               .public  sysKeyTable
 sysKeyTable:  .con    11            ; CAT key
               KeyEntry myCAT
+              .con    26            ; ASN key
+              KeyEntry myASN
               .con    0x100         ; end of table
 
 ;;; **********************************************************************
