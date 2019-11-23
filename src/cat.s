@@ -44,7 +44,7 @@ catHandler:   c=n
 
 ;;; **********************************************************************
 ;;;
-;;; CAT - A catalog replacement.
+;;; CAT' - A catalog replacement.
 ;;;
 ;;; Provide a 2-digit prompt and use the extension notification mechanism
 ;;; in OS4 to let any plug-in dynamically handle the catalog.
@@ -53,7 +53,8 @@ catHandler:   c=n
 
               .section BoostCode
               .public myCAT
-              .con    0x94          ; T
+              .con    '\'' + 0x80   ; '
+              .con    0x14          ; T
               .con    0x201         ; A
               .con    0x203         ; C 2-digit prompt
 myCAT:        nop                   ; non-programmable
