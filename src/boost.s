@@ -15,7 +15,6 @@ XROMno:       .equ    6
               .con    (FatEnd - FatStart) / 2 ; number of entry points
 FatStart:
               .fat    Header        ; ROM header
-              .fat    COMPILE
               .fat    RAMED
               .fat    APX
               .fat    ASHFX
@@ -188,3 +187,28 @@ extensionHandlers:
               .con    ExtensionCAT
               .con    .low12 catHandler
               .con    ExtensionListEnd
+
+
+;;; **********************************************************************
+;;;
+;;; Secondary FAT
+;;;
+;;; **********************************************************************
+
+              .section BoostFC6
+              .con    .low12 secondary1 ; Root pointer for secondary FAT headers
+
+              .section BoostSecondary ; First secondary FAT header
+              .align  4
+secondary1:   .con    0             ; pointer to next table
+              .con    (FAT1End - FAT1Start) / 2
+              .con    0             ; TBD
+              .con    0             ; start index
+              .con    .low12 FAT1Start
+              enrom1                ; This one is in bank 1
+              rtn
+
+              .section BoostSecondary
+              .align  4
+FAT1Start:    .fat    COMPILE
+FAT1End:
