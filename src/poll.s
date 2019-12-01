@@ -41,5 +41,8 @@ pollReturn:   gosub   LDSST0
               .con    0             ; I/O
               goto    deepWake      ; Deep wake-up
               goto    deepWake      ; Memory lost
-              .text   "A1OB"        ; Identifier BO-1A
+              .con    1             ; A
+              .con    '1'           ; 1
+              .con    0x0f          ; O (not tagged for banks)
+              .con    0x202         ; B (tagged as having secondaries)
               .con    0             ; checksum position
