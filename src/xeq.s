@@ -208,7 +208,39 @@ xassign:      c=regn  10            ; which variant of assignment is this?
               pt=     0
               c=c-1   pt            ; XROM?
               goc     10$           ; yes
-              golong  XASN          ; no, alpha assignment
+              c=regn  9             ; remove assignment?
+              m=c
+              ?c#0
+              golnc   clearAssignment ; yes
+              c=regn  10            ; save keycode in reg 10
+              acex    x
+              regn=c  10
+              gosub   XASRCH        ; C[3:0]_ALBL addr
+              ?s6=1                 ; found secondary?
+              golnc   XASN+10       ; no, use mainframe code
+              a=c     x             ; A.X= secondary sequence number
+              c=regn  10            ; get keycode
+              bcex    x             ; B[1:0]= keycode
+              c=0     x
+              pt=     2
+              lc      8             ; 0x800
+              ?a<c    x             ; below 0x800?
+              golnc   ERROF         ; no, out of range, cannot be assigned
+              c=b     m             ; C[6:3]= start address of page
+              cxisa                 ; C.X= XROM Id
+              rcr     -2            ; C[3:2]= XROM Id
+              c=0     wpt           ; C[1:0]= 0
+              c=c+c                 ; left align XROM Id in C[3:0]
+              c=c+c
+              c=c+c
+              a=0     m
+              a=a+c                 ; combine with secondary sequence number
+              c=b     m             ; C[6:3]= start address of page
+              abex                  ; A[1:0]= keycode
+                                    ; B[3:0]= XRSC, combined XROM and function Ids
+              gosub   setBank1      ; bank is changed by XASRCH, but we do not
+                                    ;  want that, so ensure it is in bank 1
+              golong  assignSecondary
 
 ;;; * XROM assignment
 10$:          acex    x             ; save keycode in REGN10
@@ -230,7 +262,6 @@ xassign:      c=regn  10            ; which variant of assignment is this?
               c=regn  9
               bcex                  ; B[3:0]= XROM function code
               golong  XASN05        ; join forces with XASN
-
 
 
 ;;; * Acceptor routines for XROM numbers
