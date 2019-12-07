@@ -238,7 +238,7 @@ xassign:      c=regn  10            ; which variant of assignment is this?
               c=b     m             ; C[6:3]= start address of page
               abex                  ; A[1:0]= keycode
                                     ; B[3:0]= XRSC, combined XROM and function Ids
-              gosub   setBank1      ; bank is changed by XASRCH, but we do not
+              gosub   resetBank     ; bank is changed by XASRCH, but we do not
                                     ;  want that, so ensure it is in bank 1
               golong  assignSecondary
 
