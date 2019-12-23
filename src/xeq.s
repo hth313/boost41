@@ -17,7 +17,7 @@ XASN05:       .equlab 0x27ad       ; internal undefined entry
 assign:       rgo     xassign
 ASNCODE0:     rgo     ASNCODE
 toASNXROM:    rgo     ASNXROM
-abortASN:     golong  ABTSEQ
+abortASN:     golong  XABTSEQ
               .con    '\'' + 0x80   ; '
               .con    0x0e          ; N
               .con    0x100 + 19    ; S
@@ -28,7 +28,7 @@ myASN:        nop                   ; non-programmable
                                     ;   perform the actual assignment
               goto    abortASN      ; <-
 5$:           ?s5=1                 ; alpha pressed?
-              goc     8$            ; yes
+              goc     alpha         ; yes
               c=n                   ; no, C[2:1]= logical keycode
               a=c     x
               ldi     18 << 4       ; XEQ keycode
@@ -44,7 +44,7 @@ myASN:        nop                   ; non-programmable
               goto    abortASN
               goto    5$
 
-8$:           gosub   ENCP00
+alpha:        gosub   ENCP00
               c=regn  14
               cstex
               s7=     1             ; set alpha mode
@@ -59,7 +59,7 @@ nextChar2:    gosub   NEXT1
               ?s6=1                 ; shift key?
               gonc    notShift
               gosub   TOGSHF        ; toggle shift key
-              goto    nextChar2
+              goto    nextChar
 
 delChar:      gosub   ENCP00
               c=regn  9
@@ -76,7 +76,10 @@ delChar:      gosub   ENCP00
               s7=     0             ; clear alpha mode
               c=st
               regn=c  14
-              golong  ABTSEQ
+              golong  XABTSEQ
+
+nextChar2_2:  goto    nextChar2     ; relay
+nextChar_2:   goto    nextChar      ; relay
 
 notShift:     gosub   ENCP00
               ?s5=1                 ; ALPHA key?
@@ -88,27 +91,46 @@ notShift:     gosub   ENCP00
               gosub   RTJLBL        ; right-justify operand
 22$:          regn=c  9             ; put back right-justified
                                     ; operand
-              c=regn  10            ; set REG10[0]=0 to indicate that we
-              pt=     0             ;   are doing ALPHA assign
-              lc      1
-              regn=c  10
-
               c=regn  14            ; put up SS0
               st=c
               s7=     0             ; clear alpha mode
               c=st
               gosub   ANN_14        ; store status sets and
                                     ; update ALPHA annunciator
-              golong  KEYOP
+              rxq     isXeq
+              goto    30$           ; XEQ
+              goto    40$           ; ASN
+30$:          ldi     0x1e          ; function code for AXEQ
+              bcex    x             ; B.X= function code for AXEQ
+              c=regn  10            ; also store in REGN10[4:3]
+              rcr     3
+              c=b     x
+              rcr     -3
+              regn=c  10
+              c=regn  9             ; XEQ
+              ?c#0                  ; empty alpha?
+              gonc    noAccept_1    ; yes, not accepted
+              sel q
+              pt=     13
+              sel p
+              pt=     2
+              ?c#0    pq            ; more than 1 char in label?
+              goc     40$           ; yes
+              gsubnc  ALCL00        ; no, test for local ALPHA LBL
+40$:          c=regn  10            ; set REG10[0]=1 to indicate that we
+              pt=     0             ;   have ALPHA input
+              lc      1
+              regn=c  10
+              rgo     toKEYOP
 
-nextChar2_1:  goto    nextChar2     ; relay
-nextChar_1:   goto    nextChar      ; relay
+nextChar2_1:  goto    nextChar2_2   ; relay
+nextChar_1:   goto    nextChar_2    ; relay
 
 charInput:    gosub   GTACOD
               a=c     x             ; copy character to A.X
               gosub   OFSHFT
               a=a-1   xs            ; is it a character?
-              gonc    noAccept      ; no
+noAccept_1:   gonc    noAccept      ; no (also relay)
               pt=     1
               ldi     127           ; lazy "T"
               ?a#c    wpt
@@ -137,7 +159,7 @@ charInput:    gosub   GTACOD
                                     ; note mask decrements B.S
               goto    nextChar2_1
 
-abortASN_1:   golong  ABTSEQ        ; relay
+abortASN_1:   golong  XABTSEQ        ; relay
 
 noAccept:     gosub   BLINK
               goto    nextChar_1
@@ -170,15 +192,20 @@ asnCode10:    regn=c  9             ; REG9[3:0]= XROM function code to assign
               pt=     0
               lc      0
               regn=c  10
-toKEYOP:      golong  KEYOP     ; request key to assign to, after which we
+toKEYOP:      rxq     isXeq
+              goto    100$          ; (P+1) do not ask for key if XEQ
+              golong  KEYOP         ; request key to assign to, after which we
                                     ;   should be invoked in our run vector!
+100$:         acex
+              rcr     -3            ; C[6:3]= XADR of XEQ'
+              gotoc                 ; go and do it
 
 ;;; * Assign based on numeric codes, we have already the first digit (or A..J)
 ;;; * pressed.
 ASNCODE:      gosub   parseNumberInput
               .con    .low12 accept_0_255
               .con    0x300         ; request 3 digits
-              goto    abortASN_1
+abortASN_2:   goto    abortASN_1
               acex
               rcr     3
               regn=c  9             ; REG9[12:11] holds first byte
@@ -186,7 +213,7 @@ ASNCODE:      gosub   parseNumberInput
               gosub   parseNumber
               .con    .low12 accept_0_255
               .con    0x300         ; request 3 digits
-              goto    abortASN_1
+              goto    abortASN_2
               c=regn  9
               rcr     9             ; C[3:2]= high byte
               pt=     1
@@ -267,9 +294,11 @@ xassign:      c=regn  10            ; which variant of assignment is this?
 ;;; * Acceptor routines for XROM numbers
               .section BoostCode
               .align  4
-accept_1_31:  ?a#0    x
+accept_1_31:  ?s8=1                 ; incomplete input?
+              goc     10$           ; yes, we accept 0
+              ?a#0    x
               rtnnc                 ; zero not accepted
-              ldi     32
+10$:          ldi     32
 accept10:     ?a<c    x             ; in range?
               golc    RTNP2         ; yes
               rtn                   ; no
@@ -279,6 +308,18 @@ accept_0_63:  ldi     65
               .align  4
 accept_0_255: ldi     256
               goto    accept10
+
+              .section BoostCode
+isXeq:        c=regn  8             ; return to (P+1) if XEQ
+              rcr     -4
+              a=c
+              pt=     2
+              lc      .nib2 myXEQ
+              lc      .nib1 myXEQ
+              lc      .nib0 myXEQ
+              ?a#c    x
+              rtnnc
+              golong  RTNP2
 
 ;;; **********************************************************************
 ;;;
@@ -291,8 +332,70 @@ accept_0_255: ldi     256
 
               .section BoostCode
               .public myXEQ
+abortXEQ:     golong  XABTSEQ
+xeq0:         rgo     xeq
+toXROM:       rgo     ASNXROM
               .con    '\'' + 0x80   ; '
               .con    0x11          ; Q
               .con    0x105         ; E
               .con    0x318         ; X
-myXEQ:        nop                   ; non-programmable
+myXEQ:        gosub   partialKey    ; marker partial key takeover
+              goto    xeq0          ; when executed, argument is done and we will
+                                    ;   perform the command
+              goto    abortXEQ
+              pt=     0
+              cgex
+              cstex
+              s4=1
+              s5=0                  ; reset XROM bit, we are really XEQ
+              cstex
+              cgex
+              pt=     1
+5$:           ?s5=1                 ; alpha pressed?
+              gonc    8$
+              rgo     alpha
+8$:           c=n                   ; no, C[2:1]= logical keycode
+              a=c     x
+              ldi     18 << 4       ; XEQ keycode
+              ?a#c    x
+              gonc    toXROM
+              gosub   ENCP00
+              c=regn  10
+              rcr     3
+              ldi     0xe0          ; function code for XEQ
+              a=c     x
+              rcr     -3
+              regn=c  10
+              gosub   ENLCD
+              ?s4=1                 ; A..J?
+              goc     xeqAJ         ; yes
+              ?s3=1                 ; digit?
+              gonc    10$           ; no
+              gosub   FDIGIT
+9$:           gosub   BLINK         ; blink and try again!
+              gosub   NEXT2
+              goto    abortXEQ
+              goto    5$
+
+10$:          ?s6=1                 ; SHIFT?
+              gonc    9$            ; no
+              gosub   ENCP00
+              golong  0x0d89        ; yes, join forces with XEQ/IND
+
+xeqAJ:        golong  AJ2
+
+
+xeq:          c=regn  10            ; which variant is this?
+              pt=     0
+              c=c-1   pt            ; XROM?
+              goc     10$           ; yes
+              c=regn  9             ; C= alpha string
+              m=c
+              gosub   XASRCH        ; C[3:0]_ALBL addr
+              ?s6=1                 ; found secondary?
+              golnc   0x0f66        ; no
+              c=b     m             ; C[6]= page address
+              golong  invokeSecondary
+
+10$:          c=regn  9             ; C[3:0]= XROM function code
+              golong  RAK70
