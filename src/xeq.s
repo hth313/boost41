@@ -255,16 +255,12 @@ xassign:      c=regn  10            ; which variant of assignment is this?
               golnc   ERROF         ; no, out of range, cannot be assigned
               c=b     m             ; C[6:3]= start address of page
               cxisa                 ; C.X= XROM Id
-              rcr     -2            ; C[3:2]= XROM Id
-              c=0     wpt           ; C[1:0]= 0
-              c=c+c                 ; left align XROM Id in C[3:0]
-              c=c+c
-              c=c+c
-              a=0     m
-              a=a+c                 ; combine with secondary sequence number
+              rcr     -3            ; C[4:3]= XROM Id
+              a=c     m             ; A[3:2]= XROM Id
+                                    ; A[2:0]= secondary function number
               c=b     m             ; C[6:3]= start address of page
               abex                  ; A[1:0]= keycode
-                                    ; B[3:0]= XRSC, combined XROM and function Ids
+                                    ; B[4:0]= XR-FFF, combined XROM and function Ids
               gosub   resetBank     ; bank is changed by XASRCH, but we do not
                                     ;  want that, so ensure it is in bank 1
               golong  assignSecondary
