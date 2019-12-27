@@ -167,7 +167,9 @@ secondary1:   .con    0             ; pointer to next table
               rtn
 
               .section BoostSecondary
+              .extern CLKYSEC
               .align  4
 FAT1Start:    .fat    COMPILE
 fatXEQ:       .fat    myXEQ
+              .fat    CLKYSEC
 FAT1End:
