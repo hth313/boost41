@@ -43,7 +43,6 @@ FatStart:
               FAT     FV
 FatEnd:       .con    0,0
 
-
 ;;; ************************************************************
 ;;;
 ;;; ROM header.
@@ -53,7 +52,9 @@ FatEnd:       .con    0,0
               .section BoostCode
 
               .name   "-BOOST 1A"   ; The name of the module
-Header:       rtn
+Header:       gosub   runSecondary  ; Must be first!
+              .con    0             ; I am secondary prefix XROM 6,0
+              ;; pops return address and never comes back
 
 ;;; **********************************************************************
 ;;;
@@ -160,7 +161,7 @@ extensionHandlers:
               .align  4
 secondary1:   .con    0             ; pointer to next table
               .con    (FAT1End - FAT1Start) / 2
-              .con    0             ; TBD
+              .con    0             ; prefix XROM (XROM 6,0 - ROM header)
               .con    0             ; start index
               .con    .low12 FAT1Start
               enrom1                ; This one is in bank 1
