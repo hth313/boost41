@@ -14,7 +14,7 @@ XROMno:       .equ    6
               .con    XROMno        ; XROM number
               .con    (FatEnd - FatStart) / 2 ; number of entry points
 FatStart:
-              .fat    Header        ; ROM header
+              .fat    BoostHeader   ; ROM header
               .fat    RAMED
               .fat    APX
               .fat    ASHFX
@@ -52,7 +52,7 @@ FatEnd:       .con    0,0
               .section BoostCode
 
               .name   "-BOOST 1A"   ; The name of the module
-Header:       gosub   runSecondary  ; Must be first!
+BoostHeader:  gosub   runSecondary  ; Must be first!
               .con    0             ; I am secondary prefix XROM 6,0
               ;; pops return address and never comes back
 
