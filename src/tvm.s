@@ -14,11 +14,14 @@
               .section BoostTable, rodata
               .align  4
 tvmShell:     .con    AppShell
-              .con    0             ; no display handler defined
+              .con    0                 ; no display handler defined
               .con    .low12 keyHandler ; standard keys
               .con    .low12 keyHandler ; user keys
               .con    0                 ; alpha keys, use default
               .con    .low12 myName
+              .con    0                 ; activation
+              .con    0                 ; deactivation
+              .con    0                 ; timeout
 
               .section BoostCode
               .align  4

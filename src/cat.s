@@ -274,6 +274,9 @@ cat7Shell:    .con    TransAppShell
               .con    .low12 cat7Handler ; user keys
               .con    0             ; alpha keys not needed
               .con    .low12 myName
+              .con    0             ; activation
+              .con    0             ; decativation
+              .con    .low12 Timeout ; timeout
 
               .section BoostCode
               .align  4
