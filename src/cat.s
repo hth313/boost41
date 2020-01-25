@@ -228,7 +228,8 @@ CAT7stop:     ldi     .low12 cat7Shell
               gosub   allocScratch
               goto    10$           ; (P+1) no room for scratch
               goto    CATreturn     ; give control back
-10$:          golong  noRoom        ; NO ROOM error
+10$:          gosub   exitTransientApp
+              golong  noRoom        ; NO ROOM error
 
               .public CAT7_Clear    ; clear buffer
               .align  4
