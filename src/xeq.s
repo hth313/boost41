@@ -1,4 +1,4 @@
-#include "mainframe.i"
+#include "mainframe.h"
 #include "OS4.h"
 
 XASN05:       .equlab 0x27ad       ; internal undefined entry

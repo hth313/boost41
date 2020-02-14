@@ -1,4 +1,4 @@
-#include "mainframe.i"
+#include "mainframe.h"
 
 BSTEP3:       .equlab 0x28e5        ; non-public entry point
 

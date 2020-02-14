@@ -1,4 +1,4 @@
-#include "mainframe.i"
+#include "mainframe.h"
 #include "OS4.h"
 
 PRT12:        .equlab 0X6FD7
