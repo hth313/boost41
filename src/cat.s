@@ -144,12 +144,14 @@ CAT7main0:    goto    CAT7main      ; relay
 CAT7found0:   goto    CAT7found     ; relay
 step00:       goto    step          ; relay
 
+              .newt_timing_start
 CAT7wait:     ldi     1000          ; inner delay counter (goes up)
 CAT7loop:     rstkb
               chkkb
               goc     CAT7key       ; some key is down
               c=c-1   x
               gonc    CAT7loop
+              .newt_timing_end
               goto    step          ; step to next
 
               .align  4
