@@ -40,7 +40,7 @@ TVM:          ldi     .low12 tvmShell
               .name   "TVMEXIT"
 TVMEXIT:      ldi     .low12 tvmShell
               gosub   exitShell     ; must be a gosub to provide page address
-              rtn
+              golong  NFRPU         ; must golong as exitShell uses +3 levels
 
               .section BoostCode
               .public N
