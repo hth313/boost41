@@ -64,7 +64,7 @@ myCAT:        nop                   ; non-programmable
               gosub   TONSTF
               n=c                   ; N.X= catalog number
               ldi     ExtensionCAT
-              gosub   extensionHandler
+              gosub   sendMessage
               gosub   ENCP00        ; no takers
               c=n
               st=c
