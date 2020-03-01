@@ -168,7 +168,7 @@ ASNXROM:      gosub   MESSL         ; request XROM number (1-31)
               .messl  "XR "
               gosub   parseNumber
               .con    .low12 accept_1_31
-              .con    0x200         ; request 2 digits
+              .con    2             ; request 2 digits
               goto    abortASN_1
               asl     x             ; *16
               acex    x
@@ -180,7 +180,7 @@ ASNXROM:      gosub   MESSL         ; request XROM number (1-31)
               rxq     appendComma
               gosub   parseNumber   ; request XROM function (0-63)
               .con    .low12 accept_0_63
-              .con    0x200         ; request 2 digits
+              .con    2             ; request 2 digits
               goto    abortASN_1
               c=regn  9
               rcr     10
@@ -204,7 +204,7 @@ toKEYOP:      rxq     isXeq
 ;;; * pressed.
 ASNCODE:      gosub   parseNumberInput
               .con    .low12 accept_0_255
-              .con    0x300         ; request 3 digits
+              .con    3             ; request 3 digits
 abortASN_2:   goto    abortASN_1
               acex
               rcr     3
@@ -212,7 +212,7 @@ abortASN_2:   goto    abortASN_1
               rxq     appendComma
               gosub   parseNumber
               .con    .low12 accept_0_255
-              .con    0x300         ; request 3 digits
+              .con    3             ; request 3 digits
               goto    abortASN_2
               c=regn  9
               rcr     9             ; C[3:2]= high byte
