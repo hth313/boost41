@@ -13,7 +13,7 @@ all: $(MOD)
 	rpncomp -l --no-fat --prefix-labels LBL_ $<
 
 %.o: %.s
-	asnut -I$(LIB4) -I$(OS4) -g -l $<
+	asnut --cpu=newt  -I$(LIB4) -I$(OS4) -g -l $<
 
 $(MOD): $(OBJS) linker.scm boost.moddesc ../../lib41/src/lib41.a
 	lnnut -g $(OBJS) --list-file=linker.lst linker.scm boost.moddesc  ../../lib41/src/lib41.a
