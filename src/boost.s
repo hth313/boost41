@@ -21,16 +21,16 @@ FatStart:
 ;              .fat    MKXYZ
               .fat    `RTN?`
               .fat    ARCLINT
-;              .fat    SEED
-;              .fat    RNDM
-              .fat    `2D6`
+              .fat    SEED
+              .fat    RNDM
+;              .fat    `2D6`
 ;              .fat    KILLBUF
               .fat    `F/E`
               .fat    `Y/N?`
               .fat    `LUHN?`
               FAT     myCAT
               FAT     myASN
-              .fat    XRCL
+;              .fat    XRCL
               .fat    XSTO
               .fat    XXVIEW
               .fat    XXARCL
@@ -147,7 +147,6 @@ extensionHandlers:
               .con    .low12 catHandler
               .con    ExtensionListEnd
 
-
 ;;; **********************************************************************
 ;;;
 ;;; Secondary FAT
@@ -168,11 +167,12 @@ secondary1:   .con    0             ; pointer to next table
               rtn
 
               .section BoostSecondary
-	      .extern CLKYSEC, readRom16, writeRom16
+              .extern CLKYSEC, readRom16, writeRom16
               .align  4
 FAT1Start:    .fat    COMPILE
 fatXEQ:       .fat    myXEQ
               .fat    CLKYSEC
-	      .fat    readRom16
-	      .fat    writeRom16
+              .fat    readRom16
+              .fat    writeRom16
+              .fat    XRCL
 FAT1End:
