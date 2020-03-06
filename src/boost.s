@@ -18,7 +18,7 @@ FatStart:
               .fat    RAMED
               .fat    APX
               .fat    ASHFX
-              .fat    MKXYZ
+;              .fat    MKXYZ
               .fat    `RTN?`
               .fat    ARCLINT
 ;              .fat    SEED
