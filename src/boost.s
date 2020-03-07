@@ -21,7 +21,6 @@ FatStart:
 ;              .fat    MKXYZ
               .fat    `RTN?`
               .fat    ARCLINT
-              .fat    SEED
               .fat    RNDM
               .fat    `2D6`
 ;              .fat    KILLBUF
@@ -174,5 +173,6 @@ fatXEQ:       .fat    myXEQ
               .fat    CLKYSEC
               .fat    readRom16
               .fat    writeRom16
+              .fat    SEED
               .fat    XRCL
 FAT1End:
