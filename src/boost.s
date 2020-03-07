@@ -23,7 +23,7 @@ FatStart:
               .fat    ARCLINT
               .fat    SEED
               .fat    RNDM
-;              .fat    `2D6`
+              .fat    `2D6`
 ;              .fat    KILLBUF
               .fat    `F/E`
               .fat    `Y/N?`
