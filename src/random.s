@@ -168,18 +168,21 @@ store_seed:   c=n                   ; C= new seed
 ;;; StoreSeed - save seed to buffer
 ;;;
 ;;; Callable routine to save seed to the seed buffer.
+;;; This routine assumes that the seed buffer already exists. This is true
+;;; if a call has been made to RNDM0.
 ;;;
 ;;; IN: N= fractional seed
 ;;; OUT: C= buffer header register
 ;;;      Seed buffer register selected.
 ;;;
-;;; Uses: A, C, M, DADD, +3 sub levels
+;;; Uses: A, B.X, C, G, DADD, +3 sub levels
 ;;;
 ;;; **********************************************************************
 
 StoreSeed:    c=0     x
               gosub   chkbufHosted  ; find seed buffer
-              goto    createSeedBuffer
+              goto    toERRNE       ; (this should not happen, prior call to
+                                    ;  RNDM0 assumed)
               c=data                ; C= buffer header
               acex                  ; buffer header to A
               c=n                   ; get new seed
@@ -193,3 +196,4 @@ StoreSeed:    c=0     x
               rtn
 
 toNoRoom:     golong  noRoom
+toERRNE:      golong  ERRNE
