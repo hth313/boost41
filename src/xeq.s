@@ -245,7 +245,6 @@ xassign:      c=regn  10            ; which variant of assignment is this?
               gosub   XASRCH        ; C[3:0]_ALBL addr
               ?s6=1                 ; found secondary?
               golnc   XASN+10       ; no, use mainframe code
-              a=c     x             ; A.X= secondary sequence number
               c=regn  10            ; get keycode
               bcex    x             ; B[1:0]= keycode
               c=0     x
