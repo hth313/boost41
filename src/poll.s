@@ -23,6 +23,8 @@ deepWake:     n=c
               gosub   activateShell
               goto    pollReturn    ; (P+1) failed, not enough memory
                                     ; (P+2) success
+              ldi     0 | 128       ; hosted buffer 0
+              gosub   reclaimHostedBuffer
 pollReturn:   gosub   LDSST0
               c=n
               golong  RMCK10
