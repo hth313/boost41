@@ -93,7 +93,7 @@ CAT7main:     n=c                   ; main loop
               c=0     s
               c=0     x
               rcr     -2
-              gosub   chkbuf
+              gosub   findBuffer
               goto    step00        ; (P+1) not found, try step to next
 CAT7found:    c=data                ; (P+2) this one exists, read header
               acex    x
@@ -180,7 +180,7 @@ back:         c=n                   ; search backwards
               c=0     s
               c=0     x
               rcr     -2
-              gosub   chkbuf
+              gosub   findBuffer
               goto    back          ; (P+1) no such buffer
               goto    CAT7found0    ; (P+2) exists
 10$:          ?s9=1

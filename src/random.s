@@ -34,7 +34,7 @@
               .name   "RNDM"
 RNDM:         s9=1
 RNDM0:        c=0     x             ; buffer 0
-              gosub   chkbufHosted  ; seek seed buffer
+              gosub   findBufferHosted  ; seek seed buffer
               goto    createSeedBuffer ; (P+1) no buffer
               c=data
               acex                  ; move packed seed to A
@@ -180,7 +180,7 @@ store_seed:   c=n                   ; C= new seed
 ;;; **********************************************************************
 
 StoreSeed:    c=0     x
-              gosub   chkbufHosted  ; find seed buffer
+              gosub   findBufferHosted ; find seed buffer
               goto    toERRNE       ; (this should not happen, prior call to
                                     ;  RNDM0 assumed)
               c=data                ; C= buffer header
