@@ -14,6 +14,7 @@ XASN05:       .equlab 0x27ad       ; internal undefined entry
 
               .section BoostCode
               .public myASN
+              .extern parseNumber, parseNumberInput
 assign:       rgo     xassign
 ASNCODE0:     rgo     ASNCODE
 toASNXROM:    rgo     ASNXROM
@@ -166,7 +167,7 @@ noAccept:     gosub   BLINK
 
 ASNXROM:      gosub   MESSL         ; request XROM number (1-31)
               .messl  "XR "
-              gosub   parseNumber
+              gsbp    parseNumber
               .con    .low12 accept_1_31
               .con    2             ; request 2 digits
               goto    abortASN_1
@@ -178,7 +179,7 @@ ASNXROM:      gosub   MESSL         ; request XROM number (1-31)
               regn=c  9             ; REG9[12:10] holds lower 3 nibbles of XROM
               gosub   ENLCD
               rxq     appendComma
-              gosub   parseNumber   ; request XROM function (0-63)
+              gsbp    parseNumber   ; request XROM function (0-63)
               .con    .low12 accept_0_63
               .con    2             ; request 2 digits
               goto    abortASN_1
@@ -202,7 +203,7 @@ toKEYOP:      rxq     isXeq
 
 ;;; * Assign based on numeric codes, we have already the first digit (or A..J)
 ;;; * pressed.
-ASNCODE:      gosub   parseNumberInput
+ASNCODE:      gsbp    parseNumberInput
               .con    .low12 accept_0_255
               .con    3             ; request 3 digits
 abortASN_2:   goto    abortASN_1
@@ -210,7 +211,7 @@ abortASN_2:   goto    abortASN_1
               rcr     3
               regn=c  9             ; REG9[12:11] holds first byte
               rxq     appendComma
-              gosub   parseNumber
+              gsbp    parseNumber
               .con    .low12 accept_0_255
               .con    3             ; request 3 digits
               goto    abortASN_2
