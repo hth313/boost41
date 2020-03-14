@@ -29,6 +29,7 @@ FatStart:
               .fat    `LUHN?`
               FAT     myCAT
               FAT     myASN
+              .fat    PAUSE
 ;              .fat    XRCL
               .fat    XSTO
               .fat    XXVIEW
@@ -176,3 +177,33 @@ fatXEQ:       .fat    myXEQ
               .fat    SEED
               .fat    XRCL
 FAT1End:
+
+
+              .name "PAUSE"
+PAUSE:        ?s13=1                ; running?
+              rtnnc                 ; no
+              gosub   activeApp
+              goto    normalPSE     ; (P+1) no active application
+              gosub   shellKeyboard
+              cxisa
+              ?c#0    x
+              gonc    normalPSE     ; no keyboard override
+              gosub   unpack
+              c=c+1   m             ; step to clear digit entry handler
+              c=c+1   m
+              c=c+1   m
+              c=c+1   m
+              cxisa                 ; fetch handler address (packed)
+              ?c#0    x             ; does it have digit entry?
+              gonc    normalPSE     ; no
+              c=b     x
+              dadd=c                ; select buffer header
+              c=data
+              cstex
+              st=1    Flag_Pause
+              cstex
+              data=c
+              s13=0                 ; clear running flag
+              rtn
+normalPSE:    gosub   LDSST0
+              golong  PSE
