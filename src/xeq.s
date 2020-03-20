@@ -66,7 +66,7 @@ delChar:      gosub   ENCP00
               c=regn  9
               ?c#0                  ; any chars to delete?
               gonc    10$           ; no
-              rcr     12            ; yes. delete one char
+              rcr     12            ; yes, delete one char
               c=0     wpt
               regn=c  9
               gosub   OFSHFT
