@@ -153,7 +153,7 @@ extensionHandlers:
 ;;;
 ;;; **********************************************************************
 
-              .section BoostFC6
+              .section BoostFC2
               .con    .low12 secondary1 ; Root pointer for secondary FAT headers
 
               .section BoostSecondary ; First secondary FAT header
