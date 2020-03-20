@@ -166,7 +166,7 @@ secondary1:   .con    0             ; pointer to next table
               enrom1                ; This one is in bank 1
               rtn
 
-              .section BoostSecondary
+              .section BoostSecondary1
               .extern CLKYSEC, readRom16, writeRom16
               .align  4
 FAT1Start:    .fat    COMPILE
