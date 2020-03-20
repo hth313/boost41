@@ -258,11 +258,8 @@ xassign:      c=regn  10            ; which variant of assignment is this?
               rcr     -3            ; C[4:3]= XROM Id
               a=c     m             ; A[3:2]= XROM Id
                                     ; A[2:0]= secondary function number
-              c=b     m             ; C[6:3]= start address of page
               abex                  ; A[1:0]= keycode
                                     ; B[4:0]= XR-FFF, combined XROM and function Ids
-              gosub   resetBank     ; bank is changed by XASRCH, but we do not
-                                    ;  want that, so ensure it is in bank 1
               golong  assignSecondary
 
 ;;; * XROM assignment
