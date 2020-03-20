@@ -34,6 +34,7 @@
               .name   "RNDM"
 RNDM:         s9=1
 RNDM0:        c=0     x             ; buffer 0
+              s8=0
               gosub   findBufferHosted  ; seek seed buffer
               goto    createSeedBuffer ; (P+1) no buffer
               c=data
@@ -129,6 +130,8 @@ createSeedBuffer:
               c=c+1   x             ; request one register
               gosub   newHostedBuffer
               goto    toNoRoom      ; no room
+              ?s8=1                 ; from SEED?
+              goc     redoSeed
               c=0                   ; invent a new seed
               gosub   IGDHMS        ; init and get hms (uses 3 sub levels!)
               ?c#0
@@ -144,6 +147,10 @@ createSeedBuffer:
               gsbp    store_seed
               goto    RNDM00        ; go back
 
+redoSeed:     c=0     x
+              dadd=c
+              goto    SEED
+
 ;;; **********************************************************************
 ;;;
 ;;; SEED - initialize with specific seed
@@ -155,6 +162,7 @@ createSeedBuffer:
               .name   "SEED"
 SEED:         c=regn  x             ; entry for SEED
               n=c
+              s8=1                  ; doing SEED
 
 store_seed:   c=n                   ; C= new seed
               setdec                ; take fractional part of seed
@@ -168,8 +176,6 @@ store_seed:   c=n                   ; C= new seed
 ;;; StoreSeed - save seed to buffer
 ;;;
 ;;; Callable routine to save seed to the seed buffer.
-;;; This routine assumes that the seed buffer already exists. This is true
-;;; if a call has been made to RNDM0.
 ;;;
 ;;; IN: N= fractional seed
 ;;; OUT: C= buffer header register
@@ -181,8 +187,7 @@ store_seed:   c=n                   ; C= new seed
 
 StoreSeed:    c=0     x
               gosub   findBufferHosted ; find seed buffer
-              goto    toERRNE       ; (this should not happen, prior call to
-                                    ;  RNDM0 assumed)
+              goto    createSeedBuffer
               c=data                ; C= buffer header
               acex                  ; buffer header to A
               c=n                   ; get new seed
