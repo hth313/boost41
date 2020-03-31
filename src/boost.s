@@ -36,6 +36,7 @@ FatStart:
               .fat    XSTO
               .fat    XXVIEW
               .fat    XXARCL
+              .fat    EXCHANGE
               .fat    TVM
               FAT     TVMEXIT
               FAT     N
@@ -212,3 +213,42 @@ PAUSE:        ?s13=1                ; running?
               rtn
 normalPSE:    gosub   LDSST0
               golong  PSE
+
+;;; **********************************************************************
+;;;
+;;; Generic register exchange
+;;;
+;;; Swap two register operands. This is very much like the X<> function,
+;;; but takes two arbitrary postfix register operands.
+;;;
+;;; **********************************************************************
+
+              .name   "<>"
+EXCHANGE:     nop
+              nop
+              gosub   dualArgument
+              .con    0
+              acex
+              pt=     2
+              g=c                   ; save first argument in G
+              st=c                  ; ST= second argument
+              gosub   ADRFCH
+              pt=     0
+              c=g
+              st=c                  ; ST= first argument
+              c=n
+              rcr     -3
+              stk=c                 ; save register argument on stack
+              gosub   ADRFCH
+              a=c                   ; A= register contents
+              c=stk
+              rcr     3
+              dadd=c                ; select second register
+              c=data                ; read it
+              acex
+              data=c                ; write first value
+              c=n
+              dadd=c                ; select first register
+              acex
+              data=c                ; write second value
+              rtn
