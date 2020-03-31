@@ -37,7 +37,7 @@ FatStart:
               .fat    XXVIEW
               .fat    XXARCL
               .fat    EXCHANGE
-              .fat    EXITSH
+              .fat    EXITAPP
               .fat    TVM
               FAT     TVMEXIT
               FAT     N
@@ -263,18 +263,6 @@ EXCHANGE:     nop
 ;;;
 ;;; **********************************************************************
 
-              .name   "EXITSH"
-EXITSH:       gosub   topShell
-              goto    100$          ; (P+1) no buffer
-              goto    100$          ; (P+2) no shells
-              ?s9=1                 ; (P+3) application shell found?
-              gonc    100$          ; no
-              c=m                   ; get scan state
-              ?c#0    s             ; shell desriptor in upper half?
-              gonc    10$           ; no, lower
-              pt=     13
-10$:          c=data
-              c=0     pt            ; deactivate shell
-              data=c
-100$:         golong  NFRC          ; done, neutral on stack lift
-
+              .name   "EXITAPP"
+EXITAPP:      gosub   exitApp
+              golong  NFRC          ; done, neutral on stack lift
