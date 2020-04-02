@@ -18,7 +18,6 @@ XRCL:         nop
               nop
               gosub   argument
               .con    00 + 0x100    ; no ST
-              st=c
               s8=0
               gosub   TONSTF
               gosub   getXAdr
@@ -45,7 +44,6 @@ XSTO:         nop
               nop
               gosub   argument
               .con    00 + 0x100    ; no ST
-              st=c
               s8=0
               gosub   TONSTF
               gosub   getXAdr
@@ -75,7 +73,6 @@ XXVIEW:       nop
               nop
               gosub   argument
               .con    00 + 0x100    ; no ST
-              st=c
               s8=0
               gosub   TONSTF
               gosub   getXAdr
@@ -103,7 +100,6 @@ XXARCL:        nop
               nop
               gosub   argument
               .con    00 + 0x100    ; no ST
-              st=c
               s8=0
               gosub   TONSTF
               gosub   getXAdr
