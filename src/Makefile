@@ -2,7 +2,7 @@ OS4 = ../../OS4/src
 LIB4 = ../../lib41/include
 RPN_SRCS =
 SRCS = boost.s ramed.s compile.s poll.s tvm.s cat.s xmemory.s xeq.s \
-        assign.s readrom16.s writerom16.s random.s catalog.s partialKeys.s \
+        assign.s readrom16.s writerom16.s random.s partialKeys.s \
         compare.s
 
 OBJS = $(SRCS:%.s=%.o) $(RPN_SRCS:%.rpn=%.o)
