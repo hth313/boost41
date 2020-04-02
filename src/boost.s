@@ -141,7 +141,7 @@ keyTableCAT7: .con    40            ; SQRT
 ;;;
 ;;; **********************************************************************
 
-              .section BoostTable, rodata
+              .section ExtensionHandlers, rodata
               .public extensionHandlers
               .extern catHandler
               .align  4

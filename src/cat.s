@@ -3,7 +3,7 @@
 
 PRT12:        .equlab 0X6FD7
 
-              .section BoostTable, rodata
+              .section CatShell, rodata
               .align  4
               .public catShell
 catShell:     .con    SysShell
@@ -268,7 +268,7 @@ CAT7_RUN:     gosub   scratchArea   ; bring state back
 ;;;
 ;;; **********************************************************************
 
-              .section BoostTable, rodata
+              .section CAT7Shell, rodata
               .align  4
 cat7Shell:    .con    TransAppShell
               .con    0             ; no display handler defined
