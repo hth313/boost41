@@ -17,7 +17,7 @@
 XRCL:         nop
               nop
               gosub   argument
-              .con    00 + 0x100    ; no ST
+              .con    00 + SEMI_MERGED_NO_STACK
               s8=0
               gosub   TONSTF
               gosub   getXAdr
@@ -43,7 +43,7 @@ XRCL:         nop
 XSTO:         nop
               nop
               gosub   argument
-              .con    00 + 0x100    ; no ST
+              .con    00 + SEMI_MERGED_NO_STACK
               s8=0
               gosub   TONSTF
               gosub   getXAdr
@@ -72,7 +72,7 @@ XSTO:         nop
 XXVIEW:       nop
               nop
               gosub   argument
-              .con    00 + 0x100    ; no ST
+              .con    00 + SEMI_MERGED_NO_STACK
               s8=0
               gosub   TONSTF
               gosub   getXAdr
@@ -99,7 +99,7 @@ XXVIEW:       nop
 XXARCL:        nop
               nop
               gosub   argument
-              .con    00 + 0x100    ; no ST
+              .con    00 + SEMI_MERGED_NO_STACK
               s8=0
               gosub   TONSTF
               gosub   getXAdr
