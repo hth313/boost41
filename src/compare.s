@@ -22,7 +22,7 @@
 EQ:           nop
               nop
               gosub   dualArgument
-              .con    0x000 + '?'
+              .con    '?'
               rxq     fetchArguments
               ?a#c
               golc    SKP
@@ -33,7 +33,7 @@ EQ:           nop
 NE:           nop
               nop
               gosub   dualArgument
-              .con    0x000 + '?'
+              .con    '?'
               rxq     fetchArguments
               ?a#c
               golc    NOSKP
@@ -44,8 +44,9 @@ NE:           nop
 LT:           nop
               nop
               gosub   dualArgument
-              .con    0x000 + '?'
-              rxq     fetchArgumentsCheck
+              .con    '?'
+              rxq     fetchArguments ; save a sub level
+              rxq     checkArguments
               ?a<c
               golc    NOSKP
               golong  SKP
@@ -55,8 +56,9 @@ LT:           nop
 LE:           nop
               nop
               gosub   dualArgument
-              .con    0x000 + '?'
-              rxq     fetchArgumentsCheck
+              .con    '?'
+              rxq     fetchArguments ; save a sub level
+              rxq     checkArguments
               ?a<c
               golc    SKP
               golong  NOSKP
@@ -72,8 +74,7 @@ compareOrdering: .macro
               c=b     s             ; SXXXMMMMMMMMMM
               .endm
 
-fetchArgumentsCheck:
-              rxq     fetchArguments
+checkArguments:
               c=c-1   s             ; check for alpha data
               goc     21$
               a=a-1   s
