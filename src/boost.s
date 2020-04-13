@@ -7,7 +7,6 @@
               .extern ARCLINT, SEED, RNDM, `2D6`, KILLBUF, `F/E`
               .extern `Y/N?`
               .extern XRCL, XSTO, XXVIEW, XXARCL
-              .extern N, I, PV, PMT, FV, TVM, TVMEXIT
               .extern myCAT, myASN, myXEQ
               .extern EQ, NE, LT, LE
 XROMno:       .equ    6
@@ -38,13 +37,6 @@ FatStart:
               .fat    XXARCL
               .fat    EXCHANGE
               .fat    EXITAPP
-              .fat    TVM
-              FAT     TVMEXIT
-              FAT     N
-              FAT     I
-              FAT     PV
-              FAT     PMT
-              FAT     FV
 FatEnd:       .con    0,0
 
 ;;; ************************************************************
@@ -65,23 +57,6 @@ BoostHeader:  gosub   runSecondary  ; Must be first!
 ;;; TVM sparse keyboard definition.
 ;;;
 ;;; **********************************************************************
-
-              .section BoostTable, rodata
-              .align  4
-              .public keyTableTVM
-keyTableTVM:  .con    0             ; SIGMA+
-              KeyEntry N
-              .con    16            ; 1/X
-              KeyEntry I
-              .con    32            ; SQRT
-              KeyEntry PV
-              .con    48            ; LOG
-              KeyEntry PMT
-              .con    64            ; LN
-              KeyEntry FV
-              .con    31            ; PI
-              KeyEntry TVMEXIT
-              .con    0x100         ; end of table
 
               .section BoostTable, rodata
               .align  4
