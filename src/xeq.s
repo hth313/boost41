@@ -339,7 +339,6 @@ myXEQ:        gosub   partialKey    ; marker partial key takeover
               pt=     0
               cgex
               cstex
-              s4=1
               s5=0                  ; reset XROM bit, we are really XEQ
               cstex
               cgex
