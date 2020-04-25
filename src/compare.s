@@ -3,7 +3,7 @@
 
 ;;; **********************************************************************
 ;;;
-;;; Generic two argument compare instructions.
+;;; Generic two argument compare functions.
 ;;;
 ;;; These are dual argument semi-merged instructions. For variants are
 ;;; provided: Equal, not-equal, less-than and less-than-or-equal.
@@ -22,7 +22,7 @@
 EQ:           nop
               nop
               gosub   dualArgument
-              .con    '?'
+              .con    SEMI_MERGED_QMARK
               rxq     fetchArguments
               ?a#c
               golc    SKP
@@ -33,7 +33,7 @@ EQ:           nop
 NE:           nop
               nop
               gosub   dualArgument
-              .con    '?'
+              .con    SEMI_MERGED_QMARK
               rxq     fetchArguments
               ?a#c
               golc    NOSKP
@@ -44,7 +44,7 @@ NE:           nop
 LT:           nop
               nop
               gosub   dualArgument
-              .con    '?'
+              .con    SEMI_MERGED_QMARK
               rxq     fetchArguments ; save a sub level
               rxq     checkArguments
               ?a<c
@@ -56,7 +56,7 @@ LT:           nop
 LE:           nop
               nop
               gosub   dualArgument
-              .con    '?'
+              .con    SEMI_MERGED_QMARK
               rxq     fetchArguments ; save a sub level
               rxq     checkArguments
               ?a<c
