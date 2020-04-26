@@ -22,9 +22,8 @@
 ;;;
 ;;; **********************************************************************
 
-              .section BoostCode
+              .section BoostCode2
               .public RAMED
-              .extern KEYFC
               .name   "RAMED"
 RAMED:        nop                   ; non-programmable
               ?s3=1                 ; program mode?
@@ -131,7 +130,7 @@ RAMED:        nop                   ; non-programmable
 
 19$:          gosub   ENCP00        ; leave RAMED
               gosub   RSTKB
-              golong  CLDSP         ; put up goose
+1000$:        enrom1
 
 18$:          a=a-1   m
               goc     19$           ; timeout
@@ -206,7 +205,7 @@ RAMED:        nop                   ; non-programmable
               goto    38$           ; toggle cursor position
               goto    51$           ; illegal key
 
-33$:          golong  OFF           ; turn HP-41 off
+33$:          enrom1                ; exit and turn HP-41 off
 
 31$:          rgo     19$           ; leave RAMED
 
@@ -340,6 +339,14 @@ RAMED:        nop                   ; non-programmable
               m=c
 44$:          rgo     36$           ; move cursor right
 
+;;; * Exit is done from bank 1
+              .section BoostCode1
+              .shadow 1000$ + 1
+              golong  CLDSP         ; put up goose
+
+              .section BoostCode1
+              .shadow 33$ + 1
+              golong  OFF           ; turn off from bank 1
 
 ;;; ************************************************************
 ;;;
@@ -354,8 +361,9 @@ RAMED:        nop                   ; non-programmable
 ;;;
 ;;; ************************************************************
 
+              .section BoostCode2, reorder
 outputHex:    a=a-1   x
-              rtn     c
+              rtnc
               b=a                   ; convert to LCD code
               pt=     13
               c=0     x

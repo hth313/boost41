@@ -1,9 +1,10 @@
 #include "mainframe.h"
 #include "OS4.h"
 #include "lib41.h"
+#include "boostInternals.h"
 
               .section BoostFAT
-              .extern RAMED, COMPILE, APX, ASHFX, MKXYZ, `RTN?`
+              .extern RAMED, COMPILE, APX, ASHFX, `RTN?`
               .extern ARCLINT, SEED, RNDM, `2D6`, KILLBUF, `F/E`
               .extern `Y/N?`
               .extern XRCL, XSTO, XXVIEW, XXARCL
@@ -15,10 +16,9 @@ XROMno:       .equ    6
               .con    (FatEnd - FatStart) / 2 ; number of entry points
 FatStart:
               .fat    BoostHeader   ; ROM header
-              .fat    RAMED
+              .fat    Prefix2
               .fat    APX
               .fat    ASHFX
-;              .fat    MKXYZ
               .fat    `RTN?`
               .fat    ARCLINT
               .fat    RNDM
@@ -31,7 +31,10 @@ FatStart:
               FAT     myASN
               .fat    PAUSE
               .fat    EQ
-;              .fat    XRCL
+              .fat    NE
+              .fat    LT
+              .fat    LE
+              .fat    XRCL
               .fat    XSTO
               .fat    XXVIEW
               .fat    XXARCL
@@ -52,9 +55,15 @@ BoostHeader:  gosub   runSecondary  ; Must be first!
               .con    0             ; I am secondary prefix XROM 6,0
               ;; pops return address and never comes back
 
+              .section BoostCode
+              .name   "(BPFX2)"     ; short name for prefix function
+Prefix2:      gosub   runSecondary  ; Must be first!
+              .con    1             ; I am secondary prefix XROM 6,1
+              ;; pops return address and never comes back
+
 ;;; **********************************************************************
 ;;;
-;;; TVM sparse keyboard definition.
+;;; System shell sparse keyboard definition.
 ;;;
 ;;; **********************************************************************
 
@@ -69,7 +78,7 @@ sysKeyTable:  .con    11            ; CAT key
               KeyEntry myASN
               .con    0x100         ; end of table
 
-xeqSecondary: .con    0             ; secondary
+xeqSecondary: .con    0      ; secondary
               .con    (fatXEQ - FAT1Start) >> 1
 
 ;;; **********************************************************************
@@ -128,39 +137,59 @@ extensionHandlers:
 
 ;;; **********************************************************************
 ;;;
-;;; Secondary FAT
+;;; Secondary FATs
 ;;;
 ;;; **********************************************************************
 
               .section BoostFC2
               .con    .low12 secondary1 ; Root pointer for secondary FAT headers
 
-              .section BoostSecondary ; First secondary FAT header
+;;; * First secondary FAT header, serving bank 1
+              .section BoostSecondary1, reorder
               .align  4
-secondary1:   .con    0             ; pointer to next table
+secondary1:   .con    .low12 secondary2 ; pointer to next table
               .con    (FAT1End - FAT1Start) / 2
               .con    0             ; prefix XROM (XROM 6,0 - ROM header)
               .con    0             ; start index
               .con    .low12 FAT1Start
-              enrom1                ; This one is in bank 1
-              rtn
+              rtn                   ; this one is in bank 1,
+                                    ; no need to switch bank
 
-              .section BoostSecondary1
+              .section BoostSecondary1, reorder
               .extern CLKYSEC, readRom16, writeRom16
               .align  4
-FAT1Start:    .fat    COMPILE
+FAT1Start:    .fat    SEED
 fatXEQ:       .fat    myXEQ
               .fat    CLKYSEC
               .fat    readRom16
               .fat    writeRom16
-              .fat    SEED
-              .fat    XRCL
-              .fat    NE
-              .fat    LT
-              .fat    LE
-FAT1End:
+FAT1End:      .con    0,0
 
+;;; * Second secondary FAT header, serving bank 2
 
+              .section BoostSecondary1, reorder
+              .align  4
+secondary2:   .con    0             ; no next table
+              .con    (FAT2End - FAT2Start) / 2
+              .con    1             ; prefix XROM (XROM 6,1 - (BPFX2))
+              .con    256           ; start index
+              .con    .low12 FAT2Start
+              switchBank 2          ; this one is in bank 2
+              rtn
+
+              .section BoostSecondary2
+              .align  4
+FAT2Start:    .fat    COMPILE
+              .fat    RAMED
+FAT2End:      .con    0,0
+
+;;; **********************************************************************
+;;;
+;;; Pause function that works with OS4 shells
+;;;
+;;; **********************************************************************
+
+              .section BoostCode1
               .name "PAUSE"
 PAUSE:        ?s13=1                ; running?
               rtnnc                 ; no
@@ -203,7 +232,7 @@ normalPSE:    gosub   LDSST0
 EXCHANGE:     nop
               nop
               gosub   dualArgument
-              .con    0 + SEMI_MERGED_NO_STACK
+              .con    0 + SEMI_MERGED_NO_STACK + SEMI_MERGED_QMARK
               acex
               pt=     2
               g=c                   ; save first argument in G
@@ -239,5 +268,38 @@ EXCHANGE:     nop
 ;;; **********************************************************************
 
               .name   "EXITAPP"
-EXITAPP:      gosub   exitApp
-              golong  NFRC          ; done, neutral on stack lift
+EXITAPP:      glong   exitApp
+
+;;; **********************************************************************
+;;;
+;;; Header for bank 2, just make it look empty in case the bank is
+;;; left enabled.
+;;;
+;;; **********************************************************************
+
+              .section BoostHeader2
+              nop
+              nop
+
+;;; ----------------------------------------------------------------------
+;;;
+;;; Bank switchers allow external code to turn on specific banks.
+;;;
+;;; ----------------------------------------------------------------------
+
+BankSwitchers: .macro
+              rtn                   ; not using bank 3
+              rtn
+              rtn                   ; not using bank 4
+              rtn
+              enrom1
+              rtn
+              enrom2
+              rtn
+              .endm
+
+              .section BoostBankSwitchers1
+             BankSwitchers
+
+              .section BoostBankSwitchers2
+             BankSwitchers

@@ -1,6 +1,37 @@
 #include "mainframe.h"
 #include "OS4.h"
 
+;;; **********************************************************************
+;;;
+;;; Poll vectors and identification for bank 2.
+;;;
+;;; **********************************************************************
+
+              .section BoostTail2
+              nop                   ; Pause
+              nop                   ; Running
+              nop                   ; Wake w/o key
+              nop                   ; Powoff
+              nop                   ; I/O
+              goto    deepWake2     ; Deep wake-up
+              nop                   ; Memory lost
+              .con    1             ; A
+              .con    '1'           ; 1
+              .con    0x20f         ; O (tagged for having banks)
+              .con    0x002         ; B (no secondaries,
+                                    ;    those are in the primary bank)
+              .con    0             ; checksum position
+
+;;; ----------------------------------------------------------------------
+;;;
+;;; Switch back to bank 1 and fall into deepWake
+;;;
+;;; ----------------------------------------------------------------------
+
+              .section BoostCode2
+              .shadow deepWake - 1
+deepWake2:    enrom1
+
               .section BoostPoll
 ;;; **********************************************************************
 ;;;
@@ -32,7 +63,7 @@ pollReturn:   gosub   LDSST0
 
 ;;; **********************************************************************
 ;;;
-;;; Poll vectors, module identifier and checksum
+;;; Poll vectors, module identifier and checksum for primary bank
 ;;;
 ;;; **********************************************************************
 
@@ -45,6 +76,6 @@ pollReturn:   gosub   LDSST0
               goto    deepWake      ; Memory lost
               .con    1             ; A
               .con    '1'           ; 1
-              .con    0x0f          ; O (not tagged for banks)
+              .con    0x20f         ; O (tagged for having banks)
               .con    0x202         ; B (tagged as having secondaries)
               .con    0             ; checksum position

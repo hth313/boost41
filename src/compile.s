@@ -1,4 +1,5 @@
 #include "mainframe.h"
+#include "boostInternals.h"
 
 BSTEP3:       .equlab 0x28e5        ; non-public entry point
 
@@ -24,7 +25,7 @@ BSTEP3:       .equlab 0x28e5        ; non-public entry point
 ;;;
 ;;; **********************************************************************
 
-              .section BoostCode
+              .section BoostCode2
               .public COMPILE
               .name   "COMPILE"
 COMPILE:      nop                   ; non programmable
@@ -313,7 +314,10 @@ COMPILE:      nop                   ; non programmable
               c=c-1   pt
               cstex
               ?st=1   5
-              golc    NFRPU         ; .END. found, return to mainframe
+              goc     toNFRPU       ; .END. found, return to mainframe
               pt=     3
               gosub   PUTPC
               rgo     5$            ; go to next program
+
+toNFRPU:      switchBank 1
+              golong  NFRPU
