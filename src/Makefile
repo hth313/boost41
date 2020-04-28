@@ -6,7 +6,7 @@ SRCS = boost.s ramed.s compile.s poll.s cat.s xmemory.s xeq.s \
         compare.s
 
 OBJS = $(SRCS:%.s=%.o) $(RPN_SRCS:%.rpn=%.o)
-MOD = boost.mod
+MOD = boost.mod boost.mod2
 
 all: $(MOD)
 
@@ -17,7 +17,7 @@ all: $(MOD)
 	asnut --cpu=newt  -I$(LIB4) -I$(OS4) -g -l $<
 
 $(MOD): $(OBJS) linker.scm boost.moddesc ../../lib41/src/lib41.a
-	lnnut -g $(OBJS) --list-file=linker.lst linker.scm boost.moddesc  ../../lib41/src/lib41.a
+	lnnut -g $(OBJS) --list-file=linker.lst --extra-output-formats=mod2 linker.scm boost.moddesc  ../../lib41/src/lib41.a
 
 clean:
 	rm $(OBJS) $(MOD)
