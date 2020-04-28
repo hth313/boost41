@@ -17,16 +17,6 @@ XROMno:       .equ    6
 FatStart:
               .fat    BoostHeader   ; ROM header
               .fat    Prefix2
-              .fat    APX
-              .fat    ASHFX
-              .fat    `RTN?`
-              .fat    ARCLINT
-              .fat    RNDM
-              .fat    `2D6`
-;              .fat    KILLBUF
-              .fat    `F/E`
-              .fat    `Y/N?`
-              .fat    `LUHN?`
               FAT     myCAT
               FAT     myASN
               .fat    PAUSE
@@ -40,6 +30,17 @@ FatStart:
               .fat    XXARCL
               .fat    EXCHANGE
               .fat    EXITAPP
+              .fat    RNDM
+              .fat    `2D6`
+              .fat    APX
+; These are not fixed and can be considered preliminary
+              .fat    ASHFX
+              .fat    `RTN?`
+              .fat    ARCLINT
+;              .fat    KILLBUF
+              .fat    `F/E`
+              .fat    `Y/N?`
+              .fat    `LUHN?`
 FatEnd:       .con    0,0
 
 ;;; ************************************************************
