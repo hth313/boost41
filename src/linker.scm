@@ -7,7 +7,7 @@
                      (CAT7Shell #xF04)
                      (CatShell #xF0C)
                      (BoostBankSwitchers1 #xFC3)
-                     RPN (BoostFC2 #xFC2) (BoostPoll #xFE0))
+                     RPN (BoostFC2 #xFC2) (BoostPoll #xFDC))
             (checksum #xFFF hp41)
             (fill 0))
     (memory Boost2 (position independent)

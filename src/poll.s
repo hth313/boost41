@@ -46,6 +46,8 @@ deepWake2:    enrom1
 
               .extern catShell, extensionHandlers
 deepWake:     n=c
+              ldi     0x000         ; I need major version 0 at least
+              gosub   checkApiVersionOS4
               ldi     .low12 catShell ; activate CAT replacement
               gosub   activateShell
               goto    pollReturn    ; (P+1) failed, not enough memory
