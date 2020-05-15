@@ -119,6 +119,7 @@ RAMED:        nop                   ; non-programmable
               c=0     m             ; timeout counter
               pt=     7
               lc      2
+              .newt_timing_start
 15$:          ldi     0x200         ; cursor blink counter
               a=c
 16$:          chk kb
@@ -136,6 +137,7 @@ RAMED:        nop                   ; non-programmable
               goc     19$           ; timeout
               a=a-1   x             ; decrement cursor blink counter
               gonc    16$
+              .newt_timing_end
 
 ;;; Blink cursor, set underscore or character at cursor position in LCD
               c=m
