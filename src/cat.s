@@ -156,9 +156,7 @@ CAT7loop:     rstkb
 
               .align  4
               .public CAT7_SST
-CAT7_SST:
-              gosub   scratchArea   ; bring state back
-              c=data
+CAT7_SST:     c=regn  Q             ; bring state back
               n=c
 step:         c=n                   ; step to next buffer
               pt=     12
@@ -169,8 +167,7 @@ step:         c=n                   ; step to next buffer
               .align  4
               .public CAT7_BST
 CAT7_BST:     s9=1                  ; ordinary BST
-              gosub   scratchArea   ; bring state back
-              c=data
+              c=regn  Q             ; bring state back
               n=c
 back:         c=n                   ; search backwards
               pt=     12
@@ -189,9 +186,10 @@ back:         c=n                   ; search backwards
                                     ;  step forward instead
 
 CAT7blink:    gosub   BLINK         ; blink LCD
-CATreturn:    gosub   scratchArea   ; save state and return to OS
-              c=n
-              data=c
+CATreturn:    c=0
+              dadd=c
+              c=n                   ; save state and return to OS
+              regn=c  Q
               gosub   STMSGF        ; set message flag
               golong  NFRKB         ; give control back to OS
 
@@ -226,17 +224,13 @@ CAT7off:      golong  OFF
 CAT7stop:     ldi     .low12 cat7Shell
               gosub   activateShell
               goto    10$           ; (P+1) no room for a shell
-              ldi     1             ; (P+2) need one scratch register
-              gosub   allocScratch
-              goto    10$           ; (P+1) no room for scratch
               goto    CATreturn     ; give control back
 10$:          gosub   exitTransientApp
               golong  noRoom        ; NO ROOM error
 
               .public CAT7_Clear    ; clear buffer
               .align  4
-CAT7_Clear:   gosub   scratchArea   ; bring state back
-              c=data
+CAT7_Clear:   c=regn  Q             ; bring state back
               dadd=c
               c=data                ; read buffer header
               c=0     s             ; mark it as deleted
@@ -245,8 +239,9 @@ CAT7_Clear:   gosub   scratchArea   ; bring state back
               dadd=c
               gosub   OFSHFT
               gosub   PKIOAS        ; pack I/O area
-              gosub   scratchArea
-              c=data
+              c=0
+              dadd=c
+              c=regn  Q
               n=c
               gosub   RSTKB
               s9=0                  ; BST after delete
@@ -254,8 +249,7 @@ CAT7_Clear:   gosub   scratchArea   ; bring state back
 
               .align  4
               .public CAT7_RUN
-CAT7_RUN:     gosub   scratchArea   ; bring state back
-              c=data
+CAT7_RUN:     c=regn  Q             ; bring state back
               n=c
               gosub   exitTransientApp
               gosub   RSTKB
