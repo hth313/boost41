@@ -1,5 +1,6 @@
 #include "mainframe.h"
 #include "OS4.h"
+#include "boostInternals.h"
 
 PRT12:        .equlab 0X6FD7
 
@@ -13,7 +14,7 @@ catShell:     .con    SysShell
               .con    0                 ; alpha keys, use default
               .con    .low12 catName
 
-              .section BoostCode
+              .section BoostCode1
               .align  4
               .extern sysKeyTable
 keyHandler:   gosub   keyKeyboard   ; does not return
@@ -23,12 +24,12 @@ keyHandler:   gosub   keyKeyboard   ; does not return
               .con    .low12 sysKeyTable
 
 ;;; Name of the shell
-              .section BoostCode
+              .section BoostCode1
               .align  4
 catName:      .messl  "CAT"
 
 ;;; Handler of catalogs
-              .section BoostCode
+              .section BoostCode1
               .public catHandler
               .align  4
 catHandler:   c=n
@@ -51,7 +52,7 @@ catHandler:   c=n
 ;;;
 ;;; **********************************************************************
 
-              .section BoostCode
+              .section BoostCode1
               .public myCAT
               .con    '\'' + 0x80   ; '
               .con    0x14          ; T
@@ -83,19 +84,79 @@ myCAT:        nop                   ; non-programmable
 ;;;
 ;;; **********************************************************************
 
-              .section BoostCode
+              .section BoostCode1
+CAT7:         ldi     .low12 catalogDescriptor7
+              gosub   catalog
 
-CAT7:         spopnd                ; drop return addresses
-              spopnd
-              c=0                   ; start with buffer 0
-CAT7main:     n=c                   ; main loop
+              .section BoostCode2
+              .align  4
+step:         c=n                   ; step to next buffer
+              pt=     12
+              c=c+1   pt
+              rtnc                  ; nothing more
+              goto    next
+
+              .section BoostCode1
+              .public CAT7_Clear    ; clear buffer
+              .align  4
+CAT7_Clear:   switchBank 2
+              c=regn  Q             ; bring state back
+              dadd=c
+              c=data                ; read buffer header
+              c=0     s             ; mark it as deleted
+              data=c
+              c=0     x             ; select chip 0
+              dadd=c
+              gosub   OFSHFT
+              gosub   PKIOAS        ; pack I/O area
+              c=0
+              dadd=c
+              c=regn  Q
+              n=c
+              gosub   RSTKB
+              s9=0                  ; back step after delete
+              goto    back10
+
+;;; !!!!! This entry must be aligned of 4, add NOPs here if needed.
+;;;       Currently the tools are not smart enough to calculate shadowed
+;;;       alignments as the above align by 4 and relatative placement
+;;;       in theory could be supported. As it is now the tools detect
+;;;       that it cannot do this properly and bails out, so we have
+;;;       to align the next line by code size above.
+;;;       At the moment it happens to get the right alignment without
+;;;       any NOPs.
+back:         s9=1                  ; ordinary back step
+back10:       c=n                   ; search backwards
+              pt=     12
+              c=c-1   pt
+              goc     10$           ; no previous buffer
+              n=c
+              c=0     s
+              c=0     x
+              rcr     -2
+              gosub   findBuffer
+              goto    back10        ; (P+1) no such buffer
+              goto    found         ; (P+2) exists
+10$:          ?s9=1
+              rtnc                  ; real BST and no previous buffer,
+                                    ;   return to blink and sleep
+              goto    step          ; after clear buffer, no previous
+                                    ;  step forward instead
+
+;;; !!!!! This entry must be aligned of 4, add NOPs here if needed.
+prepare:      c=0                   ; start with buffer 0
+next:         n=c
               pt=     12
               c=0     s
               c=0     x
               rcr     -2
               gosub   findBuffer
-              goto    step00        ; (P+1) not found, try step to next
-CAT7found:    c=data                ; (P+2) this one exists, read header
+              goto    step          ; (P+1) not found, try step to next
+              s9=1                  ; (P+2) we have return address on stack
+                                    ;   (S9=0 means we are coming from backstep
+                                    ;         after CAT7_Clear and we do not have
+                                    ;         a valid return address in that case
+found:        c=data                ; (P+2) this one exists, read header
               acex    x
               n=c                   ; N= buffer header and address
               gosub   CLLCDE
@@ -126,135 +187,33 @@ CAT7found:    c=data                ; (P+2) this one exists, read header
               lc      3
               a=c
               gosub   GENNUM
-              gosub   ENCP00
-              c=regn  8
-              c=0     s             ; just say it is not CAT 1
-              regn=c  8
-              c=n
-              m=c                   ; M= state
-              gosub   PRT12         ; send LCD to printer
-              c=m
-              n=c                   ; N= state
+              ?s9=1                 ; do we have return address?
+              golc    RTNP2         ; yes
+              gosub   catalogReturn ; no, enter to display entry
 
-              gosub   hasActiveTransientApp
-              goto    CAT7wait      ; (P+1) no
-              goto    CATreturn     ; (P+2) yes
-
-CAT7main0:    goto    CAT7main      ; relay
-CAT7found0:   goto    CAT7found     ; relay
-step00:       goto    step          ; relay
-
-              .newt_timing_start
-CAT7wait:     ldi     1000          ; inner delay counter (goes up)
-CAT7loop:     rstkb
-              chkkb
-              goc     CAT7key       ; some key is down
-              c=c-1   x
-              gonc    CAT7loop
-              .newt_timing_end
-              goto    step          ; step to next
-
+              .section BoostCode1
               .align  4
-              .public CAT7_SST
-CAT7_SST:     c=regn  Q             ; bring state back
-              n=c
-step:         c=n                   ; step to next buffer
-              pt=     12
-              c=c+1   pt
-              goc     CATend
-              goto    CAT7main0
+              .public CAT7_RUN
+CAT7_RUN:     ldi     .low12 catalogDescriptor7
+              gosub   catalogRun
 
-              .align  4
-              .public CAT7_BST
-CAT7_BST:     s9=1                  ; ordinary BST
-              c=regn  Q             ; bring state back
-              n=c
-back:         c=n                   ; search backwards
-              pt=     12
-              c=c-1   pt
-              goc     10$           ; no previous buffer
-              n=c
-              c=0     s
-              c=0     x
-              rcr     -2
-              gosub   findBuffer
-              goto    back          ; (P+1) no such buffer
-              goto    CAT7found0    ; (P+2) exists
-10$:          ?s9=1
-              goc     CAT7blink     ; real BST and no previous buffer
-              goto    step          ; after clear buffer, no previous
-                                    ;  step forward instead
-
-CAT7blink:    gosub   BLINK         ; blink LCD
-CATreturn:    c=0
-              dadd=c
-              c=n                   ; save state and return to OS
-              regn=c  Q
-              gosub   STMSGF        ; set message flag
-              golong  NFRKB         ; give control back to OS
-
-CAT7loop0:    goto    CAT7loop     ; relay
-
-;;; Handle key while running
-CAT7key:      m=c                   ; save delay counters
-              ldi     2
-              gosub   keyDispatch
-              .con    0x18,0x87,0
-              goto    CAT7off       ; ON
-              goto    CAT7stop      ; R/S
-              c=m                   ; undefined key, speed up
-              a=c     x             ; shave some delay off
-              ldi     10
-              c=a-c   x
-              goc     step
-              goto    CAT7loop0
-
-back0:        goto    back          ; relay
-step0:        goto    step          ; relay
-
+              .section BoostCode1
               .align  4
               .public CAT7_BACKARROW
 CAT7_BACKARROW:
-CATend:       gosub   exitTransientApp
-              gosub   ENCP00
-              golong  QUTCAT
+              gosub catalogEnd
 
-CAT7off:      golong  OFF
-
-CAT7stop:     ldi     .low12 cat7Shell
-              gosub   activateShell
-              goto    10$           ; (P+1) no room for a shell
-              goto    CATreturn     ; give control back
-10$:          gosub   exitTransientApp
-              golong  noRoom        ; NO ROOM error
-
-              .public CAT7_Clear    ; clear buffer
+              .section BoostCode1
+              .public CAT7_SST
               .align  4
-CAT7_Clear:   c=regn  Q             ; bring state back
-              dadd=c
-              c=data                ; read buffer header
-              c=0     s             ; mark it as deleted
-              data=c
-              c=0     x             ; select chip 0
-              dadd=c
-              gosub   OFSHFT
-              gosub   PKIOAS        ; pack I/O area
-              c=0
-              dadd=c
-              c=regn  Q
-              n=c
-              gosub   RSTKB
-              s9=0                  ; BST after delete
-              goto    back0         ; try to show previous buffer
+CAT7_SST:     ldi     .low12 catalogDescriptor7
+              gosub   catalogStep
 
+              .section BoostCode1
+              .public CAT7_BST
               .align  4
-              .public CAT7_RUN
-CAT7_RUN:     c=regn  Q             ; bring state back
-              n=c
-              gosub   exitTransientApp
-              gosub   RSTKB
-              goto    step0         ; continue with next entry
-
+CAT7_BST:     ldi     .low12 catalogDescriptor7
+              gosub   catalogBack
 
 ;;; **********************************************************************
 ;;;
@@ -272,9 +231,18 @@ cat7Shell:    .con    TransAppShell
               .con    .low12 myName
               .con    0             ; no timeouts
 
-              .section BoostCode
+              .section BoostCode1
               .align  4
 myName:       .messl  "CAT-7"
+
+              .section BoostCode1
+              .align  4
+catalogDescriptor7:
+              .con    .low12 prepare
+              .con    .low12 step
+              .con    .low12 back
+              .con    .low12 cat7Shell
+              switchBank 2          ; bank switcher
 
 
 ;;; **********************************************************************
@@ -283,13 +251,12 @@ myName:       .messl  "CAT-7"
 ;;;
 ;;; **********************************************************************
 
-              .section BoostCode
+              .section BoostCode1
               .align  4
               .extern keyTableCAT7
 cat7Handler:  gosub   keyKeyboard   ; does not return
-              .con    (1 << KeyFlagSparseTable) ; flags
+              .con    (1 << KeyFlagSparseTable) | (1 << KeyFlagTransientApp) ; flags
               .con    0             ; handle a digit
               .con    0             ; end digit entry
               .con    .low12 keyTableCAT7
-                                    ; no transient termination entry needed
-                                    ; we do not have keyboard secondaries
+              .con    0             ; no transient termination entry needed
