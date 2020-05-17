@@ -10,6 +10,7 @@
               .extern XRCL, XSTO, XXVIEW, XXARCL
               .extern myCAT, myASN, myXEQ
               .extern EQ, NE, LT, LE
+              .extern DELAY, KEY
 XROMno:       .equ    6
 
               .con    XROMno        ; XROM number
@@ -30,6 +31,8 @@ FatStart:
               .fat    XXARCL
               .fat    EXCHANGE
               .fat    EXITAPP
+              .fat    DELAY
+              .fat    KEY
               .fat    RNDM
               .fat    `2D6`
               .fat    APX
