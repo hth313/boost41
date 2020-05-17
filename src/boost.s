@@ -35,7 +35,6 @@ FatStart:
               .fat    KEY
               .fat    RNDM
               .fat    `2D6`
-              .fat    APX
 ; These are not fixed and can be considered preliminary
               .fat    ASHFX
               .fat    `RTN?`
@@ -167,6 +166,7 @@ fatXEQ:       .fat    myXEQ
               .fat    CLKYSEC
               .fat    readRom16
               .fat    writeRom16
+              .fat    APX
 FAT1End:      .con    0,0
 
 ;;; * Second secondary FAT header, serving bank 2
