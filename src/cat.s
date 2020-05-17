@@ -8,11 +8,13 @@ PRT12:        .equlab 0X6FD7
               .align  4
               .public catShell
 catShell:     .con    SysShell
-              .con    0             ; no display handler defined
+              .con    0                 ; no display handler defined
               .con    .low12 keyHandler ; standard keys
               .con    .low12 keyHandler ; user keys
               .con    0                 ; alpha keys, use default
               .con    .low12 catName
+                                        ; no timeout handler needed as
+                                        ; this is a system shell
 
               .section BoostCode1
               .align  4
