@@ -2,6 +2,7 @@
 #include "OS4.h"
 #include "lib41.h"
 #include "boostInternals.h"
+#include "foo.h"
 
               .section BoostFAT
               .extern RAMED, COMPILE, APX, ASHFX, `RTN?`
@@ -53,7 +54,7 @@ FatEnd:       .con    0,0
 
               .section BoostCode
 
-              .name   "-BOOST 1A"   ; The name of the module
+              .name   "-BOOST 0A"   ; The name of the module
 BoostHeader:  gosub   runSecondary  ; Must be first!
               .con    0             ; I am secondary prefix XROM 6,0
               ;; pops return address and never comes back

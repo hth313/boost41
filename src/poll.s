@@ -16,7 +16,7 @@
               goto    deepWake2     ; Deep wake-up
               nop                   ; Memory lost
               .con    1             ; A
-              .con    '1'           ; 1
+              .con    '0'           ; 0
               .con    0x20f         ; O (tagged for having banks)
               .con    0x002         ; B (no secondaries,
                                     ;    those are in the primary bank)
@@ -77,7 +77,7 @@ pollReturn:   gosub   LDSST0
               goto    deepWake      ; Deep wake-up
               goto    deepWake      ; Memory lost
               .con    1             ; A
-              .con    '1'           ; 1
+              .con    '0'           ; 0
               .con    0x20f         ; O (tagged for having banks)
               .con    0x202         ; B (tagged as having secondaries)
               .con    0             ; checksum position
