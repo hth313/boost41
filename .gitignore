@@ -1,2 +1,6 @@
+.vscode
+_build
 src/*.o
 src/*.lst
+src/*.mod
+src/*.mod2
