@@ -2,7 +2,6 @@
 #include "OS4.h"
 #include "lib41.h"
 #include "boostInternals.h"
-#include "foo.h"
 
               .section BoostFAT
               .extern RAMED, COMPILE, APX, ASHFX, `RTN?`
