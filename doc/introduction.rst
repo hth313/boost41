@@ -24,9 +24,9 @@ You must also load the separate OS4 module in page 4 for Boost to work.
 This release
 ============
 
-This version, 0B is a work in progress module. It provides a lot of
-useful functionality to the HP-41, but it is a pre-release that is
-planned to provide a lot more later.
+This version, 0B is a work in progress module. The existing functions
+have been tested and are believed to work, however, the module is
+incomplete in that more functions are planned to be included.
 
 .. index:: buffer, I/O buffer, XROM number
 
@@ -35,7 +35,7 @@ Resource requirements
 
 Boost will allocate one register from the free memory pool when first
 powered on. Additional use of Boost may allocate further memory,
-i.e. using the pseudo random number generator will need an additional
+i.e. using the pseudo random number generator will need one additional
 register.
 
 Apart from this, it does not impose any restrictions on the
