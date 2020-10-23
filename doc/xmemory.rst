@@ -33,8 +33,10 @@ Possible errors when using these functions are:
 
 ``FL NOT FOUND``
     if not current file is selected.
+
 ``FL TYPE ERR``
     if current file exists, but is not a data file.
+
 ``NONEXISTENT``
     if attempt is made to access a register beyond the end of file.
 
@@ -91,3 +93,21 @@ the value in the alpha register.
 not register 04 in the data file), the value in that data file register
 tells which register to recall from the current data file and append
 the value in the alpha register.
+
+Other functions
+===============
+
+WORKFL
+-------
+.. index:: filename; active, name of active file
+
+This function appends the name of the current active file to the alpha
+register.
+
+Possible errors are:
+
+``NO 41CX OS``
+   if there is no 41CX style operating system provided by the calculator.
+
+``FL NOT FOUND``
+   if there is no active file.

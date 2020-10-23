@@ -7,7 +7,7 @@
               .extern RAMED, COMPILE, APX, ASHFX, `RTN?`
               .extern ARCLINT, SEED, RNDM, `2D6`, KILLBUF, `F/E`
               .extern `Y/N?`
-              .extern XRCL, XSTO, XXVIEW, XXARCL
+              .extern XRCL, XSTO, XXVIEW, XXARCL, WORKFL
               .extern myCAT, myASN, myXEQ
               .extern EQ, NE, LT, LE
               .extern DELAY, KEY
@@ -35,6 +35,7 @@ FatStart:
               .fat    KEY
               .fat    RNDM
               .fat    `2D6`
+              .fat    WORKFL
 ; These are not fixed and can be considered preliminary
               .fat    ASHFX
               .fat    `RTN?`
