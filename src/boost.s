@@ -309,3 +309,21 @@ BankSwitchers: .macro
 
               .section BoostBankSwitchers2
              BankSwitchers
+
+;;; ----------------------------------------------------------------------
+;;;
+;;; This NOP placed on address XCDD will allow the module to be used
+;;; in page 7.
+;;;
+;;; 7CDD is the address that is called to see if there is an HPIL
+;;; module in place.
+;;;
+;;; This is how Extended Function/HP41CX checks it, so it is assumed
+;;; it is the way to do it. By putting a NOP there, the probe call will
+;;; return and it will seem as the is no HP-IL module in place in the
+;;; case we are compiled to page 7.
+;;;
+;;; ----------------------------------------------------------------------
+
+              .section BoostLegal7
+              nop
