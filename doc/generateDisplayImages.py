@@ -10,7 +10,8 @@ prgmMode = Anns()
 prgmMode.annPRGM.set()
 
 lcdImages = [ ("ramed-1", lcd.image("419B 0C00020", prgmMode))
-            , ("ramed-2", lcd.image("419B 0C000_0", prgmMode))]
+            , ("ramed-2", lcd.image("419B 0C000_0", prgmMode))
+            , ("catprompt", lcd.image("CAT' __", prgmMode))]
 
 for (file, body) in lcdImages:
     svgfile = file + ".svg"

@@ -6,6 +6,7 @@ Boost module for the HP-41
    :numbered: 2
 
    introduction
+   fundamentals.rst
    compare
    input
    random
