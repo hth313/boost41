@@ -94,8 +94,10 @@ not register 04 in the data file), the value in that data file register
 tells which register to recall from the current data file and append
 the value in the alpha register.
 
-Other functions
+File operations
 ===============
+
+Function related to files in extended memory.
 
 WORKFL
 -------
@@ -111,3 +113,21 @@ Possible errors are:
 
 ``FL NOT FOUND``
    if there is no active file.
+
+RENFL
+-----
+.. index:: rename file
+
+Rename a file in extended memory. The file to be renamed are in the
+alpha register followed by a comma and after that the new name.
+
+Possible errors are:
+
+``NO 41CX OS``
+   if there is no 41CX style operating system provided by the calculator.
+
+``FL NOT FOUND``
+   if the file does not exist.
+
+``DATA ERROR``
+   if there is no comma

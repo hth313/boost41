@@ -7,7 +7,7 @@
               .extern RAMED, COMPILE, APX, ASHFX, `RTN?`
               .extern ARCLINT, SEED, RNDM, `2D6`, KILLBUF, `F/E`
               .extern `Y/N?`
-              .extern XRCL, XSTO, XXVIEW, XXARCL, WORKFL
+              .extern XRCL, XSTO, XXVIEW, XXARCL, WORKFL, RENFL
               .extern myCAT, myASN, myXEQ
               .extern EQ, NE, LT, LE
               .extern DELAY, KEY
@@ -186,6 +186,7 @@ secondary2:   .con    0             ; no next table
               .align  4
 FAT2Start:    .fat    COMPILE
               .fat    RAMED
+              .fat    RENFL
 FAT2End:      .con    0,0
 
 ;;; **********************************************************************

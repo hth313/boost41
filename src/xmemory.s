@@ -157,3 +157,30 @@ WORKFL:       gosub   ensure41CX
 40$:          ?b#0                  ; done?
               goc     25$           ; no
               rtn                   ; yes
+
+
+;;; **********************************************************************
+;;;
+;;; RENFL - rename a file
+;;;
+;;; **********************************************************************
+
+              .section BoostCode2
+              .public RENFL
+              .name   "RENFL"
+RENFL:        gosub   ensure41CX
+              s0=1
+              gosub   FLSHAP        ; locate named file
+              ?s0=1                 ; file found?
+              golnc   FLNOFN        ; no -> "FL NOT FOUND"
+              ?s6=1                 ; comma seen?
+              golnc   ERRDE         ; no, "DATA ERROR"
+              gosub   ALNAM2        ; M= name after comma
+              acex
+              rcr     8
+              dadd=c                ; select filename register
+              c=m
+              data=c
+;;              golong  resetMyBank  ; new entry, use later
+              switchBank 1          ; temporary
+              rtn
