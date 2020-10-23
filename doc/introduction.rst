@@ -60,7 +60,8 @@ If you feel that you need to brush up your background knowledge, here are some s
 
 * The *Owner's Manuals* supplied with the HP-41, Hewlett Packard Company.
 * *Extend your HP-41*, W Mier-Jedrzejowicz, 1985.
-
+* The *OS4* Documentation, Håkan Thörngren if you want to study the
+  internals of the user OS4 module.
 
 License
 =======
