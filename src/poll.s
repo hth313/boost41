@@ -1,5 +1,6 @@
 #include "mainframe.h"
 #include "OS4.h"
+#include "boostInternals.h"
 
 ;;; **********************************************************************
 ;;;
@@ -8,19 +9,31 @@
 ;;; **********************************************************************
 
               .section BoostTail2
-              nop                   ; Pause
-              nop                   ; Running
-              nop                   ; Wake w/o key
-              nop                   ; Powoff
-              nop                   ; I/O
+              goto    setBank1Poll  ; Pause
+              goto    setBank1Poll  ; Running
+              goto    setBank1Poll  ; Wake w/o key
+              goto    setBank1Poll  ; Powoff
+              goto    setBank1Poll  ; I/O
               goto    deepWake2     ; Deep wake-up
-              nop                   ; Memory lost
+              goto    deepWake2     ; Memory lost
               .con    1             ; A
               .con    '0'           ; 0
               .con    0x20f         ; O (tagged for having banks)
               .con    0x002         ; B (no secondaries,
                                     ;    those are in the primary bank)
               .con    0             ; checksum position
+
+;;; ----------------------------------------------------------------------
+;;;
+;;; Reset the bank and go back to poll vector.
+;;; Used for safety if we left another bank enabled by accident.
+;;;
+;;; ----------------------------------------------------------------------
+
+              .section BoostCode2
+              .shadow XRMCK10 - 1
+setBank1Poll: enrom1
+
 
 ;;; ----------------------------------------------------------------------
 ;;;
@@ -60,7 +73,7 @@ deepWake:     n=c
               gosub   reclaimHostedBuffer
 pollReturn:   gosub   LDSST0
               c=n
-              golong  RMCK10
+XRMCK10:      golong  RMCK10
 
 
 ;;; **********************************************************************
