@@ -9,7 +9,7 @@ Function related to program control.
 XEQ>GTO
 =======
 
-Drops one level from the return stack, essentially it converts the
+Drop one level from the return stack, essentially it converts the
 last ``XEQ`` to be a ``GTO`` instead.
 
 .. index:: program control; RTN?
@@ -20,7 +20,7 @@ RTN?
 Test if there is at least one level of return address on the call
 stack. Executes the next instructions if there is, otherwise the next
 instruction is skipped. In keyboard mode it displays ``YES`` or ``NO``
-accordingly.
+as usual.
 
 .. index:: program control; PC<>RTN
 
@@ -36,6 +36,5 @@ GE
 
 Go to the permanent ``.END.`` instruction. This puts the program
 location counter at the last address in the last program, which is
-similar to pressing ``GTO ..``, but without packing program memory and
-it will not optinally insert an ``END`` as is done by that key
-sequence.
+similar to pressing ``GTO ..``, but it will not pack program memory
+and it will not insert any ``END`` as is done in some situations.

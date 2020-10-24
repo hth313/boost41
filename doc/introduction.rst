@@ -109,4 +109,7 @@ Feedback
 ========
 
 Feedback and suggestions are welcome, the author can be contacted at
-hth313@gmail.com
+hth313@gmail.com.
+
+The source code and releases can be found at
+https://github.com/hth313/boost41.

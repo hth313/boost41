@@ -13,8 +13,8 @@ compares X to a register pointed to be the Y register, essentially
 
 The boost module provides four prompting generic compare functions
 ``=``, ``≠``, ``<`` and ``<=``.  It should be fairly obvious what they
-do. They take two arguments and will prompt for its two arguments when
-keyed. With these you can create any compare you like, i.e. ``X < 10?``
+do. They take two arguments and will prompt for its two arguments.
+With these you can create any compare you like, i.e. ``X < 10?``
 would test if X is less that the value in register ``10``.
 
 ``IND Z = IND 01?`` would take one register number from stack register
@@ -37,7 +37,7 @@ will prompt for the second argument.
 In program memory the OS4 module will display such instruction with
 the function name between the two arguments. It will also append the
 question mark for these functions, which means that once entered you
-will see ``Z = IND L`` in the program memory if you step to this
+will see ``Z = IND L?`` in the program memory if you step to this
 line.
 
 The missing compares
@@ -50,9 +50,9 @@ use ``05 < X?``.
 Compare to constant
 ===================
 
-What if you want to compare to zero? In this case you would need to keep
-zero in a register or load a zero at some point so that it is in a known
-location in the stack. One way of seeing is that you use a constant
-register, simply put the desired constant into a register and keep it
-there. Doing this way means that you are not limited to zero, you can
-store any suitable constant in a register.
+What if you want to compare to zero or another constant? In this case
+you would need to keep zero in a register or load a zero at some point
+so that it is in a known location in the stack. One way of seeing is
+that you use a constant register, simply put the desired constant into
+a register and keep it there. Doing this way means that you are not
+limited to zero, you can store any suitable constant in a register.

@@ -23,13 +23,28 @@ means that they require the Time module to be present.
 The interval timer is normally used to provide the ticking clock
 display, but here we borrow it and use it as a time out.
 
-Functions
-=========
+PAUSE
+=====
 
-These are prompting functions with a value range of 1 to 10000, which
-corresponds to 0.1 to 1000 seconds. You will need to use register
-indirect arguments to access anything past about 10 seconds (postfix
-argument 99).
+This function works as the built-in ``PSE``, but it is aware of OS4
+application shells and will properly display the correct X register
+view as defined by the shell. The built-in ``PSE`` does not do this
+and revert to showing X the usual way, which may not be what you want
+when an application is active that alters the default view.
+
+One example if the Ladybug module which replaces the standard view of
+X with integer values shown in the selected numeric base. The default
+way of showing such numbers are as non-normalized numbers, which are
+close to garbage. Using ``PAUSE`` when Ladybug may be active provides
+a pause function that works the correct way.
+
+Timed wait
+==========
+
+``DELAY`` and ``KEY`` are prompting functions with a value range of 1
+to 10000, which corresponds to 0.1 to 1000 seconds. You will need to
+use register indirect arguments to access anything past about 10
+seconds (postfix argument 99).
 
 .. index:: DELAY function
 
