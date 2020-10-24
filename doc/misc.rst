@@ -145,3 +145,31 @@ a bonus.
 number ``APX``  will attempt to bring the number into what can be
 shown without an exponent. Well behaved numbers will have the correct
 sign and decimal point in the correct location.
+
+
+.. index:: Luhn checksum, checksum; Luhs
+
+LUHN?
+-----
+
+Implements the Luhn algorithm as used by credit card numbers. Accepts
+a two-part BCD number in Y and X. The lower 14 digits are expected in
+X and any upper digits are in Y. A typical credit card number uses 16
+digits.
+
+To enter the number, you can use the usual ``CODE`` function, but it
+is probably easiest to just key it in using the Ladybug module, with a
+setting of 56-bits word size and hex mode:
+
+.. code-block:: ca65
+
+  WSIZE 56
+  HEX
+  343232_ H
+  LUHN?
+
+``LUHN?`` will skip next line if the Luhn checksum is not correct. In
+keyboard mode it will display ``YES`` for a correct Luhn number and
+``NO`` otherwise.
+
+Reference: https://en.wikipedia.org/wiki/Luhn_algorithm

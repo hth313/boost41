@@ -1,3 +1,4 @@
+
 .. index:: input functions
 
 ***************
@@ -30,6 +31,8 @@ corresponds to 0.1 to 1000 seconds. You will need to use register
 indirect arguments to access anything past about 10 seconds (postfix
 argument 99).
 
+.. index:: DELAY function
+
 DELAY _ _
 ---------
 
@@ -42,9 +45,36 @@ This also accept indirect arguments, i.e. ``DELAY IND X`` will read a
 value from the X register, divide by ``10`` and wait for that number of
 seconds.
 
+.. index:: KEY function
 
 KEY _ _
 --------
 
 Works similar as ``DELAY``, but will also return the key code of the
 pressed key to X. Returns ``0`` if no key is pressed.
+
+.. index:: Yes/no input
+
+Y/N?
+----
+
+Simple test for yes or no input. Beeps and waits for up to 25 seconds
+for input. Executes the next line if ``Y`` is pressed, skips the next
+line in ``N`` is pressed.
+
+Active keys are:
+
+``ON``
+    turns the calculator off.
+
+``Y``
+    resumes program execution at next program line.
+
+``N``
+    skips one program line and resumes execution.
+
+``R/S``
+    stops the program.
+
+``<-``
+    stops the program.

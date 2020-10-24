@@ -17,10 +17,14 @@ by the Time module if present.
 Functions
 =========
 
+.. index:: random number
+
 RNDM
 ----
 
 Provide a pseudo random number in the range 0 to 0.999999.
+
+.. index:: random mnumber; seed
 
 SEED
 ----
@@ -28,6 +32,8 @@ SEED
 Use the fractional part of the value in X as the seed for the random
 number generator. This is useful to get a predictable range of random
 numbers, i.e. useful for test or demo purposes.
+
+.. index:: 2D6 function
 
 2D6
 ---

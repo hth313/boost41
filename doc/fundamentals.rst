@@ -18,6 +18,8 @@ such module, it can also be used as a system programming module for
 the HP-41 as it makes it a lot easier to work with non-normalized numbers.
 
 
+.. index:: secondary functions
+
 Secondary functions
 ===================
 
@@ -39,6 +41,8 @@ At the moment it is not possible to display secondary functions in
 catalog 2. Such feature is planned, but not currently provided. You
 need to consult the manual as the functions are there are can be
 reached from the the ``XEQ`` and ``ASN`` keys.
+
+.. index:: system shell
 
 System shell
 ============

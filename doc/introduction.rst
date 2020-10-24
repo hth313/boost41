@@ -28,6 +28,14 @@ This version, 0B is a work in progress module. The existing functions
 have been tested and are believed to work, however, the module is
 incomplete in that more functions are planned to be included.
 
+Note that XROM number assignment may change in the future. This is
+because a lot of functions are planned and they are not implemented
+yet. As banks are not equal, there may be a need to move functions
+around in order to make everything fit and that may have effects on
+XROM versus secondary XXROM function allocation. The initial decision
+on whether a function is primary or secondary may also need to be
+reconsidered due to available empty XROM slots, or lack of it.
+
 .. index:: buffer, I/O buffer, XROM number
 
 Resource requirements
