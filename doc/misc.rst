@@ -52,9 +52,14 @@ RAMED
 .. index:: RAMED, edit memory
 
 This is a RAM editor which allows you to examine and alter bytes
-(actually hex digits) in the RAM memory of your calculator. It does
-not take any structure of data in account, you need to be very sure
-what you are doing as you may corrupt the memory structure otherwise.
+(actually hex digits) in the RAM memory of your calculator.
+
+.. warning::
+
+   This RAM editor allows you to edit any RAM memory as you
+   wish. Be very sure that you understand what you are doing as doing
+   it wrong can compromise the memory structure and lead to a ``MEMORY
+   LOST``.
 
 Once started you may see a display like the following:
 
