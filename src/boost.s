@@ -10,7 +10,7 @@
               .extern myCAT, myASN, myXEQ
               .extern EQ, NE, LT, LE
               .extern DELAY, KEY
-              .extern `XEQ>GTO`, `PC<>RTN`, `RTN?`, GE
+              .extern `XEQ>GTO`, `PC<>RTN`, `RTN?`, GE, AVAILMEM
               .extern ARCLINT, ATOXR, XTOAL
 XROMno:       .equ    6
 
@@ -171,6 +171,7 @@ fatXEQ:       .fat    myXEQ
               .fat    GE
               .fat    VMANT
               .fat    `F/E`
+              .fat    AVAILMEM
 FAT1End:      .con    0,0
 
 ;;; * Second secondary FAT header, serving bank 2

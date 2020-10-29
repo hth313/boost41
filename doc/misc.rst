@@ -5,6 +5,17 @@ Miscellaneous
 In this chapter various functions that do not belong to any particular
 category are documented.
 
+AVAIL
+------
+.. index:: free memory, available memory, memory; available
+
+This function returns the number of free registers to the X
+register. This is the same number that you would see when standing at
+end of program memory. In the past this function has sometimes been
+called ``FREE?``, but it has been renamed here to make it less
+confusing. The question mark normally means that we optionally skip a
+program step.
+
 COMPILE
 -------
 .. index:: COMPILE, program memory; compile
