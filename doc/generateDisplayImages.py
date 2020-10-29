@@ -20,6 +20,7 @@ lcdImages = [ ("ramed-1", lcd.image("419B 0C00020", prgmMode))
             , ("exchange-4", lcd.image("&lt;&gt; Z IND __", normalMode))
             , ("exchange-5", lcd.image("&lt;&gt; Z IND 10", normalMode))
             , ("exchange-6", lcd.image("05 Z &lt;&gt; 07", prgmMode))
+            , ("cat-7", lcd.image("15 002  @192", normalMode))
             ]
 
 for (file, body) in lcdImages:

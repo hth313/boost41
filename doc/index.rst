@@ -7,6 +7,7 @@ Boost module for the HP-41
 
    introduction
    fundamentals
+   catalog
    memory
    compare
    program

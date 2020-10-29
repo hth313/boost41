@@ -62,7 +62,7 @@ as usual.
 F/E
 ===
 
-Enable the hybrid ``FIX`` with ``ENG`` mode. Normally when using ``FIX``
+Enables the hybrid ``FIX`` with ``ENG`` mode. Normally when using ``FIX``
 mode and the number needs to be shown with an exponent, the HP-41
 switches to ``SCI`` mode. The ``F/E`` mode changes this so
 that the HP-41 instead will switch to ``ENG`` mode in such situation.
