@@ -16,7 +16,7 @@
               goto    setBank1Poll  ; I/O
               goto    deepWake2     ; Deep wake-up
               goto    deepWake2     ; Memory lost
-              .con    1             ; A
+              .con    2             ; B
               .con    '0'           ; 0
               .con    0x20f         ; O (tagged for having banks)
               .con    0x002         ; B (no secondaries,
@@ -89,7 +89,7 @@ XRMCK10:      golong  RMCK10
               nop                   ; I/O
               goto    deepWake      ; Deep wake-up
               goto    deepWake      ; Memory lost
-              .con    1             ; A
+              .con    2             ; B
               .con    '0'           ; 0
               .con    0x20f         ; O (tagged for having banks)
               .con    0x202         ; B (tagged as having secondaries)

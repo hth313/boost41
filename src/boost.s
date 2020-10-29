@@ -51,7 +51,7 @@ FatEnd:       .con    0,0
 
               .section BoostCode
 
-              .name   "-BOOST 0A"   ; The name of the module
+              .name   "-BOOST 0B"   ; The name of the module
 BoostHeader:  gosub   runSecondary  ; Must be first!
               .con    0             ; I am secondary prefix XROM 6,0
               ;; pops return address and never comes back
