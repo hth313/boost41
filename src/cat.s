@@ -90,14 +90,6 @@ myCAT:        nop                   ; non-programmable
 CAT7:         ldi     .low12 catalogDescriptor7
               gosub   catalog
 
-              .section BoostCode2
-              .align  4
-step:         c=n                   ; step to next buffer
-              pt=     12
-              c=c+1   pt
-              rtnc                  ; nothing more
-              goto    next
-
               .section BoostCode1
               .public CAT7_Clear    ; clear buffer
               .align  4
@@ -127,6 +119,9 @@ CAT7_Clear:   switchBank 2
 ;;;       to align the next line by code size above.
 ;;;       At the moment it happens to get the right alignment without
 ;;;       any NOPs.
+              nop
+              nop
+              nop
 back:         s9=1                  ; ordinary back step
 back10:       c=n                   ; search backwards
               pt=     12
@@ -142,10 +137,25 @@ back10:       c=n                   ; search backwards
 10$:          ?s9=1
               rtnc                  ; real BST and no previous buffer,
                                     ;   return to blink and sleep
-              goto    step          ; after clear buffer, no previous
+
+                                    ; after clear buffer, no previous
                                     ;  step forward instead
 
 ;;; !!!!! This entry must be aligned of 4, add NOPs here if needed.
+              nop
+              nop
+              nop
+step:         c=n                   ; step to next buffer
+              pt=     12
+              c=c+1   pt
+              rtnc                  ; nothing more
+              goto    next
+
+
+;;; !!!!! This entry must be aligned of 4, add NOPs here if needed.
+              nop
+              nop
+              nop
 prepare:      c=0                   ; start with buffer 0
 next:         n=c
               pt=     12
