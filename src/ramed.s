@@ -3,9 +3,9 @@
 
 ;;; **********************************************************************
 ;;;
-;;; RAMED a RAM editor.  Allows easy editing of the RAM memory.
+;;; RAMED allows for easy editing of the RAM memory.
 ;;;
-;;; It can be started in 3 ways:
+;;; RAMED can be started in 3 ways:
 ;;; 1. In program mode it will show the current program location.
 ;;; 2. In run mode with a decimal address in X.
 ;;; 3. In runmode with a right justified binary address in X.

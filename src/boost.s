@@ -3,13 +3,14 @@
 #include "boostInternals.h"
 
               .section BoostFAT
-              .extern RAMED, COMPILE, APX, ASHFX, `RTN?`
+              .extern RAMED, COMPILE, APX
               .extern ARCLINT, SEED, RNDM, `2D6`, KILLBUF, `F/E`
-              .extern `Y/N?`
+              .extern `Y/N?`, `LUHN?`, VMANT
               .extern XRCL, XSTO, XXVIEW, XXARCL, WORKFL, RENFL
               .extern myCAT, myASN, myXEQ
               .extern EQ, NE, LT, LE
               .extern DELAY, KEY
+              .extern `XEQ>GTO`, `PC<>RTN`, `RTN?`, GE
 XROMno:       .equ    6
 
               .con    XROMno        ; XROM number
@@ -36,13 +37,10 @@ FatStart:
               .fat    `2D6`
               .fat    WORKFL
 ; These are not fixed and can be considered preliminary
-              .fat    ASHFX
-              .fat    `RTN?`
-              .fat    ARCLINT
+;              .fat    ASHFX
+;              .fat    ARCLINT
 ;              .fat    KILLBUF
-              .fat    `F/E`
               .fat    `Y/N?`
-              .fat    `LUHN?`
 FatEnd:       .con    0,0
 
 ;;; ************************************************************
@@ -166,7 +164,12 @@ fatXEQ:       .fat    myXEQ
               .fat    CLKYSEC
               .fat    readRom16
               .fat    writeRom16
-              .fat    APX
+              .fat    `XEQ>GTO`
+              .fat    `PC<>RTN`
+              .fat    `RTN?`
+              .fat    GE
+              .fat    VMANT
+              .fat    `F/E`
 FAT1End:      .con    0,0
 
 ;;; * Second secondary FAT header, serving bank 2
@@ -186,6 +189,8 @@ secondary2:   .con    0             ; no next table
 FAT2Start:    .fat    COMPILE
               .fat    RAMED
               .fat    RENFL
+              .fat    `LUHN?`
+              .fat    APX
 FAT2End:      .con    0,0
 
 ;;; **********************************************************************
