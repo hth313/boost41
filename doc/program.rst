@@ -2,7 +2,7 @@
 Program related
 ***************
 
-Function related to program control.
+Functions related to program control.
 
 .. index:: program control; XEQ>GTO
 
@@ -19,8 +19,7 @@ RTN?
 
 Test if there is at least one level of return address on the call
 stack. Executes the next instructions if there is, otherwise the next
-instruction is skipped. In keyboard mode it displays ``YES`` or ``NO``
-as usual.
+instruction is skipped. In keyboard mode it displays ``YES`` or ``NO``.
 
 .. index:: program control; PC<>RTN
 

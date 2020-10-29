@@ -4,13 +4,14 @@
 
               .section BoostFAT
               .extern RAMED, COMPILE, APX
-              .extern ARCLINT, SEED, RNDM, `2D6`, KILLBUF, `F/E`
+              .extern SEED, RNDM, `2D6`, KILLBUF, `F/E`
               .extern `Y/N?`, `LUHN?`, VMANT
               .extern XRCL, XSTO, XXVIEW, XXARCL, WORKFL, RENFL
               .extern myCAT, myASN, myXEQ
               .extern EQ, NE, LT, LE
               .extern DELAY, KEY
               .extern `XEQ>GTO`, `PC<>RTN`, `RTN?`, GE
+              .extern ARCLINT, ATOXR, XTOAL
 XROMno:       .equ    6
 
               .con    XROMno        ; XROM number
@@ -37,9 +38,9 @@ FatStart:
               .fat    `2D6`
               .fat    WORKFL
 ; These are not fixed and can be considered preliminary
-;              .fat    ASHFX
-;              .fat    ARCLINT
-;              .fat    KILLBUF
+              .fat    ARCLINT
+              .fat    ATOXR
+              .fat    XTOAL
               .fat    `Y/N?`
 FatEnd:       .con    0,0
 
