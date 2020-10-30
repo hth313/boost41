@@ -59,7 +59,7 @@ deepWake2:    enrom1
 
               .extern catShell, extensionHandlers
 deepWake:     n=c
-              ldi     0x000         ; I need major version 0 at least
+              ldi     0x001         ; Use at least major version 0 and API 1
               gosub   checkApiVersionOS4
               ldi     .low12 catShell ; activate CAT replacement
               gosub   activateShell
