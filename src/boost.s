@@ -245,7 +245,7 @@ normalPSE:    gosub   LDSST0
 EXCHANGE:     nop
               nop
               gosub   dualArgument
-              .con    0 + SEMI_MERGED_NO_STACK + SEMI_MERGED_QMARK
+              .con    0
               acex
               pt=     2
               g=c                   ; save first argument in G
