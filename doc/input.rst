@@ -28,9 +28,10 @@ PAUSE
 
 This function works as the built-in ``PSE``, but it is aware of OS4
 application shells and will properly display the correct X register
-view as defined by the shell. The built-in ``PSE`` does not do this
-and revert to showing X the usual way, which may not be what you want
-when an application is active that alters the default view.
+view as defined by the active shell. The built-in ``PSE`` does not do this
+and revert to showing X the old way, which may not be what you want
+when an application is active as it may alter the default view of the
+X register.
 
 One example if the Ladybug module which replaces the standard view of
 X with integer values shown in the selected numeric base. The default
