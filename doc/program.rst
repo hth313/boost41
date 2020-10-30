@@ -21,6 +21,14 @@ Test if there is at least one level of return address on the call
 stack. Executes the next instructions if there is, otherwise the next
 instruction is skipped. In keyboard mode it displays ``YES`` or ``NO``.
 
+.. index:: program control; RTNS
+
+RTNS
+====
+
+Return the number of pending return level to X register. This will be
+a number 0--6.
+
 .. index:: program control; PC<>RTN
 
 PC<>RTN

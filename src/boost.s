@@ -10,7 +10,7 @@
               .extern myCAT, myASN, myXEQ
               .extern EQ, NE, LT, LE
               .extern DELAY, KEY
-              .extern `XEQ>GTO`, `PC<>RTN`, `RTN?`, GE, AVAILMEM
+              .extern `XEQ>GTO`, `PC<>RTN`, `RTN?`, RTNS, GE, AVAILMEM
               .extern ARCLINT, ATOXR, XTOAL
 XROMno:       .equ    6
 
@@ -168,6 +168,7 @@ fatXEQ:       .fat    myXEQ
               .fat    `XEQ>GTO`
               .fat    `PC<>RTN`
               .fat    `RTN?`
+              .fat    `RTNS`
               .fat    GE
               .fat    VMANT
               .fat    `F/E`
