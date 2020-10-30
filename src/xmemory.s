@@ -224,6 +224,4 @@ RENFL:        gosub   ensure41CX
               dadd=c                ; select filename register
               c=m
               data=c
-;;              golong  resetMyBank  ; new entry, use later
-              switchBank 1          ; temporary
-              rtn
+              gosub   resetMyBank   ; new entry, use later
