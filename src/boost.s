@@ -6,7 +6,7 @@
               .extern RAMED, COMPILE, APX
               .extern SEED, RNDM, `2D6`, KILLBUF, `F/E`
               .extern `Y/N?`, `LUHN?`, VMANT
-              .extern XRCL, XSTO, XXVIEW, XXARCL, WORKFL, RENFL
+              .extern XRCL, XSTO, XXVIEW, XXARCL, ExchangeX, WORKFL, RENFL
               .extern myCAT, myASN, myXEQ
               .extern EQ, NE, LT, LE
               .extern DELAY, KEY
@@ -28,7 +28,6 @@ FatStart:
               .fat    LE
               .fat    XRCL
               .fat    XSTO
-              .fat    XXVIEW
               .fat    XXARCL
               .fat    EXCHANGE
               .fat    EXITAPP
@@ -173,6 +172,8 @@ fatXEQ:       .fat    myXEQ
               .fat    VMANT
               .fat    `F/E`
               .fat    AVAILMEM
+              .fat    XXVIEW
+              .fat    ExchangeX
 FAT1End:      .con    0,0
 
 ;;; * Second secondary FAT header, serving bank 2

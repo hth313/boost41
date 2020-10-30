@@ -7,7 +7,7 @@
 ;;;
 ;;; XRCL - RCL on a register in extended memory
 ;;;
-;;; Prompting instruction to access a given register in the current
+;;; Prompting function to access a given register in the current
 ;;; data file in extended memory and behave as RCL on the value.
 ;;;
 ;;; **********************************************************************
@@ -19,8 +19,7 @@ XRCL:         nop
               nop
               gosub   argument
               .con    00 + SEMI_MERGED_NO_STACK
-              s8=0
-              gosub   TONSTF
+              gosub   postfix4095
               gosub   getXAdr
               acex    x
               dadd=c
@@ -33,7 +32,7 @@ XRCL:         nop
 ;;;
 ;;; XSTO - STO on a register in extended memory
 ;;;
-;;; Prompting instruction to access a given register in the current
+;;; Prompting function to access a given register in the current
 ;;; data file in extended memory and behave as STO on the value.
 ;;;
 ;;; **********************************************************************
@@ -45,8 +44,7 @@ XSTO:         nop
               nop
               gosub   argument
               .con    00 + SEMI_MERGED_NO_STACK
-              s8=0
-              gosub   TONSTF
+              gosub   postfix4095
               gosub   getXAdr
               c=0     x
               dadd=c
@@ -55,61 +53,106 @@ XSTO:         nop
               dadd=c
               acex    x
               data=c
-              golong  NFRPU         ; needed as we are XKD
+              goto    toNFRPU       ; needed as we are XKD
 
 
 ;;; **********************************************************************
 ;;;
 ;;; XVIEW - VIEW on a register in extended memory
 ;;;
-;;; Prompting instruction to access a given register in the current
+;;; Prompting function to access a given register in the current
 ;;; data file in extended memory and behave as VIEW on the value.
 ;;;
 ;;; **********************************************************************
 
-              .section BoostCode
               .public  XXVIEW
               .name   "XVIEW"
 XXVIEW:       nop
               nop
               gosub   argument
               .con    00 + SEMI_MERGED_NO_STACK
-              s8=0
-              gosub   TONSTF
+              gosub   postfix4095
               gosub   getXAdr
               acex    x
               dadd=c
               c=data
               bcex
               gosub   XVIEW
-              golong  NFRPU         ; needed as we are XKD
+toNFRPU:      golong  NFRPU         ; needed as all stack level busted, and
+                                    ;  also because XKD
 
 
 ;;; **********************************************************************
 ;;;
 ;;; XARCL - ARCL on a register in extended memory
 ;;;
-;;; Prompting instruction to access a given register in the current
+;;; Prompting function to access a given register in the current
 ;;; data file in extended memory and behave as ARCL on the value.
 ;;;
 ;;; **********************************************************************
 
-              .section BoostCode
               .public  XXARCL
               .name   "XARCL"
 XXARCL:       nop
               nop
               gosub   argument
               .con    00 + SEMI_MERGED_NO_STACK
-              s8=0
-              gosub   TONSTF
+              gosub   postfix4095
               gosub   getXAdr
               acex    x
               dadd=c
               c=data
               bcex
               gosub   XARCL
-              golong  NFRPU         ; needed as we are XKD
+              goto    toNFRPU
+
+
+;;; **********************************************************************
+;;;
+;;; ExchangeX - exchange between a register and extended memory
+;;;
+;;; Prompting function to access a given register in the current
+;;; data file in extended memory and behave as STO on the value.
+;;;
+;;; The name here is <>X to make it different from X<>. The idea
+;;; is also that the X appears on the side where the operand for
+;;; the extended memory goes.
+;;;
+;;; **********************************************************************
+
+              .public  ExchangeX
+              .name   "<>X"
+ExchangeX:    nop
+              nop
+              gosub   dualArgument
+              .con    SEMI_MERGED_SECOND_NO_STACK
+              acex
+              pt=     2             ; save first argument in G
+              g=c
+              st=c
+              gosub   postfix4095
+              gosub   getXAdr       ; A.X= address in extended memory
+              acex
+              rcr     -3
+              stk=c                 ; save address on stack
+
+              pt=     0             ; get first argument again
+              c=g
+              st=c
+              gosub   ADRFCH
+              m=c                   ; M= register value
+              c=stk
+              rcr     3             ; C.X= X memory address
+              dadd=c
+              c=data                ; C= X memory value
+              cmex                  ; C= register value
+                                    ; M= X memory value
+              data=c                ; write out register value to X memory
+              c=n
+              dadd=c                ; select register address
+              c=m
+              data=c                ; write out X memory value to regiser
+              goto    toNFRPU
 
 
 ;;; **********************************************************************

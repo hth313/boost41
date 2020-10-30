@@ -94,6 +94,28 @@ not register 04 in the data file), the value in that data file register
 tells which register to recall from the current data file and append
 the value in the alpha register.
 
+<>X _ _
+--------
+.. index:: <>X, data file access; <>X
+
+Dual prompting function that takes one normal register argument and a
+register value for extended memory. Swaps the value between the two
+indicated registers.
+
+Register indirect arguments are permitted on both sides. A stack
+argument is permitted for the left hand side, but not for right hand
+side as it is extended memory.
+
+.. note::
+
+   The name here is selected so that the ``X`` appears after the
+   exchange name. This is for two reasons. First, there is already a
+   built-in function ``X<>`` which takes one argument and exchanges
+   between the X register and the argument. Second, the ``X`` appears
+   after the ``<>`` to indicate that the extended memory register
+   operand comes second.
+
+
 File operations
 ===============
 
