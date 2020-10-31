@@ -3,7 +3,7 @@ RPN_SRCS =
 SRCS = boost.s ramed.s compile.s poll.s cat.s xmemory.s xeq.s \
         assign.s readrom16.s writerom16.s random.s partialKeys.s \
         compare.s delay.s returnStack.s luhn.s apx.s fixeng.s vmant.s \
-	yntest.s alpha.s binbcds.s
+	yntest.s alpha.s binbcds.s math.s
 
 OBJS = $(SRCS:%.s=%.o) $(RPN_SRCS:%.rpn=%.o)
 MOD = boost.mod boost.mod2

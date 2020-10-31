@@ -10,6 +10,7 @@ Boost module for the HP-41
    catalog
    memory
    compare
+   math
    alpha
    program
    input

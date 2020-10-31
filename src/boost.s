@@ -12,6 +12,7 @@
               .extern DELAY, KEY
               .extern `XEQ>GTO`, `PC<>RTN`, `RTN?`, RTNS, GE, AVAILMEM
               .extern ARCLINT, ATOXR, XTOAL
+              .extern decrement, increment
 XROMno:       .equ    6
 
               .con    XROMno        ; XROM number
@@ -36,11 +37,12 @@ FatStart:
               .fat    RNDM
               .fat    `2D6`
               .fat    WORKFL
-; These are not fixed and can be considered preliminary
               .fat    ARCLINT
               .fat    ATOXR
               .fat    XTOAL
               .fat    `Y/N?`
+              .fat    decrement
+              .fat    increment
 FatEnd:       .con    0,0
 
 ;;; ************************************************************
