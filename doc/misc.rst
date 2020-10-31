@@ -189,3 +189,39 @@ keyboard mode it will display ``YES`` for a correct Luhn number and
 ``NO`` otherwise.
 
 Reference: https://en.wikipedia.org/wiki/Luhn_algorithm
+
+.. index:: decode NNN
+
+DECODE
+------
+
+This is the ubiquitous ``DECODE`` function used to decode the number
+in and put its hexadecimal value in the alpha register. This was often
+used in the days of synthetic programming to make sense of the
+non-normalized numbers that often resulted.
+
+In program mode the hexadecimal string is appended to the alpha
+register. When used from the keyboard the alpha register is cleared
+first.
+
+.. note::
+
+   If you are into fiddling with register value like this it can be
+   worth checking out the Ladybug module which makes working with such
+   numbers as easy normal decimal number. Just configure it in hex
+   mode with word size 56 for the ultimate way of working with binary
+   (non-normalized) numbers on the HP-41. In addition Ladybug makes a
+   great replacement for an HP-16C.
+
+.. index:: encode NNN, CODE
+
+CODE
+----
+
+This is the ubiquitous ``CODE`` function used to encode a
+non-normalized number based on a hexadecimal value in the alpha
+register.  The resulting value is put in the X register.
+
+As with ``DECODE``, you may want to look into the Ladybug module.
+The ``CODE`` and ``DECODE`` are included for completeness in the case
+when you do not have Ladybug module inserted in your HP-41.

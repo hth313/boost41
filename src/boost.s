@@ -13,6 +13,7 @@
               .extern `XEQ>GTO`, `PC<>RTN`, `RTN?`, RTNS, GE, AVAILMEM
               .extern ARCLINT, ATOXR, XTOAL
               .extern decrement, increment
+              .extern CODE, DECODE
 XROMno:       .equ    6
 
               .con    XROMno        ; XROM number
@@ -204,6 +205,8 @@ FAT2Start:    .fat    COMPILE
               .fat    RENFL
               .fat    `LUHN?`
               .fat    APX
+              .fat    CODE
+              .fat    DECODE
 FAT2End:      .con    0,0
 
 ;;; **********************************************************************

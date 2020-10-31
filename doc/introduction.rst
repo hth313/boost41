@@ -71,6 +71,19 @@ If you feel that you need to brush up your background knowledge, here are some s
 * The *OS4* Documentation, Håkan Thörngren if you want to study the
   internals of the user OS4 module.
 
+Acknowledgments
+===============
+
+Some of the code sequences used in Boost have been borrowed from, or is
+based on source code found elsewhere.
+No permissions for this have been asked for, or been granted by the
+original authors or copyright owners.
+
+The ``CODE`` and ``DECODE`` functions were written by Ken Emery.
+
+Part of the code used for the ``R/S`` replacement is copyright by
+Hewlett Packard Company.
+
 License
 =======
 
