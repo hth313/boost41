@@ -75,12 +75,18 @@ sysKeyTable:  .con    11            ; CAT key
               KeyEntry myCAT
               .con    18            ; XEQ key
               .con    64 + xeqSecondary - .
+              .con    55
+              .con    64 + runStopSecondary - .
               .con    26            ; ASN key
               KeyEntry myASN
               .con    0x100         ; end of table
 
-xeqSecondary: .con    0      ; secondary
+xeqSecondary: .con    0             ; secondary
               .con    (fatXEQ - FAT1Start) >> 1
+
+runStopSecondary:
+              .con    0             ; secondary
+              .con    (fatRunStop - FAT1Start) >> 1
 
 ;;; **********************************************************************
 ;;;
@@ -174,6 +180,7 @@ fatXEQ:       .fat    myXEQ
               .fat    AVAILMEM
               .fat    XXVIEW
               .fat    ExchangeX
+fatRunStop:   .fat    myRunStop
 FAT1End:      .con    0,0
 
 ;;; * Second secondary FAT header, serving bank 2
@@ -271,6 +278,65 @@ EXCHANGE:     nop
               acex
               data=c                ; write second value
               rtn
+
+;;; **********************************************************************
+;;;
+;;; Alternative R/S
+;;;
+;;; This is needed to make it possible to stop a running PAUSE.
+;;;
+;;; **********************************************************************
+
+              .section BoostCode
+              .name   "STOP'"
+myRunStop:    nop                   ; non-programmable
+              nop                   ; XKD
+              c=regn  14
+              rcr     6
+              cstex                 ; put up SS3
+              ?s1=1                 ; catalog flag?
+              golc    R_SCAT        ; yes, goto catalog FCN.
+              st=c                  ; retrieve SS0
+              ?s3=1                 ; program mode?
+              gonc    XRS20         ; no
+XRS10:        ldi     0x84          ; FC for stop
+              golong  PARS56
+XRS20:        ?s1=1                 ; pauseflag?
+              goc     XRS10         ; yes (normal PSE)
+              gosub   pausingReset  ; OS4 pause running? (and reset it)
+              goto    XRS10         ; yes, stop
+
+;;; * This is PATCH 4, speed up Run
+              .newt_timing_start
+              ldi     167           ; set up 100ms wait
+PTCH4A:       rst kb                ; is the key still down?
+              chk kb
+              goc     toXRS45       ; no, go run!
+              c=c-1   x             ; time out over?
+              gonc    PTCH4A        ; no, keep checking the key
+              .newt_timing_end
+              gosub   LINNUM        ; display the starting step
+
+;;; *
+;;; * If key is let up, go run. Otherwise put up description of step.
+;;; * This is a patch to speed up execution of R/S.
+;;; *
+              ?s12=1                ; privacy?
+              gonc    XRS25         ; no
+              s8=     0             ; yes
+              gosub   MSGA
+              .con    .low10 MSGPR  ; "PRIVATE"
+              goto    XRS40
+
+XRS25:        c=regn  15
+              ?c#0    x             ; line number # 0?
+              goc     XRS30         ; yes, non-zero
+              c=c+1   x             ; zero. set to 1
+              regn=c  15
+XRS30:        gosub   DFKBCK        ; display next step
+              ?s9=1                 ; keyboard reset yet?
+XRS40:        gsubnc  NULTST        ; no
+toXRS45:      golong  XRS45
 
 ;;; **********************************************************************
 ;;;
