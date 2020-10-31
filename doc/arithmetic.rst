@@ -1,10 +1,10 @@
 .. index:: alpha functions
 
-***********
-Mathematics
-***********
+**********
+Arithmetic
+**********
 
-Functions related to numbers and calculations.
+Functions related to arithmetic calculations.
 
 .. index:: decrement
 
