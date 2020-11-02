@@ -8,6 +8,7 @@ Boost module for the HP-41
    introduction
    fundamentals
    catalog
+   assignment
    memory
    compare
    arithmetic

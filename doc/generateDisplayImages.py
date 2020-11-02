@@ -21,6 +21,12 @@ lcdImages = [ ("ramed-1", lcd.image("419B 0C00020", prgmMode))
             , ("exchange-5", lcd.image("&lt;&gt; Z IND 10", normalMode))
             , ("exchange-6", lcd.image("05 Z &lt;&gt; 07", prgmMode))
             , ("cat-7", lcd.image("15 002  @192", normalMode))
+            , ("asn-1", lcd.image("ASN' ___", normalMode))
+            , ("asn-xrom-1", lcd.image("ASN' XR __", normalMode))
+            , ("asn-xrom-2", lcd.image("ASN' XR 0_", normalMode))
+            , ("asn-xrom-3", lcd.image("ASN' XR 06,__", normalMode))
+            , ("asn-xrom-4", lcd.image("ASN' XR 06,1_", normalMode))
+            , ("asn-xrom-5", lcd.image("N' XR 06,10 _", normalMode))
             ]
 
 for (file, body) in lcdImages:
