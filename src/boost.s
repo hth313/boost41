@@ -166,11 +166,11 @@ secondary1:   .con    .low12 secondary2 ; pointer to next table
                                     ; no need to switch bank
 
               .section BoostSecondary1, reorder
-              .extern CLKYSEC, readRom16, writeRom16
+              .extern readRom16, writeRom16
               .align  4
 FAT1Start:    .fat    SEED
 fatXEQ:       .fat    myXEQ
-              .fat    CLKYSEC
+fatRunStop:   .fat    myRunStop
               .fat    readRom16
               .fat    writeRom16
               .fat    `XEQ>GTO`
@@ -183,7 +183,6 @@ fatXEQ:       .fat    myXEQ
               .fat    AVAILMEM
               .fat    XXVIEW
               .fat    ExchangeX
-fatRunStop:   .fat    myRunStop
 FAT1End:      .con    0,0
 
 ;;; * Second secondary FAT header, serving bank 2
@@ -198,6 +197,7 @@ secondary2:   .con    0             ; no next table
               switchBank 2          ; this one is in bank 2
               rtn
 
+              .extern CLKYSEC, LKAON, LKAOFF
               .section BoostSecondary2
               .align  4
 FAT2Start:    .fat    COMPILE
@@ -207,6 +207,9 @@ FAT2Start:    .fat    COMPILE
               .fat    APX
               .fat    CODE
               .fat    DECODE
+              .fat    CLKYSEC
+              .fat    LKAON
+              .fat    LKAOFF
 FAT2End:      .con    0,0
 
 ;;; **********************************************************************
