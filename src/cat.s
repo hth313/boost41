@@ -20,7 +20,7 @@ catShell:     .con    SysShell
               .align  4
               .extern sysKeyTable
 keyHandler:   gosub   keyKeyboard   ; does not return
-              .con    (1 << KeyFlagSparseTable) ; flags
+              .con    (1 << KeyFlagSparseTable) | (1 << KeyAutoAssign) ; flags
               .con    0             ; handle a digit
               .con    0             ; end digit entry
               .con    .low12 sysKeyTable
