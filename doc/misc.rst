@@ -225,3 +225,17 @@ register.  The resulting value is put in the X register.
 As with ``DECODE``, you may want to look into the Ladybug module.
 The ``CODE`` and ``DECODE`` are included for completeness in the case
 when you do not have Ladybug module inserted in your HP-41.
+
+.. index:: Half-nut display; contrast, display; contrast
+
+CTRST
+-----
+
+Sets the contrast value for the later Half-nut style displays. Takes a
+value 0--15 from the X register.
+
+CTRST?
+------
+
+Reads the current contrast value 0--15 and puts it in the X
+register. This works for later Half-nut style displays.

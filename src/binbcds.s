@@ -1,12 +1,43 @@
 #include "mainframe.h"
 #include "OS4.h"
 
+;;; **********************************************************************
+;;;
+;;; CTRST - Set contrast by value in X, for Halfnut displays
+;;;
+;;; **********************************************************************
+
+              .public CTRST, `CTRST?`
+              .section BoostCode
+              .name   "CTRST"
+CTRST:        c=regn  x
+              gosub   BCDBIN
+              a=c     x
+              ldi     0x10
+              dadd=c
+              pfad=c
+              acex    x
+              regn=c  m
+              golong  ENCP00
+
+;************************************************************
+; CTRST? - Recall contrast of LCD, for Halfnut displays
+;************************************************************
+
+              .name   "CTRST?"
+`CTRST?`:     ldi     0x10
+              dadd=c
+              pfad=c
+              c=regn  m
+              acex     x
+              gosub   ENCP00
+              goto    toCXtoX
+
 ;************************************************************
 ; AVAIL - Gives number of free registers
 ;************************************************************
 
               .public AVAILMEM
-              .section BoostCode
               .name   "AVAIL"
 AVAILMEM:     gosub   MEMLFT     ; Fetch # of free regs
               acex

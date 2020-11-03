@@ -14,6 +14,7 @@
               .extern ARCLINT, ATOXR, XTOAL
               .extern decrement, increment
               .extern CODE, DECODE
+              .extern CTRST, `CTRST?`
 XROMno:       .equ    6
 
               .con    XROMno        ; XROM number
@@ -183,6 +184,8 @@ fatRunStop:   .fat    myRunStop
               .fat    AVAILMEM
               .fat    XXVIEW
               .fat    ExchangeX
+              .fat    CTRST
+              .fat    `CTRST?`
 FAT1End:      .con    0,0
 
 ;;; * Second secondary FAT header, serving bank 2
