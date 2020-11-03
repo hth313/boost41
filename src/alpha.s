@@ -78,8 +78,8 @@ ATOXR:        c=regn  M
               c=0     wpt
               rcr     10
               regn=c  P
-              abex                  ; A.X= rightmost char
-              golp    AXtoX
+              c=b                   ; C.X= rightmost char
+              golong  CXtoX
 
 ;;; **********************************************************************
 ;;;

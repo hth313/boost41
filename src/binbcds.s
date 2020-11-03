@@ -1,4 +1,5 @@
 #include "mainframe.h"
+#include "OS4.h"
 
 ;************************************************************
 ; AVAIL - Gives number of free registers
@@ -9,7 +10,8 @@
               .name   "AVAIL"
 AVAILMEM:     gosub   MEMLFT     ; Fetch # of free regs
               acex
-              goto    AXtoX
+toCXtoX:      acex
+              golong  CXtoX
 
 ;************************************************************
 ; RTNS - Gives number of pending return address levels.
@@ -29,7 +31,7 @@ RTNS:         c=regn  a
 
 10$:          rcr     4             ; C[3:0]= next pending return
               ?c#0    wpt           ; one more pending return?
-              gonc    AXtoX         ; no
+              gonc    toCXtoX       ; no
               a=a+1   x             ; yes, increment counter
               c=0     wpt           ; reset this one
               ?c#0                  ; any more in this register?
@@ -37,95 +39,6 @@ RTNS:         c=regn  a
               bcex                  ; B=0, C=second register of returns
               rcr     -2
               goto    10$           ; take care of second return register
-
-;;; **********************************************************************
-;;;
-;;; AXtoX - convert small binary number to floating point in X
-;;;
-;;; IN: A[2:0] - binary number
-;;; OUT: X - floating point number
-;;;
-;;; **********************************************************************
-
-;;; **********************************************************************
-;;;
-;;; AXtoX - convert A from binary integer to floating point number
-;;; AtoXDrop - same as AtoX, but DROPST into X rather than RCL
-;;; AtoXFill - same as AtoX, but FILLXL into X rather than RCL
-;;;
-;;; The converted binary number is saved in X. The 3 different main
-;;; entry points correspond to push value (AtoX), update X after unary
-;;; operation (AtoXFill) and update X after binary operation (AtoXDrop).
-;;; The two latter also update L.
-;;;
-;;; IN: A - binary integer (all bits)
-;;;     S0 -
-;;; OUT: X - floating point number
-;;; ASSUME: DADD 0 selected
-;;;
-;;; **********************************************************************
-
-              .public AXtoX, AtoX, AtoX10, AtoXDrop, AtoXFill
-
-AtoXDrop:     s0=0                  ; Use DROPST
-              goto    AtoX10
-AtoXFill:     s0=1                  ; Use FILLXL
-              goto    AtoX05
-AXtoX:        a=0     m
-              a=0     s
-AtoX:         s0=0                  ; RCL to X
-AtoX05:       s1=0
-AtoX10:       pt=     13            ; digit counter
-              setdec
-              acex
-              m=c                   ; M= number to convert
-              clrabc
-              n=c                   ; N= 0
-
-10$:          c=m                   ; loop start, get input
-              a=0
-              a=c     s             ; get next nibble from left side
-              rcr     13
-              m=c                   ; save input back for next iteration
-              acex
-              rcr     13            ; C[0]= current nibble
-              acex                  ; A[0]= current nibble
-              a=a+b                 ; add with zero to convert it to BCD
-              c=n
-              c=c+c                 ; multiply it with 16 (decimal mode)
-              c=c+c
-              c=c+c
-              c=c+c
-              c=c+a
-              n=c                   ; N= accumulated mantissa so far
-              ?pt=    0             ; have we visited all digits?
-              goc     20$           ; yes
-              decpt                 ; no
-              goto     10$
-
-; BCD mantissa is now in C and N
-20$:          a=0     x             ; A.X= 0 (exponent)
-              rcr     -3            ; C.M= right justified mantissa
-              c=0     x
-              c=0     s
-              ?c#0    m             ; check for zero mantissa
-              gonc    40$           ; zero mantissa
-25$:          rcr     -1            ; left shift mantissa to left align it
-              ?c#0    s             ; did we get a digit?
-              goc     30$           ; yes
-              a=a+1   x             ; no, increment exponent and loop over
-              goto    25$
-30$:          rcr     1             ; shift right one digit to get the
-                                    ; final left justified mantissa in C
-              acex    x             ; get exponent
-              c=-c-1  pt            ; fix exponent
-40$:          bcex                  ; move result to B for RCL/DROPST
-              sethex                ; needed if we have a printer connected
-              ?s1=1
-              golc    DROPST
-              ?s0=1
-              golc    FILLXL
-              golong  RCL
 
 ;;; **********************************************************************
 ;;; * getX<256 - routine to get int(X) and check if int(X) < 256

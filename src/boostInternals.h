@@ -13,7 +13,6 @@ switchBank:   .macro  n
 #define OperandX    115
 
 // Support routines
-              .extern AXtoX, AtoX, AtoX10, AtoXDrop, AtoXFill
               .extern `getX<256`, `getX<999`, `getA<999`
 
 ;;; **********************************************************************
