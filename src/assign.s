@@ -1,5 +1,6 @@
 #include "mainframe.h"
 #include "OS4.h"
+#include "boostInternals.h"
 
 ;;; **********************************************************************
 ;;;
@@ -8,10 +9,22 @@
 ;;; **********************************************************************
 
               .section BoostCode2
-              .public CLKYSEC, LKAON, LKAOFF
+              .public CLKYSEC, LKAON, LKAOFF, MAPKEYS
               .name   "CLKYSEC"
 CLKYSEC:      gosub   clearSecondaryAssignments
               goto    done
+
+;;; **********************************************************************
+;;;
+;;; CLKYSEC - Rebuild all key assignment bitmaps
+;;;
+;;; **********************************************************************
+
+              .name "MAPKEYS"
+MAPKEYS:      s2=0                  ; favor program assignments
+              gosub   mapAssignments
+              goto    done
+
               .name   "LKAON"
 LKAON:        s8=1
               goto    KAONOFF
@@ -32,4 +45,6 @@ KAONOFF:      ldi     15
 10$:          st=0    Flag_HideTopKeyAssign
 20$:          cstex
               data=c                ; write updated buffer header back
-done:         gosub   resetMyBank   ; reset bank and return
+done:         switchBank 1          ; cannot use resetMyBank as all stack
+                                    ;   level used up
+              golong  NFRPU

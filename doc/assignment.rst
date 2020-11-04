@@ -108,3 +108,14 @@ LKAON
 
 Enable the auto-assignments on the top row keys. This is the default
 behavior unless you have executed ``LKAOFF``.
+
+MAPKEYS
+-------
+
+.. index:: MAPKEYS, assignment; rebuild bitmaps
+
+This function rebuilds the key assignment bitmap registers for both
+primary and secondary assignments. You should not normally need to use
+this, but it can be useful if you manage to corrupt those registers or
+used some function that adjusts key assignments without properly
+updating the key assignment bitmap bits.

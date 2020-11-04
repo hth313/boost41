@@ -200,7 +200,7 @@ secondary2:   .con    0             ; no next table
               switchBank 2          ; this one is in bank 2
               rtn
 
-              .extern CLKYSEC, LKAON, LKAOFF
+              .extern CLKYSEC, LKAON, LKAOFF, MAPKEYS
               .section BoostSecondary2
               .align  4
 FAT2Start:    .fat    COMPILE
@@ -213,6 +213,7 @@ FAT2Start:    .fat    COMPILE
               .fat    CLKYSEC
               .fat    LKAON
               .fat    LKAOFF
+              .fat    MAPKEYS
 FAT2End:      .con    0,0
 
 ;;; **********************************************************************
