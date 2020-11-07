@@ -17,7 +17,6 @@ mode, much like the HP-16C. In addition to the obvious applications of
 such module, it can also be used as a system programming module for
 the HP-41 as it makes it a lot easier to work with non-normalized numbers.
 
-
 .. index:: secondary functions
 
 Secondary functions
@@ -44,7 +43,7 @@ reached from the the ``XEQ`` and ``ASN`` keys.
 
 .. index:: system shell
 
-System shell
+Altered keys
 ============
 
 Boost makes use a of a sparse system shell. When the calculator is
@@ -61,3 +60,19 @@ actually allow other aware plug-in modules to listen to the catalog
 function and provide catalogs of their own. Even if Boost does not
 implement a given catalog, it is possible that another plug-in module
 may provide it and they are all reachable from the same catalog key.
+
+The modified keyboard becomes available when the HP-41 is powered on
+and is also installed at a master clear (MEMORY LOST).
+
+Some hardware allows for inserting modules by software means while
+power is on. One example is the ``PLUG`` functions in the 41CL. Once
+the module is "inserted" by software means, you need to turn the power
+off and then back on to properly initialize Boost. For the original
+HP-41, you plug in physical modules while powered off.
+
+.. note::
+
+   When the 41CL does a master clear it disables the MMU which causes
+   any module you may have plugged in to be removed. Thus, after you
+   enable the MMU again, you will need to cycle power to properly
+   initialize Boost.
