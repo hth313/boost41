@@ -261,3 +261,31 @@ The actual number is the sum of the stack registers used by the buffer and
 the number of alpha register entities that are on the stack. The two
 register buffer overhead is not included in this count. The means that
 an empty stack and a non-existing buffer stack both return 0.
+
+TOPRTN?
+-------
+
+Test if the top level record on the buffer stack is a return stack
+record. This can be used to control recursion to see when you have
+exhausted the return stacks pushed on the buffer stack.
+
+To make this work in a reliable way, you should start by pushing
+something else on the stack first before you start recursion. If you
+have nothing you already pushed, you can push the ``X`` register using
+``PUSH X`` to serve as a marker. When you are done, simply pop it off
+the stack. If you do not want to clobber ``X`` doing that, you can for
+example pop it to the ``T`` register instead (or the ``Q`` register if
+you are into synthetic programming and do not want to even disturb
+``T``).
+
+.. note::
+
+   There are two way this function can fail to work as intended. If
+   the next record on the stack is the alpha register, it may be empty
+   in which case this function will actually look at the next thing
+   on the stack. Also, the test for whether the top element is a
+   return stack record checks a magic number (``0x2ac`` in the
+   rightmost part). There is a (very) minor risk that what is pushed
+   happens to contain that pattern and being something else. However,
+   no normalized number has bits like this and ``0xac`` is not a
+   normal letter.

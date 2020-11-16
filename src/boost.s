@@ -21,7 +21,7 @@
               .extern PUSHST, POPST
               .extern POPDRXL, POPFLXL
               .extern pushDataX, popDataX
-              .extern PUSHA, POPA, STACKSZ
+              .extern PUSHA, POPA, STACKSZ, `TOPRTN?`
 
 XROMno:       .equ    6
 
@@ -209,6 +209,7 @@ fatRunStop:   .fat    myRunStop
               .fat    pushDataX
               .fat    popDataX
               .fat    STACKSZ
+              .fat    `TOPRTN?`
 FAT1End:      .con    0,0
 
 ;;; * Second secondary FAT header, serving bank 2

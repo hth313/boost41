@@ -2,7 +2,7 @@
 #include "OS4.h"
 
 #define StackBuffer 3
-#define ReturnMagicNumber 0x26c
+#define ReturnMagicNumber 0x2ac
 
 ;;; **********************************************************************
 ;;;
@@ -582,3 +582,32 @@ STACKSZ:      ldi     StackBuffer
 10$:          golong  CXtoX
 20$:          c=0     x
               goto    10$
+
+;;; **********************************************************************
+;;;
+;;; `TOPRTN?` - test if top element is a stack return record.
+;;;
+;;; **********************************************************************
+
+              .public `TOPRTN?`
+              .name   "TOPRTN?"
+`TOPRTN?`:    ldi     StackBuffer
+              gosub   findBuffer
+              goto    10$           ; (P+1) negative
+              ldi     3
+              a=c     x
+              rcr     10
+              c=0     xs
+              ?a<c    x             ; at least 4 buffer registers? (2 for header
+                                    ;   and 2 for return stack record)
+10$:          golnc   SKP           ; no
+              c=m
+              c=c+1   x             ; point to second register in record
+              dadd=c
+              c=data
+              a=c
+              ldi     ReturnMagicNumber
+              ?a#c    x             ; magic number good?
+              goc     10$           ; no
+              golong  NOSKP         ; yes, return record appears to be at top
+                                    ;   of stack
