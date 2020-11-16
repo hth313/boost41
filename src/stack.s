@@ -3,6 +3,7 @@
 
 #define StackBuffer 3
 #define ReturnMagicNumber 0x2ac
+#define FlagsMagicNumber 0x1fe
 
 ;;; **********************************************************************
 ;;;
@@ -43,6 +44,7 @@
               .section BoostCode
               .name   "PUSHFLG"
 PUSHFLG:      c=regn  14
+              ldi     FlagsMagicNumber
               goto    push1
 
 ;;; **********************************************************************
@@ -147,7 +149,7 @@ POPA:         c=0     x             ; assume zero register for a start
               rxq     trailer
               c=c-1   s             ; decrement alpha push counter
               ?c#0    s             ; did we go too far?
-              gonc    20$           ; yes, STACK ERROR
+              gonc    toStackError2 ; yes, STACK ERROR
               a=c
               asl                   ; A.S= alpha block size
                                     ; A[12:0]= updated remainging alpha push counts
@@ -168,7 +170,8 @@ POPA:         c=0     x             ; assume zero register for a start
 10$:          dadd=c                ; select chip 0
               golong  CLA           ; go and clear alpha
 
-20$:          rgo     stackError
+toStackError2:
+              rgo     stackError
 
 ;;; **********************************************************************
 ;;;
@@ -178,9 +181,17 @@ POPA:         c=0     x             ; assume zero register for a start
 
               .name   "POPFLG"
 POPFLG:       rxq     pop1
-              n=c
-              ldi     14
-              goto    POP10
+              a=c                   ; A= popped value
+              ldi     FlagsMagicNumber
+              ?a#c    x             ; magic number good?
+              goc     toStackError2 ; no
+              c=0                   ; yes
+              dadd=c
+              c=regn  14            ; use existing flags 44-55
+              acex    m
+              acex    s
+              regn=c  14
+              goto    shrinkStackBuffer
 
 ;;; **********************************************************************
 ;;;
@@ -224,7 +235,7 @@ POP:          nop
               gosub   ADRFCH
               rxq     pop1          ; get pointer to stack block
               cnex
-POP10:        dadd=c                ; select destination
+              dadd=c                ; select destination
               cnex
               data=c                ; write to destination
 
@@ -285,7 +296,7 @@ POPRST:       ldi     2
               a=c
               ldi     ReturnMagicNumber
               ?a#c    x             ; correct?
-              goc     toStackError    ; no
+              goc     toStackError  ; no
               c=0
               dadd=c                ; select chip 0
               c=n
