@@ -15,6 +15,14 @@
               .extern decrement, increment
               .extern CODE, DECODE
               .extern CTRST, `CTRST?`
+              .extern PUSH, POP
+              .extern PUSHFLG, POPFLG
+              .extern PUSHRST, POPRST
+              .extern PUSHST, POPST
+              .extern POPDRXL, POPFLXL
+              .extern pushDataX, popDataX
+              .extern PUSHA, POPA, STACKSZ
+
 XROMno:       .equ    6
 
               .con    XROMno        ; XROM number
@@ -45,6 +53,15 @@ FatStart:
               .fat    `Y/N?`
               .fat    decrement
               .fat    increment
+              .fat    PUSH
+              .fat    POP
+              .fat    PUSHFLG
+              .fat    POPFLG
+              .fat    PUSHST
+              .fat    POPDRXL
+              .fat    POPFLXL
+              .fat PUSHA
+              .fat    POPA
 FatEnd:       .con    0,0
 
 ;;; ************************************************************
@@ -186,6 +203,12 @@ fatRunStop:   .fat    myRunStop
               .fat    ExchangeX
               .fat    CTRST
               .fat    `CTRST?`
+              .fat    PUSHRST
+              .fat    POPRST
+              .fat    POPST
+              .fat    pushDataX
+              .fat    popDataX
+              .fat    STACKSZ
 FAT1End:      .con    0,0
 
 ;;; * Second secondary FAT header, serving bank 2
