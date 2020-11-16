@@ -1,6 +1,8 @@
 #ifndef __BOOST_INTERNALS_H__
 #define __BOOST_INTERNALS_H__
 
+#define StackBuffer 3
+
 // Macro to switch to given bank on the fly.
 switchBank:   .macro  n
               enrom\n

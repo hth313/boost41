@@ -45,7 +45,19 @@ setBank1Poll: enrom1
               .shadow deepWake - 1
 deepWake2:    enrom1
 
-              .section BoostPoll
+              .section BoostPollPart2
+doStackBuffer:
+              ldi     StackBuffer
+              gosub   findBuffer
+              goto    pollReturn    ; (P+1) no stack buffer
+              rcr     10            ; check for size 2
+              c=0     xs
+              c=c-1   x
+              c=c-1   x
+              ?c#0    x
+              goc     reclaimStackBuffer ; not size 2, we reclaim it
+              goto    doStackBuffer2
+
 ;;; **********************************************************************
 ;;;
 ;;; deepWake - poll vector called at power on
@@ -57,7 +69,27 @@ deepWake2:    enrom1
 ;;;
 ;;; **********************************************************************
 
+              .section BoostPoll
               .extern catShell, extensionHandlers
+doStackBuffer2:
+              acex    x             ; has size 2
+              a=c     x
+              c=c+1   x
+              dadd=c
+              c=data                ; read trailer register
+              c=c-1   s
+              ?c#0    s
+              gonc    pollReturn    ; it is really empty, do not reclaim it
+reclaimStackBuffer:
+              acex    x             ; reclaim the stack buffer
+              dadd=c
+              c=data
+              c=c+1   s
+              data=c
+pollReturn:   gosub   LDSST0
+              c=n
+XRMCK10:      golong  RMCK10
+
 deepWake:     n=c
               ldi     0x001         ; Use at least major version 0 and API 1
               gosub   checkApiVersionOS4
@@ -71,10 +103,7 @@ deepWake:     n=c
                                     ; (P+2) success
               ldi     0 | 128       ; hosted buffer 0
               gosub   reclaimHostedBuffer
-pollReturn:   gosub   LDSST0
-              c=n
-XRMCK10:      golong  RMCK10
-
+              goto    doStackBuffer
 
 ;;; **********************************************************************
 ;;;

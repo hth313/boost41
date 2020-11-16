@@ -1,7 +1,7 @@
 #include "mainframe.h"
 #include "OS4.h"
+#include "boostInternals.h"
 
-#define StackBuffer 3
 #define ReturnMagicNumber 0x2ac
 #define FlagsMagicNumber 0x1fe
 
