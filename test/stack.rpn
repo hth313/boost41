@@ -1,0 +1,52 @@
+#include "boost.h"
+
+LBL "STACK"
+42     PUSH X
+STACKSZ  1  X≠Y?  SF 99
+
+"FOO"  PUSHA
+STACKSZ  3  X≠Y?  SF 99
+ASTO 00                       ; save FOO in register 00
+
+CF 00   SF 01  CF 28  PUSHFLG
+SF 00   CF 01  SF 28          ; toggle pushed flags
+
+STACKSZ  4  X≠Y?  SF 99
+
+3 BUFSZ  5 X≠Y?  SF 99
+
+CLA  PUSHA                    ; push empty string
+
+STACKSZ  5  X≠Y?  SF 99
+
+3 BUFSZ  5 X≠Y?  SF 99        ; check that clear alpha did not grow buffer
+
+ASTO X
+= 00 X                        ; "FOO" in register 00 is not the empty string
+SF 99
+
+"GARBAGE TEXT"
+POPA                          ; pop empty string
+ALENG  X≠0?  SF 99            ; was it empty?
+
+POPFLG                        ; restore and test flags
+FS? 00  SF 99
+FC? 01  SF 99
+FS? 28  SF 99
+
+"LONG STRING"
+
+POPA
+ALENG 3  X≠Y?  SF 99          ; now we popped back a string of length 3
+
+ASTO X
+≠ 00 X                        ; now "FOO" should be "FOO"
+SF 99
+
+42  POP X
+X≠Y?  SF 99
+
+3 BUFSZ  2 X≠Y?  SF 99        ; buffer remains, 2 registers
+STACKSZ  X≠0?  SF 99          ; but stack is actually empty
+
+END

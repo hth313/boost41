@@ -1,0 +1,7 @@
+;; Boost tests
+
+LBL "BOOST"
+
+"STACK"
+XEQ "STACK"
+END

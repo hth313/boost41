@@ -19,6 +19,7 @@ all: $(MOD)
 
 $(MOD): $(OBJS) linker.scm boost.moddesc
 	lnnut -g $(OBJS) --list-file=linker.lst --extra-output-formats=mod2 linker.scm boost.moddesc
+	modtool --extract-module-export boost.mod
 
 clean:
 	rm $(OBJS) $(MOD)
