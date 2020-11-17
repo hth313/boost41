@@ -289,3 +289,9 @@ you are into synthetic programming and do not want to even disturb
    happens to contain that pattern and being something else. However,
    no normalized number has bits like this and ``0xac`` is not a
    normal letter.
+
+CLSTBUF
+-------
+
+Remove the stack buffer. This will result in a ``NONEXISTENT`` error
+message if the stack buffer does not exist.

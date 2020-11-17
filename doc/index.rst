@@ -15,6 +15,7 @@ Boost module for the HP-41
    alpha
    program
    stack
+   buffer
    input
    random
    xmemory

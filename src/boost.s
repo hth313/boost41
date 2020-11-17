@@ -22,6 +22,8 @@
               .extern POPDRXL, POPFLXL
               .extern pushDataX, popDataX
               .extern PUSHA, POPA, STACKSZ, `TOPRTN?`
+              .extern CLSTBUF, CLBUF, CLHBUF, BUFSZ, HBUFSZ
+              .extern `BUF?`, `HBUF?`
 
 XROMno:       .equ    6
 
@@ -238,6 +240,13 @@ FAT2Start:    .fat    COMPILE
               .fat    LKAON
               .fat    LKAOFF
               .fat    MAPKEYS
+              .fat    CLSTBUF
+              .fat    CLBUF
+              .fat    CLHBUF
+              .fat    BUFSZ
+              .fat    HBUFSZ
+              .fat    `BUF?`
+              .fat    `HBUF?`
 FAT2End:      .con    0,0
 
 ;;; **********************************************************************
