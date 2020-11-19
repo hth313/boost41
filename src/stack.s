@@ -643,6 +643,7 @@ STACKSZ:      ldi     StackBuffer
               abex    x
               c=c-1   x             ; point to trailer
               c=c-1   x             ; point to second register in record
+              c=a+c   x
               dadd=c
               c=data
               a=c
