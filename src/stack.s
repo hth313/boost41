@@ -144,7 +144,7 @@ reserve:      pt=     0
 ;;; **********************************************************************
 
               .name   "POPA"
-POPA:         c=0     x             ; assume zero register for a start
+POPA:         a=0     x             ; assume zero registers for a start
               rxq     pop
               rxq     trailer
               c=c-1   s             ; decrement alpha push counter
@@ -207,10 +207,10 @@ popDataX10:   c=0     m
               c=g
               a=c     m             ; A.M= number of registers
               goto    20$
-10$:          cmex
-              dadd=c                ; select a data register
+10$:          acex    x
+              dadd=c                ; select a data register in stack
               c=c+1   x
-              cmex
+              acex    x
               c=data                ; read data register
               cnex
               dadd=c
@@ -264,19 +264,19 @@ POPST:        ldi     5
               a=c     x
               rxq     pop
               ldi     4
-              a=c     x             ; A.X= pointer to stack registers
-10$:          c=m
+              n=c                   ; N.X= pointer to stack registers
+10$:          acex    x
               dadd=c                ; select stack register
               c=c+1   x             ; step pointer
-              m=c
+              acex    x
               c=data                ; read it
-              acex    x
+              cnex
               dadd=c                ; select RPN stack register
-              acex    x
+              c=c-1   x
+              goc     POPRST10
+              cnex
               data=c                ; write it
-              a=a-1   x
-              gonc    10$
-              goto    POPRST10
+              goto    10$
 
 ;;; **********************************************************************
 ;;;
@@ -289,7 +289,7 @@ POPRST:       ldi     2
               a=c     x
               rxq     pop
               n=c                   ; N= upper return stack registers
-              c=m
+              acex    x
               c=c+1   x
               dadd=c                ; select next stack buffer register
               c=data                ; read it
@@ -344,12 +344,12 @@ POPFLXL:      s8=1
 POPFLXL10:    ldi     5
               a=c     x
               rxq     pop
-              acex    x             ; C.X= buffer header
+              bcex    x             ; C.X= buffer header
               n=c                   ; N.X= buffer header
-              c=m                   ; C.X= address of first register in stack block
+              acex    x             ; C.X= address of first register in stack block
               c=c+1   x             ; point to old X
               dadd=c
-              a=c     x
+              acex    x
               c=data                ; C= old X
               bcex                  ; B= old X
               c=0
@@ -405,9 +405,9 @@ stackError:   gosub   errorMessage
 ;;;
 ;;; In: A[1:0]= size of topmost stack block
 ;;; Out: B.X= buffer header address
-;;;      A.X= buffer header address
+;;;      A.X= address of first register in block (selected)
 ;;;      C= contents of first register in stack block
-;;;      M.X= address of first register in stack block (selected)
+;;;      M.X= offset to first register in block
 ;;;      DADD= first register in stack block
 ;;;      G= size of topmost stack block
 ;;; Uses: A, C, B.X, M, PT, DADD, +1 sub level
@@ -428,15 +428,18 @@ pop:          pt=     0
               a=c     x             ; A.X= buffer size
               pt=     0
               c=g                   ; C.X= number of registers to pop
+              c=c+1   x             ; compensate for trailer
               c=a-c   x             ; C.X= offset to first register in stack block
               goc     stackError
               ?c#0    x
               gonc    stackError
 
-              m=c                   ; M.X= offset to first register in lock
+              m=c                   ; M.X= offset to first register in block
               a=b     x             ; A.X= buffer header address
               c=a+c   x             ; C.X= address of first register in block
               dadd=c                ; select it
+              a=c     x
+              c=data                ; C= contents of first register in stack block
               rtn
 
 ;;; **********************************************************************
@@ -478,10 +481,9 @@ PUSHA:        pt=     13
               c=regn  8             ; upper 4 character register
               pt=     5
               c=0     wpt
-              ?c#0                  ; non-empty?
+10$:          ?c#0                  ; non-empty?
               goc     20$           ; yes
-
-10$:          a=a-1   s             ; step counter
+              a=a-1   s             ; step counter
               ?a#0    s
               gonc    20$           ; empty alpha register
               a=a-1   x
@@ -489,13 +491,17 @@ PUSHA:        pt=     13
               dadd=c
               acex    x
               c=data
-              ?c#0                  ; this register empty?
-              gonc    10$           ; yes, keep looking
+              goto    10$           ; yes, keep looking
 
 20$:          acex
+              c=0     x
               rcr     -1
               acex                  ; A.X= registers needed
               rxq     reserve       ; prepare
+              c=b     x             ; C.X= new space
+              n=c                   ; N.X= new space
+              abex    x             ; B.X= buffer header
+
               rxq     trailer
               c=c+1   s
               c=c+1   s
@@ -511,7 +517,8 @@ PUSHA:        pt=     13
               acex
               data=c                ; write back
               ldi     5
-              n=c
+              cnex                  ; N.X= read pointer
+              bcex    x             ; B.X= write pointer
               goto    pushBlock
 
 ;;; **********************************************************************
@@ -555,17 +562,16 @@ dataRange:    s5=1
               a=a+1   x             ; A.X= number of registers needed
               rtn
 
-trailer:      acex    x
+trailer:      c=b     x
+              a=c     x
               dadd=c                ; select buffer header
-              acex
-              c=data
+              c=data                ; C= buffer header
               rcr     10
               c=0     xs
               c=c-1   x
               c=a+c   x
               dadd=c
-              acex    x
-              c=data
+              c=data                ; C= buffer trailer register
               rtn
 
 ;;; **********************************************************************
@@ -580,6 +586,7 @@ STACKSZ:      ldi     StackBuffer
               gosub   findBuffer
               goto    20$           ; (P+1) no stack buffer
               a=c     m             ; A[11:10]= buffer size
+              b=a     x             ; B.X= buffer header address
               rxq     trailer
               c=0     x
               rcr     -1
@@ -605,6 +612,7 @@ STACKSZ:      ldi     StackBuffer
 `TOPRTN?`:    ldi     StackBuffer
               gosub   findBuffer
               goto    10$           ; (P+1) negative
+              b=a     x
               ldi     3
               a=c     x
               rcr     10
@@ -612,8 +620,9 @@ STACKSZ:      ldi     StackBuffer
               ?a<c    x             ; at least 4 buffer registers? (2 for header
                                     ;   and 2 for return stack record)
 10$:          golnc   SKP           ; no
-              c=m
-              c=c+1   x             ; point to second register in record
+              abex    x
+              c=c-1   x             ; point to trailer
+              c=c-1   x             ; point to second register in record
               dadd=c
               c=data
               a=c
