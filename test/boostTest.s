@@ -10,7 +10,7 @@ FatEnd:       .con    0, 0
 
 
               .section Code
-              .name "-BOOST T 1A"
+              .name "-TEST BT 1A"
 Header:       rtn
 
 
