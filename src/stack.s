@@ -156,19 +156,19 @@ POPA:         a=0     x             ; assume zero registers for a start
               acex    m
               acex    x
               data=c                ; write out updated trailer
+              c=0
+              dadd=c                ; select chip 0
+              gosub   CLA           ; always clear first, we may restore
+                                    ;   fewer registers
               acex    s
-              c=0     x
               rcr     -1            ; C.X= number of registers to pop
               ?c#0    x             ; are we popping empty alpha?
-              gonc    10$           ; yes, clear alpha
+              rtnnc                 ; yes, we are done, alpha was cleared above
               a=c     x             ; A.X= number of registers to pop
               rxq     pop           ; prepare for pop of the alpha block
               ldi     5             ; point to first alpha register
               n=c
               goto    popDataX10
-
-10$:          dadd=c                ; select chip 0
-              golong  CLA           ; go and clear alpha
 
 toStackError2:
               rgo     stackError
