@@ -483,8 +483,10 @@ PUSHA:        pt=     13
               ldi     8
               a=c
               c=regn  8             ; upper 4 character register
-              pt=     5
+              rcr     6
+              pt=     7
               c=0     wpt
+              rcr     -6
 10$:          ?c#0                  ; non-empty?
               goc     20$           ; yes
               a=a-1   s             ; step counter
