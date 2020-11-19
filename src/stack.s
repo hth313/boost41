@@ -219,6 +219,10 @@ popDataX10:   c=0     m
               data=c
 20$:          a=a-1   m
               gonc    10$
+              c=0                   ; put NFRPU on the stack, dataRange used
+              pt=     4             ;   up all levels above
+              lc      15
+              stk=c
               goto    toPOPRST10
 
 ;;; **********************************************************************
@@ -563,7 +567,7 @@ pushBlock:    c=0     m
               data=c
 20$:          a=a-1   m
               gonc    10$
-              rtn
+              golong  NFRPU
 
 dataRange:    s5=1
               gosub   getIndexX
