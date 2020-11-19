@@ -1,7 +1,9 @@
 #include "boost.h"
 
 LBL "STACK"
-3 CLBUF                      ; erase stack buffer
+
+CF 25                        ; catch errors
+CLSTBUF                      ; erase stack buffer
 
 42     PUSH X
 STACKSZ  1  X≠Y?  SF 99
@@ -51,4 +53,98 @@ X≠Y?  SF 99
 3 BUFSZ  2 X≠Y?  SF 99        ; buffer remains, 2 registers
 STACKSZ  X≠0?  SF 99          ; but stack is actually empty
 
+;;; Test limit of 13 PUSHA
+1.013
+
+LBL 05
+PUSHA
+STO IND X                     ; also store in reg 1-13
+ISG X
+GTO 05
+
+SF 25                         ; now we should have an error if we try again
+PUSHA
+FS?C 25
+SF 99
+
+3 BUFSZ  15 X≠Y?  SF 99       ; buffer should be 15 registers now
+STACKSZ  26 X≠Y?  SF 99       ; stack size includes the 13 alpha pushes
+
+;;; Test push/pop data register range
+1.013  PUSHBYX                ; push 13 registers of loop values
+CLRG                          ; clear data registers
+1.013  POPBYX                 ; restore them
+
+STO 00                        ; use 00 for loop counter
+LBL 06
+≠ IND 00 00      SF 99        ; test the value
+POPA
+ISG 00
+GTO 06
+
+STACKSZ  X≠0?  SF 99          ; stack is now empty
+
+;;; Test recursion
+"RECURSE"  AVIEW
+
+1  STO 00
+13   XEQ 12
+13 FACT   RCL 00    X≠Y?  SF 99
+
+;;; Test stack fill
+"FILL ST"  AVIEW
+4  STO 00
+1  STO 01
+2  STO 02
+XEQ 08                        ; fill stack and push
++ POPFLXL                     ; X=7 L=4
+≠ 00 L    SF 99
++ + +
+13  X≠Y?  SF 99
+
+XEQ 08
+20 POPDRXL
+≠ 00 L    SF 99
+≠ 02 Y    SF 99
+≠ 01 Z    SF 99
+≠ 01 T    SF 99
++ +
+23 X≠Y?   SF 99
+
+STACKSZ  X≠0?  SF 99          ; stack is now empty
+
+RTN                           ; done
+
+
+LBL 12                        ; stupid recursion loop
+PUSHST
+RTNS
+6   X=Y?   GTO 09
+POPST
+X=0?       GTO 10
+ST* 00
+1  -
+XEQ 12
+LBL 10
+RTN?
+RTN
+TOPRTN?
+POPRST
+RTN
+
+LBL 09                       ; extend the stack
+POPST
+PUSHRST
+GTO 12
+
+LBL 08
+5 +
+1
+ENTER
+2
+ENTER
+3
+ENTER
+4
+PUSHST
 END
