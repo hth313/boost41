@@ -126,6 +126,12 @@ Pop a single register from the stack. This function takes a single
 postfix argument which allows for data registers and RPN stack
 registers to be popped.
 
+.. note::
+
+   A ``POP X`` will replace the value in ``X`` register without
+   having any other affect on the stack. Thus, ``POP`` is more like
+   ``STO`` to the given location than a ``RCL`` of a value.
+
 PUSHA
 -----
 

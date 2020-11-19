@@ -45,7 +45,7 @@ ASTO X
 ≠ 00 X                        ; now "FOO" should be "FOO"
 SF 99
 
-42  POP X
+POP X 42
 X≠Y?  SF 99
 
 3 BUFSZ  2 X≠Y?  SF 99        ; buffer remains, 2 registers
