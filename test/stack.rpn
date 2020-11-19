@@ -1,6 +1,8 @@
 #include "boost.h"
 
 LBL "STACK"
+3 CLBUF                      ; erase stack buffer
+
 42     PUSH X
 STACKSZ  1  X≠Y?  SF 99
 
