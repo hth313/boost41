@@ -299,5 +299,4 @@ you are into synthetic programming and do not want to even disturb
 CLSTBUF
 -------
 
-Remove the stack buffer. This will result in a ``NONEXISTENT`` error
-message if the stack buffer does not exist.
+Remove the stack buffer.

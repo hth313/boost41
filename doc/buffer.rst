@@ -28,8 +28,8 @@ Functions
 =========
 
 If the buffer number specified is outside valid numeric range, 0-15
-for normal buffers and 0-127 for hosted buffer, a ``NONEXISTENT``
-error message is given.
+for normal buffers and 0-127 for hosted buffer, a ``DATA ERROR``
+message is returned.
 
 CLBUF
 -----

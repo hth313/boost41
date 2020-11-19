@@ -26,7 +26,7 @@ CLSTBUF:      ldi     StackBuffer
               .name   "CLBUF"
 CLBUF:        rxq     BCDBIN1
 CLBUF10:      gosub   findBuffer
-              goto    toERRNE20     ; (P+1) does not exist
+              goto    CLBUF20       ; (P+1) does not exist
               c=0     s             ; mark for removal
               data=c
               c=0     x
@@ -42,12 +42,9 @@ CLBUF20:      gosub   resetMyBank   ; return
 
               .public CLHBUF
               .name   "CLHBUF"
-CLHBUF:       c=regn  X
-              gosub   BCDBIN
-              ?c#0    xs
-              goto    toERRNE10
+CLHBUF:       rxq     BCDBIN127
               gosub   findBufferHosted
-toERRNE20:    goto    toERRNE10     ; (P+1) does not exist
+              goto    CLBUF20       ; (P+1) does not exist
               c=0
               pt=     13
               lc      8
@@ -82,23 +79,37 @@ toSKP:        s7=0
 
               .public `HBUF?`
               .name   "HBUF?"
-`HBUF?`:      c=regn  X
-              gosub   BCDBIN
-              ?c#0    xs
-              goc     toSKP
+`HBUF?`:      rxq     BCDBIN127
               gosub   findBufferHosted
               goto    toSKP
               goto    toNOSKP
 
 ;;; * Support routine for getting a normal buffer number
-BCDBIN1:      c=regn  X
-              gosub   BCDBIN
+BCDBIN1:      rxq     myBCDBIN
               pt=     0
               a=0     x
               a=c     pt
               ?a#c    x
               rtnnc
-toERRNE10:    goto    toERRNE
+toERRDE10:    golong  ERRDE_resetMyBank
+
+;;; * Get buffer number for a hosted buffer
+BCDBIN127:    rxq     myBCDBIN
+              ?c#0    xs
+              goc     toERRDE10
+              a=c     x
+              pt=     1
+              c=c+c   wpt
+              goc     toERRDE10
+              acex    x
+              rtn
+
+myBCDBIN:     ldi     2             ; make consisten DATA ERROR message
+              a=c     x
+              c=regn  X             ; when specified buffer is out of range
+              ?a<c    x
+              goc     toERRDE10
+              golong  BCDBIN
 
 ;;; **********************************************************************
 ;;;
@@ -108,15 +119,10 @@ toERRNE10:    goto    toERRNE
 
               .public HBUFSZ
               .name   "HBUFSZ"
-HBUFSZ:       c=regn  X
-              gosub   BCDBIN
-              ?c#0    xs
-              goc     toERRNE
+HBUFSZ:       rxq     BCDBIN127
               gosub   findBufferHosted
-              goto    toERRNE
+              goto    emptyBuffer
               goto    BUFSZ10
-
-toERRNE:      gosub   ERRNE_resetMyBank
 
 ;;; **********************************************************************
 ;;;
@@ -125,13 +131,15 @@ toERRNE:      gosub   ERRNE_resetMyBank
 ;;; **********************************************************************
 
               .public BUFSZ
+emptyBuffer:  c=0
+              goto    tofill
               .name   "BUFSZ"
 BUFSZ:        rxq     BCDBIN1
               gosub   findBuffer
-              goto    toERRNE       ; (P+1) does not exist
+              goto    emptyBuffer   ; (P+1) does not exist
 BUFSZ10:      rcr     10
               c=0     s
               c=0     m
               c=0     xs
               switchBank 1
-              golong  CtoXFill
+tofill:       golong  CtoXFill
