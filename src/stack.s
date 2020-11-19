@@ -191,7 +191,7 @@ POPFLG:       rxq     pop1
               acex    m
               acex    s
               regn=c  14
-              goto    shrinkStackBuffer
+              goto    shrinkStackBuffer_abex
 
 ;;; **********************************************************************
 ;;;
@@ -240,6 +240,9 @@ POP:          nop
               data=c                ; write to destination
 
 ;;; * Fall into shrinkStackBuffer
+
+shrinkStackBuffer_abex:
+              abex    x             ; A.X= buffer header
 
 ;;; **********************************************************************
 ;;;
@@ -306,7 +309,8 @@ POPRST:       ldi     2
               a=c     wpt
               acex
               regn=c  12            ; write lower return levels with current PC
-POPRST10:     abex    x
+POPRST10:     goto    shrinkStackBuffer_abex
+
 POPRST20:     goto    shrinkStackBuffer
 
 ;;; **********************************************************************
