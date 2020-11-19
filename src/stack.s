@@ -511,7 +511,7 @@ PUSHA:        pt=     13
               rxq     trailer
               c=c+1   s
               c=c+1   s
-              golc    noRoom        ; no space in trailer for another alpha push
+              goc     50$           ; no space in trailer for another alpha push
               c=c-1   s             ; adjust counter
               a=c                   ; A[13]= adjusted counter
               csr                   ; C[11:0]= right shifted alpha push counts
@@ -526,6 +526,16 @@ PUSHA:        pt=     13
               cnex                  ; N.X= read pointer
               bcex    x             ; B.X= write pointer
               goto    pushBlock
+
+;;; At this point we have actually allocated a register in the buffer
+;;; which we cannot use now. These registers need to be removed.
+50$:          c=n                   ; C.X= first register to remove
+              acex    x             ; A.X= first register to remove
+                                    ; C.X= buffer header
+              c=a-c   x             ; C.X= offset to first register to remove
+              abex    x             ; A.X= buffer header
+              gosub   shrinkBuffer
+              golong  noRoom
 
 ;;; **********************************************************************
 ;;;
