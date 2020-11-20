@@ -3,10 +3,16 @@ Stack and memory
 ****************
 
 Functions related to stack and memory values are documented here.
+You may also want to consult the sections about compares and stack as
+they also operate on stack an memory values. See
+:ref:`compare` and :ref:`stack`.
+
+Functions
+=========
 
 
 Generic exchange
-================
+-----------------
 
 The ``<>`` genereric exchange function takes two arguments and swaps
 the values described by the arguments. This is a generalization of
@@ -50,7 +56,7 @@ the line becomes so long that it scrolls horizontally.
 .. index:: VMANT function, mantissa; view
 
 VMANT
-=====
+-----
 
 View the mantissa of the value in X. This displays all digits of the X
 register, stripping off any exponent. The actual value in X is not
@@ -60,7 +66,7 @@ as usual.
 .. index:: fix/end mode
 
 F/E
-===
+---
 
 Enables the hybrid ``FIX`` with ``ENG`` mode. Normally when using ``FIX``
 mode and the number needs to be shown with an exponent, the HP-41

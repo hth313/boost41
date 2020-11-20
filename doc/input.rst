@@ -23,8 +23,11 @@ means that they require the Time module to be present.
 The interval timer is normally used to provide the ticking clock
 display, but here we borrow it and use it as a time out.
 
+Functions
+=========
+
 PAUSE
-=====
+-----
 
 This function works as the built-in ``PSE``, but it is aware of OS4
 application shells and will properly display the correct X register

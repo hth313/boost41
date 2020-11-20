@@ -1,5 +1,7 @@
 .. index:: compare functions
 
+.. _compare:
+
 *****************
 Compare functions
 *****************
@@ -11,7 +13,7 @@ The HP-41CX adds additional compare functions such as ``X<NN?`` which
 compares X to a register pointed to be the Y register, essentially
 ``X < IND Y?``.
 
-The boost module provides four prompting generic compare functions
+The Boost module provides four prompting generic compare functions
 ``=``, ``≠``, ``<`` and ``<=``.  It should be fairly obvious what they
 do. They take two arguments and will prompt for its two arguments.
 With these you can create any compare you like, i.e. ``X < 10?``

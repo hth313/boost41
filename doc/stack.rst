@@ -1,4 +1,5 @@
 .. index:: stack buffer, buffer stack
+.. _stack:
 
 ************
 Buffer stack

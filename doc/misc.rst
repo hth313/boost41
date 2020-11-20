@@ -5,8 +5,11 @@ Miscellaneous
 In this chapter various functions that do not belong to any particular
 category are documented.
 
+Functions
+=========
+
 AVAIL
-------
+-----
 .. index:: free memory, available memory, memory; available
 
 This function returns the number of free registers to the X
