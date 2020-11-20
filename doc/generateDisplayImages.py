@@ -39,8 +39,8 @@ lcdImages = [ ("ramed-1", lcd.image("419B 0C00020", prgmMode))
             , ("compare-4", lcd.image("= Z IND __", normalMode))
             , ("compare-5", lcd.image("= Z IND ST _", normalMode))
             , ("compare-6", lcd.image("= Z IND L", normalMode))
-            , ("compare-7", lcd.image("2 Z = IND L?", normalMode))
-            , ("compare-8", lcd.image("10 Z = 05?", normalMode))
+            , ("compare-7", lcd.image("2 Z = IND L?", prgmMode))
+            , ("compare-8", lcd.image("10 Z = 05?", prgmMode))
             ]
 
 for (file, body) in lcdImages:

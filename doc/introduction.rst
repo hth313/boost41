@@ -21,6 +21,16 @@ page in the normal memory expansion space (page 7--F).
 
 You must also load the separate OS4 module in page 4 for Boost to work.
 
+.. index:: Clonix, NoV modules
+
+.. note::
+   Clonix and NoV modules will require an update of its firmware to a
+   version that allows independent bank pages, as the original
+   firmware bank switch all pages simultaneously held by the module.
+   A work around is to load OS4 and non-banked modules in one
+   Clonix module while banked application modules are loaded to a
+   second Clonix module.
+
 This release
 ============
 
@@ -35,8 +45,9 @@ Resource requirements
 
 Boost will allocate one register from the free memory pool when first
 powered on. Additional use of Boost may allocate further memory,
-i.e. using the pseudo random number generator will need one additional
-register.
+e.g. using the pseudo random number generator will require one additional
+register. Using the buffer stack will also allocate memory from the
+free area.
 
 Apart from this, it does not impose any restrictions on the
 environment and will run comfortable on any HP-41C, HP-41CV, HP-41CX

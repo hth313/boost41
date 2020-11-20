@@ -4,7 +4,7 @@
 Extended memory
 ***************
 
-Boost provides some additional instructions related to extended memory
+Boost provides some additional functions related to extended memory
 as implemented on the HP-41CX and HP-41CL. Currently the separate
 82180A Extended Functions as used by the HP-41C and HP-41CV is not
 supported.
@@ -12,8 +12,8 @@ supported.
 .. note::
 
    Large extended memory as optionally available on the HP-41CL using
-   a custom firmare is fully supported by all these functions as they
-   go through the entry points provided by the mainframe firmware.
+   a custom firmare is fully supported by all these functions, as they
+   use the official entry points.
 
 
 Random data file access
@@ -21,9 +21,9 @@ Random data file access
 
 These functions make it possible to treat data files in extended
 memory much like ordinary registers. A set of functions corresponding
-to the existing ones such as ``RCL`` and ``STO`` are provided. These
-are prefixed with an ``X`` and prompts for the register to access.
-Indirection is also possible, but the indirection register act on the
+to the existing ones such as ``RCL`` and ``STO`` are provided. The
+names start with an ``X`` and they prompt for the register to access.
+Indirection is also possible, but the indirection register acts on the
 ordinary data registers, or stack registers.
 
 Possible errors when using these functions are:
@@ -54,7 +54,7 @@ XRCL _ _
 Prompting function that reads directly from a data file. ``XRCL 03``
 will recall the fourth register in the current data file to X.
 ``XRCL IND 04`` will read data register 04 (the normal data register,
-not register 04 in the data file), the value in that data file register
+not register 04 in the data file). The value in that data file register
 tells which register to recall from the current data file to the X
 register.
 
@@ -66,9 +66,10 @@ Prompting function that writes directly to a data file. ``XSTO 03``
 will store the contents in the X register in the fourth register in the
 current data file.
 ``STO IND Z`` will store the value in the X register into the current
-data file, the register number that is written to is in stack register
-Z. If the indirect register number is numeric, i.e. ``STO IND 10`` the
-register number used is in that data register (not the data file).
+data file. The register number that is written to is in stack register
+Z. If the indirect register number is numeric, e.g. ``STO IND 10``, the
+indirection register is the normal data register (not the data file
+register).
 
 XVIEW _ _
 -----------
@@ -89,17 +90,13 @@ XARCL _ _
 Prompting function that reads directly from a data file. ``XARCL 03``
 will recall the fourth register in the current data file and append
 the value in the alpha register.
-``XARCL IND 04`` will read data register 04 (the normal data register,
-not register 04 in the data file), the value in that data file register
-tells which register to recall from the current data file and append
-the value in the alpha register.
 
 <>X _ _
 --------
 .. index:: <>X, data file access; <>X
 
 Dual prompting function that takes one normal register argument and a
-register value for extended memory. Swaps the value between the two
+register value for extended memory. Swaps the two values between the two
 indicated registers.
 
 Register indirect arguments are permitted on both sides. A stack
@@ -112,7 +109,7 @@ side as it is extended memory.
    exchange name. This is for two reasons. First, there is already a
    built-in function ``X<>`` which takes one argument and exchanges
    between the X register and the argument. Second, the ``X`` appears
-   after the ``<>`` to indicate that the extended memory register
+   after the ``<>`` to indicate that the Extended memory register
    operand comes second.
 
 

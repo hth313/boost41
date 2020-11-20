@@ -4,15 +4,15 @@
 Pseudo random numbers
 *********************
 
-The base operating system in the HP-41 lacks a random number
+The base operating system in the HP-41 lacks a pseudo random number
 generator. The Boost module provides an MCODE version of the one that
 is available in the Game application module.
 
 The seed is stored in a hosted buffer offered by OS4, not competing
 with any other I/O buffer. The hosted buffer number used is 0.
 
-Initialization of the seed is done based on the current time offered
-by the Time module if present.
+Initialization of the seed is based on the current time offered
+by the Time module, if present.
 
 Functions
 =========
@@ -30,8 +30,8 @@ SEED
 ----
 
 Use the fractional part of the value in X as the seed for the random
-number generator. This is useful to get a predictable range of random
-numbers, i.e. useful for test or demo purposes.
+number generator. This is useful to get a predictable range of pseudo random
+numbers, e.g. useful for test or demo purposes.
 
 .. index:: 2D6 function
 

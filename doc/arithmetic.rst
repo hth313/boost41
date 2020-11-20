@@ -14,7 +14,7 @@ Functions
 DEC _ _
 --------
 
-Decrement the specified register, that is, subtract 1 without affect
+Decrement the specified register, that is, subtract 1 without affecting
 the last X register.
 
 .. index:: increment
@@ -22,5 +22,5 @@ the last X register.
 INC _ _
 --------
 
-Increment the specified register, that is, subtract 1 without affect
+Increment the specified register, that is, subtract 1 without affecting
 the last X register.

@@ -15,8 +15,8 @@ which allows the following alternatives:
 By name
 
    Press the ``ALPHA`` key and spell out the name of the function you
-   want to call. This will search for the function in the usual way,
-   except that secondary functions are also searched.
+   want to execute. This will search for the function in the usual way,
+   but here it also includes searching among the secondary functions.
 
 By local label
 

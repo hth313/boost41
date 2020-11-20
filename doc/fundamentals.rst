@@ -10,7 +10,7 @@ OS4
 
 Boost is a companion module for the OS4 extension module. OS4 provides
 a lot of ground breaking new features for the HP-41 and Boost is
-intended to unlock a lot of it to the user.
+intended to unlock it to the user.
 
 Another module that uses OS4 is Ladybug, which provides an integer
 mode, much like the HP-16C. In addition to the obvious applications of
@@ -25,21 +25,22 @@ Secondary functions
 Boost make use of secondary functions. Secondary functions can be
 entered by name, assigned to keys and stored in programs. The only
 downside is that when stored in a program they occupy a little bit
-more space, typically 4 bytes instead of 2. For functions with a
-postfix operand (semi-merged instruction), they cost one byte extra
-compare to a corresponding XROM function.
+more space, typically 4 bytes instead of 2. Secondary functions with a
+postfix operand (semi-merged function) costs one byte extra
+compared to the corresponding XROM function.
 
 The main advantage of secondary functions is that they allow a 4K
 module page to have virtually unlimited number of functions.
 
 Seldom used functions and functions that are not expected to be used
-in programs are prime candidates when deciding if a function should be
-primary or secondary.
+in programs are good candidates for being secondary functions when you
+run out of primary XROM numbers.
 
-At the moment it is not possible to display secondary functions in
-catalog 2. Such feature is planned, but not currently provided. You
-need to consult the manual as the functions are there are can be
-reached from the the ``XEQ`` and ``ASN`` keys.
+.. note::
+   At the moment it is not possible to display secondary functions in
+   catalog 2. Such feature is planned, but not currently provided. You
+   need to consult the manual as the functions are there are can be
+   reached from the the ``XEQ`` and ``ASN`` keys.
 
 .. index:: system shell
 
@@ -66,7 +67,7 @@ and is also installed at a master clear (MEMORY LOST).
 
 Some hardware allows for inserting modules by software means while
 power is on. One example is the ``PLUG`` functions in the 41CL. Once
-the module is "inserted" by software means, you need to turn the power
+the module has been "inserted" by software means, you need to turn the power
 off and then back on to properly initialize Boost. For the original
 HP-41, you plug in physical modules while powered off.
 

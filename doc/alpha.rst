@@ -24,15 +24,15 @@ string in alpha register.
 XTOAL
 -----
 
-Take the character code from X and append that character to the left
-side of the string in the alpha register. This is similar to ``XTOA``
-in the Extended Functions module, but works on the opposite side of
-the string in alpha register.
+Take the character code from ``X`` register and append that character
+to the left side of the string in the alpha register. This is similar
+to ``XTOA`` in the Extended Functions module, but works on the
+opposite side of the string in alpha register.
 
 .. index:: ARCLINT
 
 ARCLINT _ _
 -----------
 
-Prompting function like ``ARCL``, but returns the integer part of the
-value found.
+Prompting function like ``ARCL``, but returns the integer part only of
+the value.

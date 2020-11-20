@@ -2,8 +2,8 @@
 Assignments
 ***********
 
-In this chapter we look at various enhancements made to key
-assignments.
+In this chapter we look at various enhancements made to key assignment
+mechanism.
 
 Improved ASN
 ============
@@ -67,8 +67,8 @@ to load key assignments and one to merge them with the existing ones.
 As existing storage media code is unaware of secondary assignments,
 ``CLKYSEC`` provides a means of replacing keys as it will wipe the
 existing secondary key assignments, which is what a load and replace
-key assignments will do. Not calling ``CLKYSEC`` means that loading
-keys acts as merging them with respect to existing secondary
+key assignments is intended to do. Not calling ``CLKYSEC`` means that
+loading keys acts as merging them with respect to existing secondary
 assignments.
 
 .. note::
@@ -76,7 +76,7 @@ assignments.
    This is simpler than it sounds. If you want to replace
    keys, also execute ``CLKYSEC``. The reason why this function is
    needed is that all the old ways of loading key assignments from
-   external storage media uses old firmware which is totally unaware
+   external storage media uses firmware which is totally unaware
    of secondary assignments.
 
 .. index:: LKAOFF, auto-assignments, assignment; auto
@@ -99,7 +99,7 @@ them again using ``LKAON``.
    effect (as long as that shell is active). In such case you need to
    deactivate the application shell (using ``SHIFT``-``USER``) or
    activate another application shell on top of it that does not
-   disable top row assignments.
+   disable the top row assignments.
 
 .. index:: LKAON, auto-assignments, assignment; auto
 
@@ -116,6 +116,6 @@ MAPKEYS
 
 This function rebuilds the key assignment bitmap registers for both
 primary and secondary assignments. You should not normally need to use
-this, but it can be useful if you manage to corrupt those registers or
+this, but it can be useful if you manage to corrupt the bitmap registers or
 used some function that adjusts key assignments without properly
 updating the key assignment bitmap bits.

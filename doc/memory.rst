@@ -38,8 +38,8 @@ Press the shift key to enter a register indirect argument.
 
 .. image:: _static/exchange-4.*
 
-And finally enter the register to complete the instruction which is
-executed once you release the key:
+And finally enter the register to complete the function, which is
+executed when you release the key:
 
 .. image:: _static/exchange-5.*
 

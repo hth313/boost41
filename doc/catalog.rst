@@ -4,7 +4,7 @@ Catalogs
 
 Boost provides an extension mechanism to the catalog function. Once
 Boost is inserted it installs a system shell that replaces a couple of
-keys, ``CAT`` is one of them.
+keys and ``CAT`` is one of them.
 
 
 Overview
@@ -15,7 +15,7 @@ show. Once entered, the notification mechanism of OS4 is used to find
 a module that implements the entered catalog.
 
 If there is no module that overrides the entered catalog it falls back
-to the normal system catalog. If there is a module that implements the
+to the normal system catalogs. If there is a module that implements the
 entered catalog it is handled by that module. Boost itself implements
 a buffer catalog with number 7 (more are planned in future updates).
 
@@ -66,4 +66,4 @@ When stopped the following keys are active:
 
 When stopped the shift and user keys are active and toggle the state
 as usual. Any other key press will terminate the catalog shown and
-the function bound to that key is executed.
+the function bound to that key will be executed.

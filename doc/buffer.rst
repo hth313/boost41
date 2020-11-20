@@ -5,31 +5,35 @@ Buffers
 *******
 
 Buffers are blocks of private memory that modules can allocate for
-various purposes. Buffers are allocated from the free memory poll and
-are located after key assignments registers. A buffer can be 1-255
-registers in size. There are 16 buffers possible in the HP-41 design
-(0-15).
+various private purposes. Buffers are allocated from the free memory
+pool and are located between the key assignments registers and the
+program memory. A buffer can be 1-255 registers in size. There are 16
+buffers possible in the HP-41 design (0-15).
 
 In addition to ordinary buffers, the OS4 module allows for a concept
 of hosted buffers. A hosted buffer resides inside the OS4 maintained
-system buffer (buffer number 15) using an unrelated number range
-(0-127).
+system buffer (buffer number 15). Hosted buffers uses a number range
+(0-127) that is unrelated to the ordinary buffers.
 
-The Boost module provides functions related to both ordinary buffers
-as well as hosted buffers.
+The Boost module provides functions related to both ordinary and
+hosted buffers.
 
-.. node::
+.. note::
 
-   Originally the buffers were designed with I/O in mind and were
+   Originally buffers were designed with I/O in mind and were
    often called I/O buffers. Later they were used for Time module
-   alarms and the name generalized to "buffers".
+   alarms and the name was generalized to be just buffers.
 
-Functions
-=========
+Errors
+======
 
 If the buffer number specified is outside valid numeric range, 0-15
 for normal buffers and 0-127 for hosted buffer, a ``DATA ERROR``
 message is returned.
+
+Functions
+=========
+
 
 CLBUF
 -----

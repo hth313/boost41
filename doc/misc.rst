@@ -16,7 +16,7 @@ This function returns the number of free registers to the X
 register. This is the same number that you would see when standing at
 end of program memory. In the past this function has sometimes been
 called ``FREE?``, but it has been renamed here to make it less
-confusing. The question mark normally means that we optionally skip a
+confusing. The question mark often means that we optionally skip a
 program step.
 
 COMPILE
@@ -25,7 +25,7 @@ COMPILE
 
 Compile all branches in the entire program memory. This
 non-programmable function will walk through all programs and compile
-all local ``GTO`` and ``XEQ`` instructions. A short ``GTO`` that is
+all local ``GTO`` and ``XEQ`` functions. A short ``GTO`` that is
 out of range will get converted to the corresponding long version so
 that it can be compiled.
 
@@ -47,7 +47,7 @@ The main purpose of ``COMPILE`` is to avoid the initial slow execution
 of programs that are not compiled. That is, you have a situation where
 you have time in advance and want to invest that in making your
 programs run as fast as possible when you later use them. A typical use
-is you load up your calculator with software prior to an an exam which is
+is you load up your calculator with software prior to an an exam that is
 time constrained.
 
 RAMED
@@ -83,25 +83,25 @@ highlighted with a blinking cursor.
 Keys of operation are as follows:
 
 R/S
-   terminates ``RAMED``.
+   terminate ``RAMED``.
 
 ON
-   turns the HP-41 off.
+   turn the HP-41 off.
 
 ``+``
-   moves to next register.
+   move to next register.
 
 ``-``
-   moves to previous register.
+   move to previous register.
 
 PRGM
-   moves cursor right.
+   move cursor right.
 
 USER
-   moves cursor left.
+   move cursor left.
 
 0-F
-   alter the digit where the cursor are.
+   alter the digit where the cursor is.
 
 .
    toggle cursor field between the address and the data.
@@ -113,13 +113,13 @@ wraps around between the last and first digit in the register.
 use the current program location as the start address.
 
 When started outside program mode the start address is taken from the
-X register. This can either be a decimal address or a right justified
-binary value (non-normalized number) in X.
+``X`` register. This can either be a decimal address or a right justified
+binary value (non-normalized number) in ``X``.
 
 .. note::
 
    When used together with the Ladybug module, simply enter the
-   address in X and start ``RAMED``. An integer value is actually just
+   address in ``X`` and start ``RAMED``. An integer value is actually just
    right justified binary value (non-normalized number).
 
 .. note::
@@ -128,7 +128,7 @@ binary value (non-normalized number) in X.
    to start editing program memory at the current location when inside
    program mode. If you place ``RAMED`` inside a program (there are
    several ways of how this can be done), then ``RAMED`` will start
-   from the address in the X register. When the user press ``R/S`` to
+   from the address in the X register. When the user presses ``R/S`` to
    leave ``RAMED``, program execution resumes.
 
 APX
@@ -136,11 +136,11 @@ APX
 .. index:: APX, append to X
 
 
-This function that makes it possible to append to the number in X register.
+This function makes it possible to append to the number in ``X`` register.
 You can see this as a counterpart of the append function in alpha
 mode.
 
-In the book "Extend your HP-41" there is a discussion of this
+In the book *Extend your HP-41* there is a discussion of this
 function and some motivation of why it is useful on page 541, followed
 by a synthetic program on page 542. The ``APX`` function provided here
 is an MCODE version of this program and works mostly the same.
@@ -151,8 +151,8 @@ doing numeric entry.
 
 It can be used quite naturally if assigned to the same place as alpha
 append (shifted ``ASN`` key), making it appear on the corresponding
-place on the user keyboard. This means you can only reach the ``ASN``
-function outside USER mode.
+place on the user keyboard. This has the downside that you can only
+reach the ``ASN`` function outside USER mode.
 
 ``APX`` also works from inside a program. However, it needs to be
 followed by ``STOP`` or ``PSE`` in order to let the user append to the
@@ -184,7 +184,9 @@ setting of 56-bits word size and hex mode:
 
   WSIZE 56
   HEX
-  343232_ H
+  3432_ H
+  ENTER
+  5422395239434_ H
   LUHN?
 
 ``LUHN?`` will skip next line if the Luhn checksum is not correct. In
@@ -192,29 +194,6 @@ keyboard mode it will display ``YES`` for a correct Luhn number and
 ``NO`` otherwise.
 
 Reference: https://en.wikipedia.org/wiki/Luhn_algorithm
-
-.. index:: decode NNN
-
-DECODE
-------
-
-This is the ubiquitous ``DECODE`` function used to decode the number
-in and put its hexadecimal value in the alpha register. This was often
-used in the days of synthetic programming to make sense of the
-non-normalized numbers that often resulted.
-
-In program mode the hexadecimal string is appended to the alpha
-register. When used from the keyboard the alpha register is cleared
-first.
-
-.. note::
-
-   If you are into fiddling with register value like this it can be
-   worth checking out the Ladybug module which makes working with such
-   numbers as easy normal decimal number. Just configure it in hex
-   mode with word size 56 for the ultimate way of working with binary
-   (non-normalized) numbers on the HP-41. In addition Ladybug makes a
-   great replacement for an HP-16C.
 
 .. index:: encode NNN, CODE
 
@@ -231,14 +210,37 @@ when you do not have Ladybug module inserted in your HP-41.
 
 .. index:: Half-nut display; contrast, display; contrast
 
+.. index:: decode NNN
+
+DECODE
+------
+
+This is the ubiquitous ``DECODE`` function used to decode the number
+in ``X`` and put its hexadecimal value in the alpha register. This was often
+used in the days of synthetic programming to make sense of the
+non-normalized numbers that often resulted.
+
+When used from a running program mode the hexadecimal string is
+appended to the alpha register. When used from the keyboard the alpha
+register is cleared first.
+
+.. note::
+
+   If you are into fiddling with register values, it can be
+   worth checking out the Ladybug module which makes working with such
+   numbers as easy as working with normal decimal numbers. Just
+   configure it in hex mode with word size 56 for the ultimate way of
+   working with binary (non-normalized) numbers on the HP-41. In
+   addition Ladybug makes a great replacement for an HP-16C.
+
 CTRST
 -----
 
 Sets the contrast value for the later Half-nut style displays. Takes a
-value 0--15 from the X register.
+value 0--15 from the ``X`` register.
 
 CTRST?
 ------
 
-Reads the current contrast value 0--15 and puts it in the X
+Reads the current contrast value 0--15 and puts it in the ``X``
 register. This works for later Half-nut style displays.
