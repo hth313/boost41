@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Stop on failure
+set -e
+
+# remove any stale documentation files
+rm -rf doc/_build
+
+# Build module and documentaiton
+pushd src
+make clean
+make
+popd
+pushd test
+make clean
+make
+popd
+pushd doc
+make html
+make latexpdf
+make epub
+markdown  ReleaseNotes.md >ReleaseNotes.html
+popd
+
+# Set up a dist folder
+rm -rf dist
+mkdir -p dist/doc/html
+cp src/boost.mod dist/
+cp src/boost.mod2 dist/
+cp test/boostTest.mod dist/
+cp -R doc/_build/html dist/doc/
+cp doc/_build/latex/boost.pdf dist/doc
+cp doc/_build/epub/boost.epub dist/doc
+cp doc/ReleaseNotes.html dist/
+
+# Unpack .rom files from the MOD2 file for 41CL
+pushd dist
+modtool --extract-rom-pages boost.mod2
+popd
+
+# Clean up some stuff we do not want
+rm -rf dist/doc/html/_sources
+rm -rf dist/doc/html/_static/*.pdf
+rm dist/doc/html/_static/coverGreen.jpg
+rm dist/doc/html/_static/coverGreenNoBackground.jpg
+rm dist/doc/html/.buildinfo
+
+# Pack a .zip
+pushd dist
+zip -r boost *
+popd
