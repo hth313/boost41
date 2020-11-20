@@ -7,8 +7,8 @@ Boost is inserted it installs a system shell that replaces a couple of
 keys, ``CAT`` is one of them.
 
 
-Extensible
-==========
+Overview
+========
 
 The new ``CAT`` function prompts for a 2-digit catalog number to
 show. Once entered, the notification mechanism of OS4 is used to find
@@ -16,17 +16,14 @@ a module that implements the entered catalog.
 
 If there is no module that overrides the entered catalog it falls back
 to the normal system catalog. If there is a module that implements the
-entered catalog it is handled by that module. This gives an extensible
-mechanism, an HP-IL related module could provide specific HP-IL
-related catalogs that are available when that module is plugged in.
-
-Boost in itself implements a buffer catalog with number 7 (more are
-planned in future updates).
+entered catalog it is handled by that module. Boost itself implements
+a buffer catalog with number 7 (more are planned in future updates).
 
 .. note::
 
-   The catalogs provided by Boost are very similar in behavior with
-   the original catalog 1--3. Once stopped the calculator goes to
+   The catalogs provided by Boost are built on top of mechanisms in
+   OS4 that gives them very similar behavior compared to the original
+   catalog 1--3. Once stopped the calculator goes to
    light sleep, saving power. If a key that is not implemented by the
    catalog is pressed, the catalog is terminated and the key action is
    performed. This is different from catalogs 4--6 in the HP-41CX

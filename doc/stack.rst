@@ -5,86 +5,88 @@
 Buffer stack
 ************
 
-While the RPN stack is very central in the HP-41, it is very short and
+The RPN stack is very central in the HP-41. However, it is very short and
 mostly suitable for intermediate values in calculations. A dynamic
-stack that can be used to tuck away values and contexts to make it
-possible to later restore it and appear as we did not actually mess up
-a lot of things in a subroutine is sorely missing.
+stack that can be used to tuck away values and contexts and later
+restore them, to make it appear as we did not actually mess things up
+inside a subroutine is sorely missing.
 
-The buffer stack in the Boost module aims to solve this problem. It
-uses one of those buffers that allocate space in the free area to
-implement a dynamic stack. Buffer number 7 is used for this.
+The buffer stack provided here aims to solve this problem. Functions
+to push and pop values to and from a dynamic stack are provided. The
+actual storage for the stack is buffer number 3. Space is dynamically
+allocated and returned from the free memory area as needed.
+
 
 .. hint::
 
    To make the buffer stack work well you should keep some free
    registers around that can be used for dynamic behavior. This means
-   that you should not fill your entire memory to brim with programs
-   or a too large register data area. This is easier today as you can
-   normally create a module image or two with your most used RPN
-   programs.
+   that you should not fill your entire memory to the brim with
+   programs or allocate way more data registers than you actually
+   need. This is easier today as you can normally create a module
+   image or two with your most used RPN programs.
 
 
 Stack limitations
 =================
 
 The buffer stack is mainly limited to available free memory, but there
-is also a hard limit to 253 registers of dynamic stack space due to
-buffers being limited to maximum 255 registers (two registers are used
+is also a hard limit to 253 registers of dynamic stack space due to a
+buffer being limited to maximum 255 registers (two registers are used
 for overhead).
 
 The registers needed to push the alpha register varies from zero to
-four registers. Thus, the minimal number of needed registers are used
-to represent it. The trailer register in the buffer is used to keep
-track of the pushed alpha sizes, which means that there can be up to
-13 levels of alpha registers on the stack.
+four registers. In order to use as few registers as possible to
+represent the alpha register in the buffer stack, the actual count
+0--4 is stored in the buffer trailer register. This limits the push
+depth of the alpha register to 13.
 
 Buffer keeping
 ==============
 
 The stack is created as needed and will remain until you pop values
 from it or explicitly delete it. The buffer will be deleted at power
-on if the stack is empty. This reclaims the two registers used for
-it.
+on if the stack is empty. This will reclaim the two registers used for
+an empty stack.
 
 .. note::
 
    If you abort a calculation so that things are left on the stack,
-   they are not reclaimed and continue to occupy memory. If you done
-   this and you know you will never need those pushed items anymore
-   you must explicitly remove the stack buffer (``CLSTBUF``).
+   they are not reclaimed and continue to occupy memory. If you have done
+   this and you know that you will never need those pushed items anymore,
+   you need to explicitly remove the stack buffer (``CLSTBUF``).
    The easiest way to see if you have a stack buffer left behind is to
-   run ```CAT 07`` and look for buffer number 7 in it. If it exists,
+   run ```CAT 07`` and look for buffer number 3 in it. If it exists,
    you can use the ``C`` key to erase the buffer when the catalog is
    stopped and showing that buffer.
 
 Sanity checking
 ===============
 
-There is no actual tagging of elements on the stack like you have on
+There are no actual tagging of elements in the stack like you have on
 an RPL machine. It is assumed that you write programs that pair stack
 pushes with pops properly.
 
-However, some elements on the stack have tags (magic numbers) to
+However, some elements on the stack do have tags (magic numbers) to
 detect bad stack use. When you push and pop the flag register, the
 system flags are not affected and that area is used for a magic number
-to detect if you mismatched stack operations. This is because randomly
-changing system flags may put your calculator in a weird state that
-may require power cycling to restore proper operation.
+to detect mismatched stack operations.
 
 Return stack extension
 ======================
 
 Extending the return stack also includes some extra sanity checking
-where the PC field of the record on the buffer stack is used to tell
-if the top element on the stack is actually a return stack
+where the (unused) PC field of the record in the buffer stack is used
+to tell if the top element on the stack is actually a return stack
 extension. This is useful because the nature of a return stack is such
 that we may want to implement recursion. With recursion we may need
-multiple return stack stores and it depends on the recursion depth.
-In such case you can push something else at start and use inspection
-of the top of stack (``TOPRTN?``) to control recursion. An alternative
-way would be to keep track of the number of such push elements in some
-register.
+multiple return stack stores entries and that number depends on the
+recursion depth.
+In such case you can push something else on the stack before deep
+recursion and use inspection of the top of stack (``TOPRTN?``) to see
+if it is a return stack entry to control recursion. An alternative
+way would be to keep track of the number of return stacks pushed in
+some register.
 
 The return stack extension is not transparent in that you can just
 blindly ``XEQ`` and ``RTN``. You will need to use ``PUSHRST`` and

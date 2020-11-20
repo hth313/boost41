@@ -33,6 +33,14 @@ lcdImages = [ ("ramed-1", lcd.image("419B 0C00020", prgmMode))
             , ("xeq-xrom-3", lcd.image("XEQ' XR 06,__", normalMode))
             , ("xeq-xrom-4", lcd.image("XEQ' XR 06,1_", normalMode))
             , ("xeq-xrom-5", lcd.image("XROM 06,10", normalMode))
+            , ("compare-1", lcd.image("= __", normalMode))
+            , ("compare-2", lcd.image("= ST _", normalMode))
+            , ("compare-3", lcd.image("= Z __", normalMode))
+            , ("compare-4", lcd.image("= Z IND __", normalMode))
+            , ("compare-5", lcd.image("= Z IND ST _", normalMode))
+            , ("compare-6", lcd.image("= Z IND L", normalMode))
+            , ("compare-7", lcd.image("2 Z = IND L?", normalMode))
+            , ("compare-8", lcd.image("10 Z = 05?", normalMode))
             ]
 
 for (file, body) in lcdImages:

@@ -15,7 +15,7 @@ compares X to a register pointed to be the Y register, essentially
 
 The Boost module provides four prompting generic compare functions
 ``=``, ``≠``, ``<`` and ``<=``.  It should be fairly obvious what they
-do. They take two arguments and will prompt for its two arguments.
+do. They take two arguments and will prompt for them both.
 With these you can create any compare you like, i.e. ``X < 10?``
 would test if X is less that the value in register ``10``.
 
@@ -31,30 +31,57 @@ Prefix entry
 ============
 
 As any prompting function you start with the function name. To key in
-``Z = IND L`` you need to type ``XEQ`` ALPHA ``=`` ALPHA. This will
-show a prompt for the first argument (the one that goes to the left of
-the equal sign). Once the first argument is entered, the calculator
-will prompt for the second argument.
+``Z = IND L`` you need to type ``XEQ`` ALPHA ``=`` ALPHA:
+
+.. image:: _static/compare-1.*
+
+This will show a prompt for the first argument (the one that goes to
+the left of the equal sign). You can now press the dot/comma/ST key
+followed by ``Z``:
+
+.. image:: _static/compare-2.*
+
+.. image:: _static/compare-3.*
+
+Once the first argument is entered, the calculator will prompt for the
+second argument. Complete the entry by filling in the second argument:
+
+.. image:: _static/compare-4.*
+
+.. image:: _static/compare-5.*
+
+.. image:: _static/compare-6.*
 
 In program memory the OS4 module will display such instruction with
 the function name between the two arguments. It will also append the
 question mark for these functions, which means that once entered you
-will see ``Z = IND L?`` in the program memory if you step to this
-line.
+will see ``Z = IND L?`` when you step to this line. As this line is a
+bit long it the display will scroll part of it off the display leaving
+you with something like:
+
+.. image:: _static/compare-7.*
+
+A shorter compare instruction that fits in the display will show
+properly together with its line number:
+
+.. image:: _static/compare-8.*
+
+
 
 The missing compares
 ====================
 
 What if you want to compare if X is greater than register ``05``? There
-is not compare greater than so you would need to swap the operands and
-use ``05 < X?``.
+is no compare greater than provides, so you would need to swap the
+operands and use ``05 < X?`` instead.
 
 Compare to constant
 ===================
 
-What if you want to compare to zero or another constant? In this case
+What if you want to compare to zero (or another constant)? In this case
 you would need to keep zero in a register or load a zero at some point
-so that it is in a known location in the stack. One way of seeing is
+so that it is in a known location in the stack, then compare towards
+that constant by its register location. One way of seeing is
 that you use a constant register, simply put the desired constant into
 a register and keep it there. Doing this way means that you are not
-limited to zero, you can store any suitable constant in a register.
+limited to zero, you can use any desired constant compare.
