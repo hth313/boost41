@@ -349,14 +349,14 @@ XRS10:        ldi     0x84          ; FC for stop
 XRS20:        ?s1=1                 ; pauseflag?
               goc     XRS10         ; yes (normal PSE)
               gosub   pausingReset  ; OS4 pause running? (and reset it)
-              goto    XRS10         ; yes, stop
+              goto    XRS10         ; (P+1) yes, stop
 
 ;;; * This is PATCH 4, speed up Run
               .newt_timing_start
               ldi     167           ; set up 100ms wait
 PTCH4A:       rst kb                ; is the key still down?
               chk kb
-              goc     toXRS45       ; no, go run!
+              gonc    toXRS45       ; no, go run!
               c=c-1   x             ; time out over?
               gonc    PTCH4A        ; no, keep checking the key
               .newt_timing_end
