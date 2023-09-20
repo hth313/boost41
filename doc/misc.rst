@@ -1,9 +1,9 @@
-*************
-Miscellaneous
-*************
+***********************
+Miscellaneous functions
+***********************
 
-In this chapter various functions that do not belong to any particular
-category are documented.
+This chapter describes various functions that either are system
+related or did not really belong to the other chapters.
 
 Functions
 =========
@@ -26,29 +26,28 @@ COMPILE
 Compile all branches in the entire program memory. This
 non-programmable function will walk through all programs and compile
 all local ``GTO`` and ``XEQ`` functions. A short ``GTO`` that is
-out of range will get converted to the corresponding long version so
-that it can be compiled.
+out of range will get converted to the corresponding long version to
+allow the branch to be compiled.
 
 While scanning for ``GTO`` and ``XEQ`` and their destination ``LBL``
 the display shows ``WORKING``. If a short ``GTO`` is converted to a
 long version, the insertion will cause nulls to be inserted. To get
-rid of these the program memory is immediately packed. Thus, during
+rid of these the program memory is packed. Thus, during
 operation you will see the display alternating between ``WORKING`` and
 ``PACKING``.
 
-If ``COMPILE`` runs out of memory, the usual ``TRY AGAIN`` message is
-shown.
+If ``COMPILE`` runs out of memory, a ``TRY AGAIN`` message is
+displayed.
+
 
 Execution time varies wildly for this function. For a very large
 single program that takes up almost all memory, it may take 10 minutes
 to complete the compilation.
 
 The main purpose of ``COMPILE`` is to avoid the initial slow execution
-of programs that are not compiled. That is, you have a situation where
+of programs that are not compiled. Typically useful in situation where
 you have time in advance and want to invest that in making your
-programs run as fast as possible when you later use them. A typical use
-is you load up your calculator with software prior to an an exam that is
-time constrained.
+programs run as fast as possible when you use them later.
 
 RAMED
 -----
@@ -109,7 +108,7 @@ USER
 The HP-41 will give a short beep if you move to cursor so that it
 wraps around between the last and first digit in the register.
 
-``RAMED`` is non-programmable and if invoked in program mode it will
+``RAMED`` is non-programmable and when invoked in program mode it will
 use the current program location as the start address.
 
 When started outside program mode the start address is taken from the
@@ -124,12 +123,12 @@ binary value (non-normalized number) in ``X``.
 
 .. note::
 
-   The reason for ``RAMED`` to be non-programmable is that is natural
+   The reason for ``RAMED`` to be non-programmable is that is useful
    to start editing program memory at the current location when inside
    program mode. If you place ``RAMED`` inside a program (there are
    several ways of how this can be done), then ``RAMED`` will start
-   from the address in the X register. When the user presses ``R/S`` to
-   leave ``RAMED``, program execution resumes.
+   from the address in the X register. Program execution resumes when
+   ``R/S`` is pressed to leave ``RAMED``.
 
 APX
 ---
@@ -137,7 +136,7 @@ APX
 
 
 This function makes it possible to append to the number in ``X`` register.
-You can see this as a counterpart of the append function in alpha
+You can see this as a counterpart of the append function in Alpha
 mode.
 
 In the book *Extend your HP-41* there is a discussion of this
@@ -149,15 +148,15 @@ Somewhat simplified, ``APX`` takes the number in X and feeds it into
 the digit entry mechanism, then tells the system that we are still
 doing numeric entry.
 
-It can be used quite naturally if assigned to the same place as alpha
+It can be used quite naturally if assigned to the same place as Alpha
 append (shifted ``ASN`` key), making it appear on the corresponding
 place on the user keyboard. This has the downside that you can only
 reach the ``ASN`` function outside USER mode.
 
 ``APX`` also works from inside a program. However, it needs to be
 followed by ``STOP`` or ``PSE`` in order to let the user append to the
-number. When stopped from a program with ALPHA on, it acts as alpha
-append instead. Thus, ``APX`` gives you a programmable alpha append as
+number. When stopped from a program with ALPHA on, it acts as Alpha
+append instead. Thus, ``APX`` gives you a programmable Alpha append as
 a bonus.
 
 ``APX`` favors editing the mantissa. When given a very large or small
@@ -177,8 +176,8 @@ X and any upper digits are in Y. A typical credit card number uses 16
 digits.
 
 To enter the number, you can use the usual ``CODE`` function, but it
-is probably easiest to just key it in using the Ladybug module, with a
-setting of 56-bits word size and hex mode:
+is probably easiest to just key it in using the Ladybug module
+configured with 56-bit word size and hex mode:
 
 .. code-block:: ca65
 
@@ -201,12 +200,8 @@ CODE
 ----
 
 This is the ubiquitous ``CODE`` function used to encode a
-non-normalized number based on a hexadecimal value in the alpha
+non-normalized number based on a hexadecimal value in the Alpha
 register.  The resulting value is put in the X register.
-
-As with ``DECODE``, you may want to look into the Ladybug module.
-The ``CODE`` and ``DECODE`` are included for completeness in the case
-when you do not have Ladybug module inserted in your HP-41.
 
 .. index:: Half-nut display; contrast, display; contrast
 
@@ -216,12 +211,12 @@ DECODE
 ------
 
 This is the ubiquitous ``DECODE`` function used to decode the number
-in ``X`` and put its hexadecimal value in the alpha register. This was often
+in ``X`` and put its hexadecimal value in the Alpha register. This was often
 used in the days of synthetic programming to make sense of the
 non-normalized numbers that often resulted.
 
 When used from a running program mode the hexadecimal string is
-appended to the alpha register. When used from the keyboard the alpha
+appended to the Alpha register. When used from the keyboard the alpha
 register is cleared first.
 
 .. note::
@@ -231,7 +226,7 @@ register is cleared first.
    numbers as easy as working with normal decimal numbers. Just
    configure it in hex mode with word size 56 for the ultimate way of
    working with binary (non-normalized) numbers on the HP-41. In
-   addition Ladybug makes a great replacement for an HP-16C.
+   addition Ladybug is a great replacement for an HP-16C.
 
 CTRST
 -----

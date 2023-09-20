@@ -15,12 +15,12 @@ which allows the following alternatives:
 By name
 
    Press the ``ALPHA`` key and spell out the name of the function you
-   want to execute. This will search for the function in the usual way,
-   but here it also includes searching among the secondary functions.
+   want to execute. This will search for the function in the usual way
+   and also search for a matching secondary function.
 
 By local label
 
-   This is numeric and top row keys single alpha letter labels, as
+   This is numeric and top row keys single Alpha letter labels, as
    before.
 
 By XROM code
@@ -49,4 +49,4 @@ and fill in the prompt for an ``XROM``:
 .. note::
 
    When the ``XROM`` number is complete and you hold the last key down
-   the display changes to display the actual function.
+   the display changes to show the name of the function.

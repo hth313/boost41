@@ -68,8 +68,9 @@ and is also installed at a master clear (MEMORY LOST).
 Some hardware allows for inserting modules by software means while
 power is on. One example is the ``PLUG`` functions in the 41CL. Once
 the module has been "inserted" by software means, you need to turn the power
-off and then back on to properly initialize Boost. For the original
-HP-41, you plug in physical modules while powered off.
+off and then back on to properly initialize Boost. On the original
+HP-41 physical modules are plugged in while the calculator is powered
+off, which makes Boost initialize properly when powered on.
 
 .. note::
 

@@ -58,7 +58,7 @@ The argument is the number of tenths of a second to wait. Example,
 will terminate the timer and execution resumes on key release. The key
 press is otherwise ignored.
 
-This also accept indirect arguments, e.g. ``DELAY IND X`` will read a
+DELTAY also accepts an indirect argument, e.g. ``DELAY IND X`` will read a
 value from the X register, divide by ``10`` and wait for that number of
 seconds.
 
@@ -67,7 +67,7 @@ seconds.
 KEY _ _
 --------
 
-Works similar as ``DELAY``, but will also return the key code of the
+Works similar to ``DELAY``, but will also return the key code of the
 pressed key to X. If no key was pressed, ``0`` is returned.
 
 .. index:: Yes/no input

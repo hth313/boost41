@@ -4,8 +4,8 @@
 Buffers
 *******
 
-Buffers are blocks of private memory that modules can allocate for
-various private purposes. Buffers are allocated from the free memory
+Buffers are blocks of memory that modules can allocate for private
+use. Buffers are allocated from the free memory
 pool and are located between the key assignments registers and the
 program memory. A buffer can be 1-255 registers in size. There are 16
 buffers possible in the HP-41 design (0-15).

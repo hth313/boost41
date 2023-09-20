@@ -7,7 +7,7 @@ Compare functions
 *****************
 
 The original HP-41 provides a set of compare functions that compares
-the X and Y register, as well as some to compare X with 0.
+the X and Y register, as well as some to compare X with zero.
 
 The HP-41CX adds additional compare functions such as ``X<NN?`` which
 compares X to a register pointed to be the Y register, essentially
@@ -17,15 +17,17 @@ The Boost module provides four prompting generic compare functions
 ``=``, ``≠``, ``<`` and ``<=``.  It should be fairly obvious what they
 do. They take two arguments and will prompt for them, one at a time.
 With these you can create any compare you like, e.g. ``X < 10?``
-would test if X is less that the value in register ``10``.
+would test if the value in the X register is less than the value in
+register ``10``.
 
 ``IND Z = IND 01?`` would take one register number from stack register
 Z and one from register ``01``. These two values point to two registers
 that are read and compared if they are equal.
 
-When executed the generic compare functions work the usual way. In a
-program they will skip the next program line if the test is false. If
-executed from the keyboard they will display ``YES`` or ``NO``.
+When executed the generic compare functions behave as other compare
+functions work. In a program they will skip the next program line if
+the test is false. If executed from the keyboard they will display
+``YES`` or ``NO``.
 
 Prefix entry
 ============
@@ -54,9 +56,10 @@ second argument. Complete the entry by filling in the second argument:
 
 In program memory the OS4 module will display such function with
 the function name between the two arguments. It will also append the
-question mark for these functions, which means that once entered you
+question mark for these functions, which means that once both
+arguments have been entered you
 will see ``Z = IND L?`` when you step to such line. As that program
-line is a bit too long for the display it will scroll part of it off,
+line is a bit too long for the display, it will scroll partially off
 leaving you with something like:
 
 .. image:: _static/compare-7.*
@@ -81,7 +84,7 @@ Compare to constant
 What if you want to compare to zero (or another constant)? In this case
 you would need to keep zero in a register or load a zero at some point
 so that it is in a known location in the stack, then compare towards
-that constant by its register location. One way of seeing is
-that you use a constant register, simply put the desired constant into
-a register and keep it there. Doing this way means that you are not
+that constant by its register location. One way of seeing it is
+that you use a constant register. Simply put the desired constant into
+a register and keep it there. Doing it this way means that you are not
 limited to zero, you can use any desired constant compare.

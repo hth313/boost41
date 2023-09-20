@@ -20,4 +20,5 @@ Boost module for the HP-41
    input
    random
    xmemory
+   hpil
    misc

@@ -39,6 +39,6 @@ numbers, e.g. useful for test or demo purposes.
 ---
 
 Simulate rolling two common six sided dices, giving a value 2-12 with
-a distribution that corresponds to throwing two dices. The value 7
+a distribution that corresponds to rolling two six sides dices. The value 7
 will the most common result, while 2 and 12 are the most uncommon
 outcomes.

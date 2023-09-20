@@ -1,4 +1,4 @@
-.. index:: alpha functions
+.. index:: arithmetic functions
 
 **********
 Arithmetic

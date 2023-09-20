@@ -49,9 +49,8 @@ e.g. using the pseudo random number generator will require one additional
 register. Using the buffer stack will also allocate memory from the
 free area.
 
-Apart from this, it does not impose any restrictions on the
-environment and will run comfortable on any HP-41C, HP-41CV, HP-41CX
-or HP-41CL.
+Boost does not impose any restrictions apart from this and will run
+comfortable on any HP-41C, HP-41CV, HP-41CX, HP-41CL and DM41X.
 
 The XROM number used by this module is 6.
 

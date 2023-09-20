@@ -47,4 +47,4 @@ GE
 Go to the permanent ``.END.``. This puts the program
 location counter at the last address in the last program, which is
 similar to pressing ``GTO ..``, but it will not pack program memory
-and it will not insert any ``END`` as is done in some situations.
+and it will not insert any new ``END`` which is done in some situations.

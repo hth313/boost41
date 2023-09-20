@@ -6,15 +6,16 @@ Buffer stack
 ************
 
 The RPN stack is central in the HP-41. However, it is very short and
-mostly suitable for intermediate values in calculations. A dynamic
-stack that can be used to tuck away values and contexts and later
-restore them, to make it appear as we did not actually mess things up
-inside a subroutine, is sorely missing.
+mostly suitable for intermediate values in calculations. Boost
+provides a dynamic stack that can be used to tuck away values and
+contexts, and later restore them. This allows RPN program or routines
+to have a cleaner interface, not messing things up inside a
+subroutine.
 
 The buffer stack provided here aims to solve this problem. Functions
 to push and pop values to and from a dynamic stack are provided. The
 actual storage for the stack is buffer number 3. Space is dynamically
-allocated and returned from the free memory area as needed.
+allocated and returned from the free memory pool as needed.
 
 
 .. hint::
@@ -22,7 +23,7 @@ allocated and returned from the free memory area as needed.
    To make the buffer stack work well you should keep some free
    registers around that can be used for the dynamic stack. This means
    that you should not fill your entire memory to the brim with
-   programs or allocate way more data registers than you actually
+   programs or set data register size much larger than you actually
    need.
 
 
@@ -34,11 +35,11 @@ is also a hard limit to 253 registers of dynamic stack space due to a
 buffer being limited to maximum 255 registers (two registers are used
 for overhead).
 
-The registers needed to push the alpha register varies from zero to
-four registers. In order to use as few registers as possible to
-represent the alpha register in the buffer stack, the actual count
-0--4 is stored in the buffer trailer register. This limits the push
-depth of the alpha register to 13.
+The registers needed to push the Alpha register varies from zero to
+four registers. In order to keep track of the number of registers used
+to represent the Alpha register, the count 0--4 is stored in the
+buffer trailer register. This limits the push depth of the Alpha
+register to 13.
 
 Buffer keeping
 ==============
@@ -51,24 +52,24 @@ remaining registers (header and trailer).
 .. note::
 
    If you abort a calculation so that things are left on the stack,
-   they are not reclaimed and continue to occupy memory. If you have done
+   they are not reclaimed and will continue to occupy memory. If you have done
    this and you know that you will never need those pushed items anymore,
-   you need to explicitly remove the stack buffer (``CLSTBUF``).
+   you may want to explicitly remove the stack buffer (``CLSTBUF``).
    The easiest way to see if you have a stack buffer left behind is to
    run ``CAT 07`` and look for buffer number 3 in it. If it exists,
    you can use the ``C`` key to erase the buffer when the catalog is
-   stopped on that buffer.
+   stopped and showing buffer 3.
 
 Sanity checking
 ===============
 
-There are no actual tagging of elements in the stack like you have on
+There are no actual tagging of elements on the stack like you have on
 an RPL machine. It is assumed that you write programs that pair stack
 pushes with pops properly.
 
 However, some elements on the stack do have tags (magic numbers) to
 detect bad stack use. When you push and pop the flag register, the
-system flags are not affected and that unused area is used for a magic
+system flags are not affected. That unused area is also used for a magic
 number to detect mismatched stack operations.
 
 Return stack extension
@@ -83,18 +84,19 @@ In such case you can push something else on the stack before deep
 recursion and use inspection of the top of stack (``TOPRTN?``) to see
 if it is a return stack entry to control up-recursion. An alternative
 way would be to keep track of the number of return stacks pushed in
-some register.
+some data register.
 
 The return stack extension is not transparent in that you cannot
-blindly use ``XEQ`` and ``RTN``. You will need to use ``PUSHRST`` and
-``POPRST`` at appropriate times and provide your own logic for
-this. You can use the other return stack utilities like `` RTN?``
-and ``RTNS`` to manage the call stack extension.
+blindly use ``XEQ`` and ``RTN`` to arbitrary depth.
+You will need to use ``PUSHRST`` and ``POPRST`` at appropriate times
+and provide your own logic for controlling this. You can use the other
+return stack utilities like ``RTN?`` and ``RTNS`` to manage the call
+stack extension.
 
 Error messages
 ==============
 
-The following error message are possible:
+The following error messages are possible:
 
 ``NO ROOM``
    no more space in the free memory area, or buffer cannot be grown
@@ -102,8 +104,8 @@ The following error message are possible:
 
 ``STACK ERR``
    this is given if you try to pop from an empty stack, or it is
-   determined that you tried to pop something that is not the top
-   stack element
+   determined that you tried to pop something that is not the expected
+   top stack element
 
 Functions
 =========
@@ -135,21 +137,21 @@ registers to be popped.
 PUSHA
 -----
 
-.. index:: push; alpha register
+.. index:: push; Alpha register
 
-Push the alpha register to the buffer stack. You can have a maximum of
-13 alpha registers on the stack at any time, trying to push more will
+Push the Alpha register on the buffer stack. You can have a maximum of
+13 Alpha registers on the stack at any time. Trying to push more will
 result in a ``NO ROOM`` error message. The actual register consumption
-depends on how long the string in the alpha register is. Pushing an
-empty alpha register costs nothing, apart from using up one of the 13
+depends on how long the string in the Alpha register is. Pushing an
+empty Alpha register costs nothing, apart from using up one of the 13
 levels.
 
 POPA
 ----
 
-.. index:: pop; alpha register
+.. index:: pop; Alpha register
 
-Pop the alpha register from the buffer stack.
+Pop the Alpha register from the buffer stack.
 
 PUSHFLG
 -------
@@ -266,7 +268,7 @@ to a previous point. It can also be used to see if things have been
 added to the stack or removed below a given point.
 
 The actual number returned is the sum of the stack registers used by
-the buffer and the number of alpha register pushes that are on the
+the buffer and the number of Alpha register pushes that are on the
 stack. The two register buffer overhead is not included in this
 count. The means that an empty stack and a non-existing buffer stack
 both will return 0.
@@ -290,7 +292,7 @@ you are into synthetic programming and do not want to even disturb
 .. note::
 
    There are two ways this function can fail to work as intended. If
-   the next record on the stack is the alpha register, it may be empty
+   the next record on the stack is the Alpha register, it may be empty
    in which case this function will actually look at the next thing
    on the stack. Also, the test for whether the top element is a
    return stack record checks a magic number (``0x2ac`` in the

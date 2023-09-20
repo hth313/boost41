@@ -3,9 +3,8 @@ Stack and memory
 ****************
 
 Functions related to stack and memory values are documented here.
-You may also want to consult the sections about compares and stack as
-they also operate on stack an memory values. See
-:ref:`compare` and :ref:`stack`.
+You may also want to consult the sections about compares and the buffer stack.
+See :ref:`compare` and :ref:`stack`.
 
 Functions
 =========
@@ -50,7 +49,7 @@ In program memory the ``<>`` function is displayed infix:
 In this example the ``IND`` variant was omitted to make the complete
 function fit on the display together with the line number.
 You can of course enter indirect arguments in program mode, however,
-the line becomes so long that it scrolls horizontally.
+the line becomes long and will scroll partially off the display.
 
 
 .. index:: VMANT function, mantissa; view
@@ -60,8 +59,7 @@ VMANT
 
 View the mantissa of the value in X. This displays all digits of the X
 register, stripping off any exponent. The actual value in X is not
-affected. The bring back to the normal display, press the back arrow key
-as usual.
+affected. The bring back to the normal display, press the back arrow key.
 
 .. index:: fix/end mode
 
@@ -71,4 +69,4 @@ F/E
 Enables the hybrid ``FIX`` with ``ENG`` mode. Normally when using ``FIX``
 mode and the number needs to be shown with an exponent, the HP-41
 switches to ``SCI`` mode. The ``F/E`` mode changes this so
-that the HP-41 instead will switch to ``ENG`` mode in such situation.
+that the HP-41 instead switches to ``ENG`` mode in such situations.
